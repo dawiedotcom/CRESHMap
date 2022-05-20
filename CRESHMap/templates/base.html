@@ -1,10 +1,36 @@
 <!doctype html>
 <html>
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
   </head>
   <body>
-    {% block content %}{% endblock %}
+
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid">
+	<a class="navbar-brand" href="{{ url_for('index') }}">CRESHMap</a>
+	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	  <span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+	  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+	    {% for title, path in navigation %}
+	    <li class="nav-item">
+              <a class="nav-link {% if page is defined and page.path == path %}active{% endif %}" aria-current="page" href="{{ url_for('page', path=path) }}">{{ title }}</a>
+            </li>
+	    {% endfor %}
+	  </ul>
+	</div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      {% block content %}{% endblock %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
   </body>
 </html>
 
