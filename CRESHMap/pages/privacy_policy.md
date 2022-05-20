@@ -1,4 +1,5 @@
 title: Privacy Policy
+order: 7
 
 Effective date: November 22, 2018
 

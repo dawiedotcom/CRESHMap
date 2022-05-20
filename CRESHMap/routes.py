@@ -1,14 +1,18 @@
 from flask import render_template
 from flask_flatpages import FlatPages
 from flask import current_app as app
+from collections import namedtuple
 
 pages = FlatPages(app)
 
+MenuItem = namedtuple("MenuItem", "title path order")
+
 
 def menu_items():
-    menu = []
+    menu = [MenuItem("Map", "dash", 1)]
     for p in pages:
-        menu.append((p['title'], p.path))
+        menu.append(MenuItem(p['title'], p.path, p['order']))
+    menu = sorted(menu, key=lambda item: item.order)
     return menu
 
 
