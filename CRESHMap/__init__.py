@@ -1,5 +1,8 @@
 """Initialize Flask app."""
 from flask import Flask
+from flask_flatpages import FlatPages
+
+pages = FlatPages()
 
 
 def init_app():
@@ -15,4 +18,5 @@ def init_app():
         from .dash.dashboard import init_dashboard
         app = init_dashboard(app)
 
+        pages.init_app(app)
         return app

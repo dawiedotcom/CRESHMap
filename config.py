@@ -9,3 +9,6 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'not-so-secret'
     STATIC_FOLDER = 'static'
     TEMPLATES_FOLDER = 'templates'
+
+    FLATPAGES_EXTENSION = '.md'
+    FLATPAGES_ROOT = 'pages'
