@@ -1,0 +1,56 @@
+title: About
+
+# Background
+In Scotland, smoking and alcohol are two of the most important preventable 
+causes of ill-health and premature death: one in every five deaths is 
+attributable to tobacco and one in 20 to alcohol. The neighbourhood 
+availability of tobacco and alcohol products has been implicated in promoting 
+smoking and drinking behaviours. In CRESH we’ve been investigating the links 
+between tobacco and alcohol environments and health (see [here](https://cresh.org.uk/2014/10/07/alcohol-related-health-is-worse-in-scottish-neighbourhoods-with-more-alcohol-outlets/) and [here](https://cresh.org.uk/2014/11/05/an-environment-where-young-people-choose-not-to-smoke-is-not-one-where-tobacco-products-are-sold-on-every-street-corner/) for more 
+details). In partnership with [Alcohol Focus Scotland](http://www.alcohol-focus-scotland.org.uk/) (AFS) and [Action on Smoking and HealthScotland](http://www.ashscotland.org.uk/) (ASH Scotland) we’ve been funded by the [Economic and 
+Social Research Council](http://www.esrc.ac.uk/) (ESRC) to publicise our research and make it more 
+accessible to the public and policy makers. In 2015, this enabled us to create 
+a webmap and data download facility, as well as some eye-catching infographics 
+for [smoking](https://cresh.org.uk/2015/03/18/smoking-and-health-in-scotland-key-stats/) and [alcohol](https://cresh.org.uk/2015/06/03/alcohol-and-health-in-scotland-key-stats/).
+
+In May 2017 we updated the webmap and data download facility to version 2.0. This allows you to map the most recent alcohol and tobacco outlet count data for small neighbourhoods across Scotland, with some extra functionality to aid your experience. Future updates will allow you to visualise change in provision over time. At this point you are able to select between total alcohol sales, alcohol on sales, alcohol off sales, both on and off alcohol sales and total tobacco sales. When the webmap is first loaded your browser will ask if you would like to share your location. If you grant permission then the map will automatically zoom to your location. If you would prefer not to share this information, then you can select to see the data for the whole of scotland, between one and five local authorities, or you can search for a specific town or postcode. The added functionality is in the form of both presentation of the data and the versatility of download. The data can now be presented in a number of ways by specifying the year, typical distance to outlet (buffer size) and rank colour options. We have also made it possible to change the basemap to give your map a different focus. 'CartoDB Positron' is a light and subtle background map, it is good for accentuating the colours of the outlet counts. 'Stamen Toner' is a high-contrast B+W (black and white) map, which highlights the difference between land and water, and the road network. Finally, 'OSM' is the most detailed background map and can be useful for locating specific features of the urban environment.
+
+In Scotland there are five licensing objectives to be considered when granting a licence to sell alcohol; the fifth objective is to protect and improve public health. Licensing boards are also required to assess overprovision of licensed premises in the board’s area. Until now this information has not been readily available to local residents. Our aim is to make the data publicly available allowing users to question notions of overprovision.
+
+The website is free to use and the data are also free. You can explore the data as you wish, however as this is a funded project we ask you for some details before you download the data. This information will allow us to track data use and make improvements to the website in the future. Once this is completed the user will be granted access to the full data set with the data changing dynamically based on the options specified previously. This allows a bespoke dataset to be downloaded and used for further analysis.
+
+On this page we describe the information that can be displayed and downloaded through the webmap site. For more information about the project please contact Dr Niamh Shortt at [niamh.shortt@ed.ac.uk](mailto:niamh.shortt@ed.ac.uk) or Dr Mark Cherrie at [mark.cherrie@ed.ac.uk](mailto:mark.cherrie@ed.ac.uk).
+
+# Area boundaries
+The area boundaries that can be shown on the map can all be downloaded from other sources, for use in mapping software such as [QGIS](http://www.qgis.org/en/site/).
+
+## Neighbourhoods (= ‘datazones’)
+The neighbourhood outlet, deaths and deprivation data that can be mapped all refer to small areas called ‘datazones’. Datazones are the main administrative geography used in Scotland, and are used for the dissemination of many types of official statistics (see [http://statistics.gov.scot/](http://statistics.gov.scot/)). There are 6,976 datazones in Scotland, with populations typically between 500 and 1000.  We use data zone boundaries to represent local neighbourhoods. Datazone boundaries are available from [here](https://data.gov.uk/dataset/data-zone-boundaries-2011).
+
+## Other boundaries
+Data can be displayed for Local Authorities (32 in Scotland), these boundaries can be downloaded as part of Ordnance Survey’s [Boundary-Line](http://www.ordnancesurvey.co.uk/business-and-government/products/boundary-line.html#Benefits-and-key-features) product.
+
+# Neighbourhood Data
+## Alcohol and tobacco outlet counts
+We collated alcohol and tobacco outlet location data as part of an earlier project funded by the [Scottish Collaboration for Public Health Research and Policy](http://www.scphrp.ac.uk/) (SCPHRP).  (Find out more about this work [here](http://cresh.org.uk/2014/11/05/an-environment-where-young-people-choose-not-to-smoke-is-not-one-where-tobacco-products-are-sold-on-every-street-corner/)). We obtained the locations of all outlets in Scotland licensed to sell alcohol for consumption on the premises (on-sales), off the premises (off-sales), both (on and off-sales) from each local licensing board in 2012 and 2016. We also obtained the locations of all premises registered on the Scottish Tobacco Retailers Register for 2012 and 2016. The datasets were checked for errors (e.g., duplications).
+
+We counted the number of each outlet type within 800 m of the population centre of each datazone (800 m represents a 10-minute walk at average pace). This 800 m zone was assumed to represent the typical neighbourhood experienced by the population of a datazone, and was unaffected by artificially-imposed datazone boundaries or differing datazone sizes. Figure 1 below shows that a circle with a radius of 800 m around this datazone’s population centre (red star) contains 73 on-sales alcohol outlets, and that this includes a number within neighbouring datazones.
+
+This process was repeated for different buffer zone distances (400 m - 5,000 m). This was undertaken because of the acknowledgement that the urban/rural nature of the datazone may affect typical distances travelled, with more rural residents travelling further to reach their nearest outlet. We have provided options to compare the colour of each individual datazone count value to several averages: Scotland, Local Authority, Urban Rural Group and Deprivation Group. For the urban rural group comparison we used the [2013/2014 Urban Rural Classification (6-Fold)](http://statistics.gov.scot/data/urban-rural-classification). Therefore if a datazone was within urban rural Group 3, then it's count value would be compared to the Scottish average for Urban Rural Group 3. For the deprivation comparison we used quintiles of the [SIMD 2016 income rank](http://statistics.gov.scot/data/scottish-index-of-multiple-deprivation-2016). As with the urban rural group comparison, individual data zone count values were compared against the Scottish average for specific quintiles of deprivation.
+
+## Alcohol hospitalisations data
+
+Alcohol hospitalisations data were derived from the [SIMD 2016 health domain](http://www.gov.scot/Topics/Statistics/SIMD). This is defined as the standardised ratio for hospital stays related to alcohol misuse.
+
+## Crime data
+Crime data were derived from the [SIMD 2016 crime domain](http://www.gov.scot/Topics/Statistics/SIMD). This is defined as the count of recorded crimes of violence, sexual offences, domestic housebreaking, vandalism, drugs offences, and common assault per 10,000 people.
+
+## Alcohol- and tobacco-related deaths
+We have used deaths data to give an indication of the ill-health due to alcohol or tobacco in each neighbourhood. We requested deaths from lung cancer and lung disease, and those due to alcohol-related causes (defined by NHS Scotland [here](https://isdscotland.scot.nhs.uk/Health-Topics/Drugs-and-Alcohol-Misuse/Alcohol/Historic-Publications/_docs/Alcohol-Bulletin2011.pdf?72909182311)) for the period (2011 to 2015) National Records of Scotland's (NRS) statistics of Vital Events. We selected lung cancer and lung disease to provide a measure of tobacco-related illness because the large majority of these deaths are due to smoking. However, we acknowledge that a portion of these deaths may not have been related to smoking, and that a number of other causes of death (e.g., heart disease, other cancers, or diseases of the digestive system) are partly attributable to smoking. As a result our indicator will represent a substantial under-estimate of the smoking-related death rate.  Detailed information about smoking-related illness is available from NHS Scotland [here](http://www.scotpho.org.uk/publications/reports-and-papers/868-smoking-ready-reckoner).
+
+Numbers of deaths should not be compared between datazones because datazones have different population sizes, and the split between males and females, or younger and older people, will vary. Rates are often used for comparing areas, as these express deaths per 100,000 people. But as datazone populations are quite small, cause-specific death rates can be unreliable.  We therefore used a more reliable method to ensure comparability: we calculated a Standardised Mortality Ratio (SMR) by comparing the number of deaths in each datazone to the number that would have been expected based on the average rates for Scotland (by age group and sex). The Scottish SMR for alcohol-related deaths or lung cancer and lung disease deaths is fixed at 100: datazones with SMRs higher than 100 can be said to have a higher rate than the Scottish average, and those with SMRs less than 100 have a lower rate. We acknowledge that there will be some instability in the mortality rates presented given that they are based on a low number of events.
+
+Deaths data for individual datazones, and the SMRs we have derived from these data, are considered sensitive data by law and cannot legally be distributed publicly. Hence we have provided the data categorised into quintiles.
+
+## Further information
+As not to duplicate data presented elsewhere for each datazone we provide a link to further information from statistics.gov.uk. For example clicking on the the "Canongate, Southside and Dumbiedykes -05" datazone link will redirect [here](http://statistics.gov.scot/doc/statistical-geography/S01008684). This webpage gives information on geography, housing, health, deprivation and urban/rural classification.
