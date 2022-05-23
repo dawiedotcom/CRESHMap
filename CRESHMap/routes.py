@@ -14,7 +14,7 @@ MenuItem = namedtuple("MenuItem", "title path order")
 
 
 def menu_items():
-    menu = [MenuItem("Map", "map", 1)]
+    menu = [MenuItem("Map", "/", 1)]
     for p in pages:
         menu.append(MenuItem(p['title'], p.path, p['order']))
     menu = sorted(menu, key=lambda item: item.order)
@@ -23,19 +23,6 @@ def menu_items():
 
 @app.route('/')
 def index():
-    """Landing page."""
-
-    return render_template('index.html', who='magi', navigation=menu_items())
-
-
-@app.route('/<path:path>')
-def page(path):
-    page = pages.get_or_404(path)
-    return render_template('page.html', page=page, navigation=menu_items())
-
-
-@app.route('/map')
-def map():
     df = pandas.DataFrame({
         'city': [
             'Glasgow', 'Edinburgh', 'Aberdeen', 'Dundee', 'Dunfermline',
@@ -58,3 +45,10 @@ def map():
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return render_template('map.html', graphJSON=graphJSON,
                            navigation=menu_items())
+
+
+@app.route('/<path:path>')
+def page(path):
+    page = pages.get_or_404(path)
+    return render_template('page.html', page=page, navigation=menu_items())
+
