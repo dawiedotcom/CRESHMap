@@ -8,6 +8,7 @@ import json
 import plotly
 import plotly.express as px
 
+
 pages = FlatPages(app)
 
 MenuItem = namedtuple("MenuItem", "title path order")
@@ -51,4 +52,3 @@ def index():
 def page(path):
     page = pages.get_or_404(path)
     return render_template('page.html', page=page, navigation=menu_items())
-
