@@ -4,7 +4,7 @@ import argparse
 import fiona
 from shapely.geometry import shape
 from pathlib import Path
-import pandas
+import pandas, geopandas
 
 
 MAPPING = {2020: {
@@ -73,9 +73,10 @@ def main():
             db.session.commit()
     else:
         with app.app_context():
-            query = db.session.query(DataZone)
-            for dz in query:
-                print(dz.name, dz.data[2020].alcohol)
+            engine = db.get_engine()
+            df = geopandas.read_postgis(
+                "SELECT geometry, name, data.alcohol FROM datazone join data on datazone.datazone=data.datazone_id", con=engine, geom_col="geometry")
+            print(df)
 
 
 if __name__ == '__main__':
