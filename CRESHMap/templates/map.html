@@ -4,17 +4,140 @@
 {% block content %}
 <h1>Map</h1>
 <div class="container-fluid">
-  <div id='chart' class='responsive-plot' style="height: 800px"></div>
+  <div id='map' class='map'></div>
+</div>
+<div id="popup" class="ol-popup">
+  <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+  <div id="popup-content"></div>
 </div>
 {% endblock %}
+{% block css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/css/ol.css" type="text/css">
+<style>
+  .map {
+      width: 100%;
+      height:800px;
+  }
+  .ol-popup {
+      position: absolute;
+      background-color: white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #cccccc;
+      bottom: 12px;
+      left: -50px;
+      min-width: 280px;
+  }
+  .ol-popup:after, .ol-popup:before {
+      top: 100%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+  }
+  .ol-popup:after {
+      border-top-color: white;
+      border-width: 10px;
+      left: 48px;
+      margin-left: -10px;
+  }
+  .ol-popup:before {
+      border-top-color: #cccccc;
+      border-width: 11px;
+      left: 48px;
+      margin-left: -11px;
+  }
+  .ol-popup-closer {
+      text-decoration: none;
+      position: absolute;
+      top: 2px;
+      right: 8px;
+  }
+  .ol-popup-closer:after {
+      content: "✖";
+  }
+  </style>
+{% endblock %}
 {% block scripts %}
-<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+<script src='https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/
+en/v6.14.1/build/ol.js'></script>
 <script type='text/javascript'>
-  var graphs = {{graphJSON | safe}};
-  Plotly.plot('chart',graphs,{});
+  /**
+   * Elements that make up the popup.
+   */
+  const container = document.getElementById('popup');
+  const content = document.getElementById('popup-content');
+  const closer = document.getElementById('popup-closer');
+  
+  /**
+   * Add a click handler to hide the popup.
+   * @return {boolean} Don't follow the href.
+   */
+  closer.onclick = function () {
+      overlay.setPosition(undefined);
+      closer.blur();
+      return false;
+  };
+  
+  /**
+   * Create an overlay to anchor the popup to the map.
+   */
+  const overlay = new ol.Overlay({
+      element: container,
+      autoPan: {
+	  animation: {
+	      duration: 250,
+	  },
+      },
+  });
 
-  window.onresize = function() {
-    Plotly.Plots.resize('chart');
-};
+  const wmsSource = new ol.source.TileWMS({
+      url: 'https://www.geos.ed.ac.uk/maps/mhagdorn/cresh?',
+      params: {'LAYERS': 'datazones', 'STYLES': 'alcohol'},
+      crossOrigin: 'anonymous',
+      transition: 0,
+  });
+
+  const view = new ol.View({
+          center: ol.proj.fromLonLat([-3.184111, 55.948162]),
+          zoom: 12
+        });
+
+  var map = new ol.Map({
+      target: 'map',
+      layers: [
+          new ol.layer.Tile({
+              source: new ol.source.OSM()
+          }),           
+          new ol.layer.Tile({
+              source: wmsSource
+          })
+      ],
+      overlays: [overlay],
+      view: view,
+  });
+  
+  map.on('singleclick', function (evt) {
+      //document.getElementById('info').innerHTML = '';
+      const coordinate = evt.coordinate;
+      const viewResolution = /** @type {number} */ (view.getResolution());
+      const url = wmsSource.getFeatureInfoUrl(
+	  coordinate,
+	  viewResolution,
+	  'EPSG:3857',
+	  {'INFO_FORMAT': 'text/html'}
+      );
+      if (url) {
+	  fetch(url)
+	      .then((response) => response.text())
+	      .then((data) => {
+		  content.innerHTML = data;
+		  overlay.setPosition(coordinate);
+	      });
+      }
+  });
 </script>
 {% endblock %}
