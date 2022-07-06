@@ -1,0 +1,70 @@
+MAP
+  NAME "CRESH Map"
+  STATUS ON
+  SIZE 600 600
+  EXTENT {% for b in bbox %}{{ b }} {% endfor %}
+  PROJECTION
+      "init=epsg:4326"
+  END  
+
+  WEB
+      IMAGEPATH "/tmp/"
+      IMAGEURL "/ms_tmp/"
+      METADATA
+          "wms_title"          "CRESHMap Server"
+          "wms_abstract"       "map server for https://cresh.org.uk/ project"
+          "wms_onlineresource" "{{ mapserverurl }}"
+          "wms_srs"            "EPSG:4326 EPSG:4269 EPSG:3978 EPSG:3857"
+          "wms_enable_request" "*"
+          "wms_getfeatureinfo_formatlist" "text/plain,text/html,application/vnd.ogc.gml,gml"
+      END
+  END
+
+  LAYER
+      NAME "datazones"
+      METADATA
+          "wms_title"         "datazones"
+          "wms_abstract"      "the datazones"
+          "wms_srs"           "EPSG:4326"
+          "gml_include_items" "all"
+          "gml_featureid"     "ID"
+          "gml_types"         "auto"
+          "wfs_enable_request" "*"
+      END
+      TYPE POLYGON
+      STATUS ON
+      CONNECTIONTYPE POSTGIS
+      CONNECTION "{% if dburl.host is not none %}host={{ dburl.host }} {% endif %}{% if dburl.username is not none %}user={{ dburl.username }} {% endif %}{% if dburl.password is not none %}password={{ dburl.password }} {% endif %}{% if dburl.port is not none %}port={{ dburl.port }} {% endif %}{% if dburl.database is not none %}dbname={{ dburl.database }}{% endif %}"
+      DATA "geometry from (select z.datazone, z.geometry, z.name,
+            {% for a in attributes %}d.{{ a }}{% if not loop.last %}, {% endif %}{% endfor %} from cresh.datazone z join cresh.data d 
+            on z.datazone = d.datazone_id) as subquery using unique datazone"
+
+
+      PROCESSING "CLOSE_CONNECTION=DEFER" # for maximum performance
+      OFFSITE 0 0 0
+      TRANSPARENCY 70
+      CLASS
+          NAME "Datazones"
+          GROUP "outlines"
+          STYLE
+              COLOR 240 240 240
+              OUTLINECOLOR 199 199 199
+          END
+      END
+      {% for a in attributes %}
+      CLASS
+          NAME "{{ attributes[a]['name'] }}"
+	  GROUP "{{ a }}"
+	  STYLE
+              RANGEITEM "{{ a }}"
+	      COLORRANGE {{ attributes[a]['start_colour'] }} {{ attributes[a]['end_colour'] }}
+	      DATARANGE {{ attributes[a]['start'] }} {{ attributes[a]['end'] }}
+	      OUTLINECOLOR 199 199 199
+	  END
+      END
+      {% endfor %}
+      TEMPLATE "{{ popup }}"
+      PROJECTION #source
+          "init=epsg:4326"
+      END
+END

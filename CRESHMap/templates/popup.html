@@ -1,0 +1,12 @@
+<!-- MapServer Template -->
+<div>
+  <strong>[name]</strong>
+  <table>
+    {% for a in attributes %}
+    <tr>
+      <td>{{ attributes[a]['name'] }}</td>
+      <td>[{{ a }}]</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
