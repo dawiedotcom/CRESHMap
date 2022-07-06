@@ -8,5 +8,5 @@ This application follows the [flask application factory pattern](https://hackers
 
 Set database connection string
 ```
-export DATABASE_URL='postgresql://creshro:PASSWORD@pow/cresh?options=-c%20search_path=cresh'
+export DATABASE_URL='postgresql://creshro:PASSWORD@pow/cresh?options=-c%20search_path=cresh,public,topology''
 ```
