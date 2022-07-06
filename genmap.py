@@ -66,11 +66,17 @@ def main():  # noqa C901
             print('Error, no attribures specified')
             sys.exit(1)
 
-        bbox = wkb.loads(bytes(
-            db.session.query(DataZone.geometry.ST_Extent()).one()[0].data))
+        bbox = db.session.query(DataZone.geometry.ST_Extent()).one()[0]
+        try:
+            bbox = wkb.loads(bytes(bbox).data).bounds
+        except Exception:
+            bb = []
+            for pnt in bbox[4:-1].split(','):
+                bb += pnt.split()
+            bbox = bb
 
         cresh_map = render_template(
-            'cresh.map', bbox=bbox.bounds,
+            'cresh.map', bbox=bbox,
             mapserverurl=cfg['setup']['mapserverurl'], dburl=db.engine.url,
             attributes=attributes, popup=popup_name)
         popup = render_template('popup.html', attributes=attributes)
