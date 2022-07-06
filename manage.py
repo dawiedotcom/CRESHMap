@@ -1,10 +1,12 @@
 from CRESHMap import init_app, db
-from CRESHMap.models import DataZone, Data
+from CRESHMap.models import DataZone
+from CRESHMap.models import Data
 import argparse
 import fiona
 from shapely.geometry import shape
 from pathlib import Path
-import pandas, geopandas
+import pandas
+import geopandas
 
 
 MAPPING = {2020: {
@@ -75,7 +77,9 @@ def main():
         with app.app_context():
             engine = db.get_engine()
             df = geopandas.read_postgis(
-                "SELECT geometry, name, data.alcohol FROM datazone join data on datazone.datazone=data.datazone_id", con=engine, geom_col="geometry")
+                "SELECT geometry, name, data.alcohol FROM datazone join "
+                "data on datazone.datazone=data.datazone_id",
+                con=engine, geom_col="geometry")
             print(df)
 
 
