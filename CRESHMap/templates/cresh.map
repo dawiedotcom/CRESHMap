@@ -67,4 +67,5 @@ MAP
       PROJECTION #source
           "init=epsg:4326"
       END
+  END
 END
