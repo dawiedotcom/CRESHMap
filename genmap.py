@@ -68,7 +68,7 @@ def main():  # noqa C901
 
         bbox = db.session.query(DataZone.geometry.ST_Extent()).one()[0]
         try:
-            bbox = wkb.loads(bytes(bbox).data).bounds
+            bbox = wkb.loads(bytes(bbox.data)).bounds
         except Exception:
             bb = []
             for pnt in bbox[4:-1].split(','):
