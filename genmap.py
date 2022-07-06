@@ -77,7 +77,7 @@ def main():  # noqa C901
 
         cresh_map = render_template(
             'cresh.map', bbox=bbox,
-            mapserverurl=cfg['setup']['mapserverurl'], dburl=db.engine.url,
+            mapserverurl=app.config['MAPSERVER_URL'], dburl=db.engine.url,
             attributes=attributes, popup=popup_name)
         popup = render_template('popup.html', attributes=attributes)
 

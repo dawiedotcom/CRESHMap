@@ -95,7 +95,7 @@ en/v6.14.1/build/ol.js'></script>
   });
 
   const wmsSource = new ol.source.TileWMS({
-      url: 'https://www.geos.ed.ac.uk/maps/mhagdorn/cresh?',
+      url: '{{ mapserverurl }}',
       params: {'LAYERS': 'datazones', 'STYLES': 'alcohol'},
       crossOrigin: 'anonymous',
       transition: 0,

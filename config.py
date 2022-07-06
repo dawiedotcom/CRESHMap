@@ -19,3 +19,6 @@ class Config:
 
     FLATPAGES_EXTENSION = '.md'
     FLATPAGES_ROOT = 'pages'
+
+    MAPSERVER_URL = os.environ.get('MAPSERVER_URL') or \
+        'https://www.geos.ed.ac.uk/maps/mhagdorn/cresh?'
