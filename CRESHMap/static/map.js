@@ -143,6 +143,13 @@ function postcodeListener () {
     }
 }
 
+searchPostcode.addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        searchPostcodeButton.click();
+    }
+});
+
 function resizeMap() {
     const nav_height = document.getElementsByClassName('navbar')[0].clientHeight;
 
