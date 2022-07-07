@@ -142,3 +142,15 @@ function postcodeListener () {
 	map.setView(nview);
     }
 }
+
+function resizeMap() {
+    const nav_height = document.getElementsByClassName('navbar')[0].clientHeight;
+
+    const mapDiv = document.getElementById('map');
+    mapDiv.style.height = window.innerHeight-nav_height + 'px';
+    map.updateSize();
+}
+
+
+window.onload = resizeMap;
+window.onresize = resizeMap;
