@@ -34,6 +34,8 @@ Note, that the read-ony user needs access to all database schemas to work correc
 ## References
 This application follows the [flask application factory pattern](https://hackersandslackers.com/flask-application-factory/).
 
+The web app uses [postcodes.io](https://postcodes.io/) for geolocating postcodes.
+
 
 Set database connection string
 ```

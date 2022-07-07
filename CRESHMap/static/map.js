@@ -5,6 +5,8 @@ const container = document.getElementById('popup');
 const content = document.getElementById('popup-content');
 const closer = document.getElementById('popup-closer');
 const attribSelector = document.getElementById('attrib');
+const searchPostcodeButton = document.getElementById('button-search-postcode');
+const searchPostcode = document.getElementById('search-postcode');
 
 var layers = {};
 
@@ -74,8 +76,8 @@ const overlay = new ol.Overlay({
 });
 
 const view = new ol.View({
-    center: ol.proj.fromLonLat([-3.184111, 55.948162]),
-    zoom: 12
+    center: ol.proj.fromLonLat([-4.352258, 57.009659]),
+    zoom: 7
 });
 
 
@@ -88,6 +90,10 @@ var map = new ol.Map({
 
 map.on('singleclick', function (evt) {
     const coordinate = evt.coordinate;
+    showInfo(coordinate);
+});
+
+function showInfo(coordinate) {
     const viewResolution = /** @type {number} */ (view.getResolution());
     const url = layers[map.CRESHlayer].A.source.getFeatureInfoUrl(
 	coordinate,
@@ -103,4 +109,36 @@ map.on('singleclick', function (evt) {
 		overlay.setPosition(coordinate);
 	    });
     }
-});
+}
+
+/*******************/
+/* search postcode */
+/*******************/
+searchPostcodeButton.onclick = function () {
+    var postcode = searchPostcode.value;
+    console.log('search');
+
+    var postcodeRequest = new XMLHttpRequest();
+    postcodeRequest.addEventListener("load", postcodeListener);
+    postcodeRequest.open("GET", "https://api.postcodes.io/postcodes/" + postcode);
+    postcodeRequest.send();
+}
+
+function postcodeListener () {
+    const response = JSON.parse(this.responseText);
+    if (response.status != 200) {
+	console.log('error');
+	searchPostcode.style.color = 'red';
+    }
+    else {
+	searchPostcode.style.color = 'black';
+	const coords = ol.proj.fromLonLat(
+	    [response.result.longitude, response.result.latitude]);
+	showInfo(coords);
+	const nview = new ol.View({
+	    center: coords,
+	    zoom: 14
+	});
+	map.setView(nview);
+    }
+}
