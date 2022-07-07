@@ -4,6 +4,52 @@
 const container = document.getElementById('popup');
 const content = document.getElementById('popup-content');
 const closer = document.getElementById('popup-closer');
+const attribSelector = document.getElementById('attrib');
+
+var layers = {};
+
+const baselayer = new ol.layer.Tile({
+    source: new ol.source.OSM()});
+
+/* get capabilities */
+function capsListener () {
+    var wmsCapabilitiesFormat = new ol.format.WMSCapabilities();
+    var c = wmsCapabilitiesFormat.read(this.responseText);
+    c.Capability.Layer.Layer[0].Style.forEach(function(item,index) {
+	var option = document.createElement("option");
+	option.text = item.Name;
+	option.value = item.Name;
+	attribSelector.appendChild(option);
+
+	var wmsSource = new ol.source.TileWMS({
+	    url: mapserverurl,
+	    params: {'LAYERS': 'datazones', 'STYLES': item.Name},
+	    crossOrigin: 'anonymous',
+	    transition: 0,
+	});
+	layers[item.Name] = new ol.layer.Tile({
+	    source: wmsSource});
+    });
+    map.once('postrender', function(event) {
+	var layer = Object.keys(layers)[0];
+	setAttributeLayer(layer);
+    });
+}
+
+var capsRequest = new XMLHttpRequest();
+capsRequest.addEventListener("load", capsListener);
+capsRequest.open("GET", mapserverurl + 'version=1.3.0&request=GetCapabilities&amp&service=WMS');
+capsRequest.send();
+
+/* the attribute changed */
+attribSelector.onchange = function() {
+    setAttributeLayer(this.value);
+}
+
+function setAttributeLayer(l) {
+    map.setLayers([baselayer, layers[l]]);
+    map.CRESHlayer = l;
+}
 
 /**
  * Add a click handler to hide the popup.
@@ -27,37 +73,23 @@ const overlay = new ol.Overlay({
     },
 });
 
-const wmsSource = new ol.source.TileWMS({
-    url: mapserverurl,
-    params: {'LAYERS': 'datazones', 'STYLES': 'alcohol'},
-    crossOrigin: 'anonymous',
-    transition: 0,
-});
-
 const view = new ol.View({
     center: ol.proj.fromLonLat([-3.184111, 55.948162]),
     zoom: 12
 });
 
+
 var map = new ol.Map({
     target: 'map',
-    layers: [
-        new ol.layer.Tile({
-            source: new ol.source.OSM()
-        }),           
-        new ol.layer.Tile({
-            source: wmsSource
-        })
-    ],
+    layers: [baselayer],
     overlays: [overlay],
     view: view,
 });
 
 map.on('singleclick', function (evt) {
-    //document.getElementById('info').innerHTML = '';
     const coordinate = evt.coordinate;
     const viewResolution = /** @type {number} */ (view.getResolution());
-    const url = wmsSource.getFeatureInfoUrl(
+    const url = layers[map.CRESHlayer].A.source.getFeatureInfoUrl(
 	coordinate,
 	viewResolution,
 	'EPSG:3857',
