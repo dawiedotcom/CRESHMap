@@ -17,8 +17,8 @@ ATTRIBUTE_DEFAULTS = {
 
 Layer = namedtuple('Layer', ['title', 'abstract', 'id', 'table'])
 
-LAYERS = {'datazones': Layer('Datazones', "data by Data Zone",
-                             'datazone', 'data'),
+LAYERS = {'datazone': Layer('Datazones', "data by Data Zone",
+                            'datazone', 'data'),
           'westminster_const': Layer('Westminster Constituencies',
                                      "data by Westminster Constituency",
                                      'code', 'data_westminster'),

@@ -25,7 +25,7 @@ function capsListener () {
 
 	var wmsSource = new ol.source.TileWMS({
 	    url: mapserverurl,
-	    params: {'LAYERS': 'datazones', 'STYLES': item.Name},
+	    params: {'LAYERS': 'datazone', 'STYLES': item.Name},
 	    crossOrigin: 'anonymous',
 	    transition: 0,
 	});
