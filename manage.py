@@ -109,7 +109,7 @@ def main():
                         db.func.sum(Data.alcohol).label('alcohol'),
                         db.func.sum(Data.drug).label('drug')).filter(
                         Data.datazone_id.in_(datazones)).one()
-                    zoneData = DataTable(code=zone.code, **data._asdict())
+                    zoneData = DataTable(code_id=zone.code, **data._asdict())
                     db.session.add(zoneData)
                 db.session.commit()
 

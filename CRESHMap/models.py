@@ -75,7 +75,7 @@ class DataWestminster(BaseData):
     id = db.Column(db.Integer,
                    db.ForeignKey('base_data.id', ondelete='CASCADE'),
                    primary_key=True)
-    code = db.Column(db.String(10), db.ForeignKey('westminster_const.code'))
+    code_id = db.Column(db.String(10), db.ForeignKey('westminster_const.code'))
     constituency = db.relationship("WestminsterConstituency",
                                    back_populates="data")
 
@@ -89,7 +89,7 @@ class DataLocalAuthority(BaseData):
     id = db.Column(db.Integer,
                    db.ForeignKey('base_data.id', ondelete='CASCADE'),
                    primary_key=True)
-    code = db.Column(db.String(10), db.ForeignKey('local_authority.code'))
+    code_id = db.Column(db.String(10), db.ForeignKey('local_authority.code'))
     local_authority = db.relationship("LocalAuthority",
                                       back_populates="data")
 
