@@ -32,12 +32,8 @@ Note, that the read-ony user needs access to all database schemas to work correc
 
 
 ## References
-This application follows the [flask application factory pattern](https://hackersandslackers.com/flask-application-factory/).
+ * This application follows the [flask application factory pattern](https://hackersandslackers.com/flask-application-factory/).
+ * The web app uses [postcodes.io](https://postcodes.io/) for geolocating postcodes.
+ * [local authority areas - Scotland]( https://spatialdata.gov.scot/geonetwork/srv/api/records/1cd57ea6-8d6e-412b-a9dd-d1c89a80ad62)
+ * [UK Parliamentary Constituencies - Scotland](https://spatialdata.gov.scot/geonetwork/srv/api/records/8d1a56f5-a943-42ad-8cff-c808a50b8f10)
 
-The web app uses [postcodes.io](https://postcodes.io/) for geolocating postcodes.
-
-
-Set database connection string
-```
-export DATABASE_URL='postgresql://creshro:PASSWORD@pow/cresh?options=-c%20search_path=cresh,public,topology''
-```

@@ -1,29 +1,36 @@
 from CRESHMap import init_app, db
 from CRESHMap.models import DataZone
+from CRESHMap.models import WestminsterConstituency
+from CRESHMap.models import LocalAuthority
 from CRESHMap.models import Data
+from CRESHMap.models import DataWestminster
+from CRESHMap.models import DataLocalAuthority
+
+from collections import namedtuple
 import argparse
 import fiona
 from shapely.geometry import shape
+from shapely.ops import transform
+import pyproj
+
 from pathlib import Path
 import pandas
-import geopandas
 
+
+DB_PROJECTION = pyproj.CRS('EPSG:4326')
 
 MAPPING = {2020: {
     "Data_Zone": "datazone_id",
     "Total_population": "total_population",
-    "Working_Age_population": "working_age_population",
     "ALCOHOL": "alcohol",
-    "DRUG": "drug",
-    "SIMD2020v2_Rank": "rank",
-    "SIMD_2020v2_Percentile": "percentile",
-    "SIMD2020v2_Income_Domain_Rank": "income_domain_rank",
-    "SIMD2020_Employment_Domain_Rank": "employment_domain_rank",
-    "SIMD2020_Health_Domain_Rank": "health_domain_rank",
-    "SIMD2020_Education_Domain_Rank": "education_domain_rank",
-    "SIMD2020_Access_Domain_Rank": "access_domain_rank",
-    "SIMD2020_Crime_Domain_Rank": "crime_domain_rank",
-    "SIMD2020_Housing_Domain_Rank": "housing_domain_rank"}}
+    "DRUG": "drug"}}
+
+Geography = namedtuple('Geography', ['cls', 'dbid', 'id', 'name'])
+
+GEOGRAPHIES = {
+    'D': Geography(DataZone, 'datazone', 'DataZone', 'Name'),
+    'W': Geography(WestminsterConstituency, 'code', 'CODE', 'NAME'),
+    'L': Geography(LocalAuthority, 'code', 'code', 'local_auth')}
 
 
 def main():
@@ -33,11 +40,13 @@ def main():
                        help="initialise tables")
     group.add_argument('--delete-db', default=False, action='store_true',
                        help="drop tables")
-    group.add_argument('--datazones', type=Path,
-                       help="load datazones from shapefile DATAZONES")
-    group.add_argument('--data', type=Path,
-                       help="CSV file containing data")
-    parser.add_argument('-y', '--year', type=int, help="the year")
+    group.add_argument('-g', '--geography', choices=GEOGRAPHIES.keys(),
+                       help='the geography type (D) datazone, (W) Westminster '
+                       'Constituency, (L) local authority')
+    group.add_argument('-y', '--year', type=int, choices=MAPPING.keys(),
+                       help="load data for YEAR")
+    parser.add_argument('data', type=Path, nargs='?',
+                        help="the data file to load")
     args = parser.parse_args()
 
     app = init_app()
@@ -48,39 +57,61 @@ def main():
     elif args.delete_db:
         with app.app_context():
             db.drop_all()
-    elif args.datazones is not None:
+    elif args.geography is not None:
+        if args.data is None:
+            parser.error('no shape file specified')
         with app.app_context():
-            with fiona.open(args.datazones, 'r') as datazones:
-                for dz in datazones:
-                    dz = DataZone(
-                        datazone=dz['properties']['DataZone'],
-                        name=dz['properties']['Name'],
-                        geometry=shape(dz['geometry']).wkt)
-                    db.session.add(dz)
+            geography = GEOGRAPHIES[args.geography]
+            with fiona.open(args.data, 'r') as geography_data:
+                # setup projection
+                shp_projection = pyproj.CRS(geography_data.crs_wkt)
+                project = pyproj.Transformer.from_crs(
+                    shp_projection, DB_PROJECTION, always_xy=True).transform
+                for geo in geography_data:
+                    if not geo['properties'][geography.id][0] == 'S':
+                        # only load Scottish data
+                        continue
+                    poly = transform(project, shape(geo['geometry']))
+                    data = {geography.dbid: geo['properties'][geography.id],
+                            'name': geo['properties'][geography.name],
+                            'geometry': poly.wkt}
+                    data = geography.cls(**data)
+                    db.session.add(data)
             db.session.commit()
-    elif args.data is not None:
-        if args.year is None:
-            parser.error('need to specify year')
-        if args.year not in MAPPING:
-            parser.error(f'no mapping for {args.year}')
-        mapping = MAPPING[args.year]
-        data = pandas.read_csv(args.data)
-        to_drop = [k for k in data.keys() if k not in mapping]
-        data.drop(to_drop, axis=1, inplace=True)
-        data.rename(columns=mapping, inplace=True)
-        data['year'] = args.year
+    elif args.year is not None:
+        if args.data is None:
+            parser.error('no CSV specified')
+
         with app.app_context():
-            db.session.bulk_insert_mappings(
-                Data, data.to_dict(orient='records'))
+            # first load data
+            mapping = MAPPING[args.year]
+            data = pandas.read_csv(args.data)
+            to_drop = [k for k in data.keys() if k not in mapping]
+            data.drop(to_drop, axis=1, inplace=True)
+            data.rename(columns=mapping, inplace=True)
+            data['year'] = args.year
+            for record in data.to_dict(orient='records'):
+                record = Data(**record)
+                db.session.add(record)
             db.session.commit()
-    else:
-        with app.app_context():
-            engine = db.get_engine()
-            df = geopandas.read_postgis(
-                "SELECT geometry, name, data.alcohol FROM datazone join "
-                "data on datazone.datazone=data.datazone_id",
-                con=engine, geom_col="geometry")
-            print(df)
+
+            # aggregate data for other geographies
+            for GeoTable, DataTable in [
+                    (WestminsterConstituency, DataWestminster),
+                    (LocalAuthority, DataLocalAuthority)]:
+                zones = db.session.query(GeoTable)
+                for zone in zones:
+                    datazones = db.session.query(DataZone.datazone).filter(
+                        DataZone.geometry.ST_Within(zone.geometry)).subquery()
+                    data = db.session.query(
+                        db.func.sum(
+                            Data.total_population).label('total_population'),
+                        db.func.sum(Data.alcohol).label('alcohol'),
+                        db.func.sum(Data.drug).label('drug')).filter(
+                        Data.datazone_id.in_(datazones)).one()
+                    zoneData = DataTable(code=zone.code, **data._asdict())
+                    db.session.add(zoneData)
+                db.session.commit()
 
 
 if __name__ == '__main__':
