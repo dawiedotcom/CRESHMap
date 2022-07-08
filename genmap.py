@@ -1,6 +1,7 @@
 from CRESHMap import init_app, db
 from CRESHMap.models import DataZone, Data
 
+from collections import namedtuple
 from pathlib import Path
 import configparser
 from flask import render_template
@@ -13,6 +14,17 @@ ATTRIBUTE_DEFAULTS = {
     'start': 0,
     'start_colour': "0 255 0",
     'end_colour': "255 0 0"}
+
+Layer = namedtuple('Layer', ['title', 'abstract', 'id', 'table'])
+
+LAYERS = {'datazones': Layer('Datazones', "data by Data Zone",
+                             'datazone', 'data'),
+          'westminster_const': Layer('Westminster Constituencies',
+                                     "data by Westminster Constituency",
+                                     'code', 'data_westminster'),
+          'local_authority': Layer('Local Authority',
+                                   "Data by Local Authority",
+                                   'code', 'data_local_authority')}
 
 
 def main():  # noqa C901
@@ -78,7 +90,7 @@ def main():  # noqa C901
         cresh_map = render_template(
             'cresh.map', bbox=bbox,
             mapserverurl=app.config['MAPSERVER_URL'], dburl=db.engine.url,
-            attributes=attributes, popup=popup_name)
+            attributes=attributes, popup=popup_name, layers=LAYERS)
         popup = render_template('popup.html', attributes=attributes)
 
         if args.output is not None:

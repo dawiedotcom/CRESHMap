@@ -20,11 +20,12 @@ MAP
       END
   END
 
+  {% for l in layers %}
   LAYER
-      NAME "datazones"
+      NAME "{{ l }}"
       METADATA
-          "wms_title"         "datazones"
-          "wms_abstract"      "the datazones"
+          "wms_title"         "{{ layers[l].title }}"
+          "wms_abstract"      "{{ layers[l].abstract }}"
           "wms_srs"           "EPSG:4326"
           "gml_include_items" "all"
           "gml_featureid"     "ID"
@@ -35,9 +36,8 @@ MAP
       STATUS ON
       CONNECTIONTYPE POSTGIS
       CONNECTION "{% if dburl.host is not none %}host={{ dburl.host }} {% endif %}{% if dburl.username is not none %}user={{ dburl.username }} {% endif %}{% if dburl.password is not none %}password={{ dburl.password }} {% endif %}{% if dburl.port is not none %}port={{ dburl.port }} {% endif %}{% if dburl.database is not none %}dbname={{ dburl.database }}{% endif %}"
-      DATA "geometry from (select z.datazone, z.geometry, z.name,
-            {% for a in attributes %}d.{{ a }}{% if not loop.last %}, {% endif %}{% endfor %} from cresh.datazone z join cresh.data d 
-            on z.datazone = d.datazone_id) as subquery using unique datazone"
+      DATA "geometry from (select z.{{ layers[l].id }}, z.geometry, z.name,
+            {% for a in attributes %}bd.{{ a }}{% if not loop.last %}, {% endif %}{% endfor %} from cresh.{{ l }} z join cresh.{{ layers[l].table }} d on z.{{ layers[l].id }} = d.{{ layers[l].id }}_id join cresh.base_data bd on d.id = bd.id) as subquery using unique {{ layers[l].id }}"
 
 
       PROCESSING "CLOSE_CONNECTION=DEFER" # for maximum performance
@@ -68,4 +68,5 @@ MAP
           "init=epsg:4326"
       END
   END
+  {% endfor %}
 END
