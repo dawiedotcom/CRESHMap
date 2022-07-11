@@ -2,6 +2,7 @@
 from . import db
 from geoalchemy2 import Geometry
 from sqlalchemy.orm.collections import attribute_mapped_collection
+import math
 
 
 class DataZone(db.Model):
@@ -48,12 +49,29 @@ class BaseData(db.Model):
     total_population = db.Column(db.Integer)
     alcohol = db.Column(db.Float)
     drug = db.Column(db.Float)
+    alcohol_density = db.Column(db.Float)
+    drug_density = db.Column(db.Float)
 
     geography = db.Column(db.String)
 
     __mapper_args__ = {
         'polymorphic_identity': 'base_data',
         'polymorphic_on': geography}
+
+
+def compute_densities(mapper, connection, target):
+    if target.total_population == 0:
+        target.alcohol_density = math.nan
+        target.drug_density = math.nan
+    else:
+        target.alcohol_density = target.alcohol / target.total_population
+        target.drug_density = target.drug / target.total_population
+
+
+db.event.listen(BaseData, 'before_insert', compute_densities, propagate=True)
+
+
+db.event.listen(BaseData, 'before_update', compute_densities, propagate=True)
 
 
 class Data(BaseData):
