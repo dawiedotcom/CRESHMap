@@ -4,6 +4,7 @@
 const container = document.getElementById('popup');
 const content = document.getElementById('popup-content');
 const closer = document.getElementById('popup-closer');
+const layerSelector = document.getElementById('layer');
 const attribSelector = document.getElementById('attrib');
 const searchPostcodeButton = document.getElementById('button-search-postcode');
 const searchPostcode = document.getElementById('search-postcode');
@@ -17,24 +18,33 @@ const baselayer = new ol.layer.Tile({
 function capsListener () {
     var wmsCapabilitiesFormat = new ol.format.WMSCapabilities();
     var c = wmsCapabilitiesFormat.read(this.responseText);
+    c.Capability.Layer.Layer.forEach(function(item, index) {
+	var option = document.createElement("option");
+	option.text = item.Title;
+	option.value = item.Title;
+	layerSelector.appendChild(option);
+	layers[item.Title] = {};
+	item.Style.forEach(function(st_item,st_index) {
+	    var wmsSource = new ol.source.TileWMS({
+		url: mapserverurl,
+		params: {'LAYERS': item.Name, 'STYLES': st_item.Name},
+		crossOrigin: 'anonymous',
+		transition: 0,
+	    });
+	    layers[item.Title][st_item.Title] = new ol.layer.Tile({
+		source: wmsSource});
+	});
+    });
     c.Capability.Layer.Layer[0].Style.forEach(function(item,index) {
 	var option = document.createElement("option");
-	option.text = item.Name;
-	option.value = item.Name;
+	option.text = item.Title;
+	option.value = item.Title;
 	attribSelector.appendChild(option);
-
-	var wmsSource = new ol.source.TileWMS({
-	    url: mapserverurl,
-	    params: {'LAYERS': 'datazone', 'STYLES': item.Name},
-	    crossOrigin: 'anonymous',
-	    transition: 0,
-	});
-	layers[item.Name] = new ol.layer.Tile({
-	    source: wmsSource});
     });
     map.once('postrender', function(event) {
-	var layer = Object.keys(layers)[0];
-	setAttributeLayer(layer);
+	var l = Object.keys(layers)[0];
+	var a = Object.keys(layers[l])[0];
+	setLayer(l, a);
     });
 }
 
@@ -43,14 +53,19 @@ capsRequest.addEventListener("load", capsListener);
 capsRequest.open("GET", mapserverurl + 'version=1.3.0&request=GetCapabilities&amp&service=WMS');
 capsRequest.send();
 
-/* the attribute changed */
-attribSelector.onchange = function() {
-    setAttributeLayer(this.value);
+/* the layer changed */
+layerSelector.onchange = function() {
+    setLayer(layerSelector.value, attribSelector.value);
 }
 
-function setAttributeLayer(l) {
-    map.setLayers([baselayer, layers[l]]);
-    map.CRESHlayer = l;
+/* the attribute changed */
+attribSelector.onchange = function() {
+    setLayer(layerSelector.value, attribSelector.value);
+}
+
+function setLayer(l,a) {
+    map.setLayers([baselayer, layers[l][a]]);
+    map.CRESHattrib = layers[l][a];
 }
 
 /**
@@ -95,7 +110,7 @@ map.on('singleclick', function (evt) {
 
 function showInfo(coordinate) {
     const viewResolution = /** @type {number} */ (view.getResolution());
-    const url = layers[map.CRESHlayer].A.source.getFeatureInfoUrl(
+    const url = map.CRESHattrib.A.source.getFeatureInfoUrl(
 	coordinate,
 	viewResolution,
 	'EPSG:3857',
@@ -116,7 +131,6 @@ function showInfo(coordinate) {
 /*******************/
 searchPostcodeButton.onclick = function () {
     var postcode = searchPostcode.value;
-    console.log('search');
 
     var postcodeRequest = new XMLHttpRequest();
     postcodeRequest.addEventListener("load", postcodeListener);
