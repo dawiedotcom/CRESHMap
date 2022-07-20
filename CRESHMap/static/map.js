@@ -15,6 +15,14 @@ var layers = {};
 const baselayer = new ol.layer.Tile({
     source: new ol.source.OSM()});
 
+/* set attribute selector */
+for (var a in mapattribs) {
+    var option = document.createElement("option");
+    option.text = mapattribs[a]['name'];
+    option.value = a;
+    attribSelector.appendChild(option);
+}
+
 /* get capabilities */
 function capsListener () {
     var wmsCapabilitiesFormat = new ol.format.WMSCapabilities();
@@ -36,16 +44,10 @@ function capsListener () {
 		source: wmsSource});
 	});
     });
-    c.Capability.Layer.Layer[0].Style.forEach(function(item,index) {
-	var option = document.createElement("option");
-	option.text = item.Title;
-	option.value = item.Title;
-	attribSelector.appendChild(option);
-    });
     map.once('postrender', function(event) {
 	var l = Object.keys(layers)[0];
 	var a = Object.keys(layers[l])[0];
-	setLayer(l, a);
+	setLayer(l, Object.keys(mapattribs)[0]);
     });
 }
 
@@ -62,12 +64,12 @@ layerSelector.onchange = function() {
 /* the attribute changed */
 attribSelector.onchange = function() {
     setLayer(layerSelector.value, attribSelector.value);
-    attribDescription.innerHTML = mapattribs[attribSelector.value].description;
 }
 
 function setLayer(l,a) {
     map.setLayers([baselayer, layers[l][a]]);
     map.CRESHattrib = layers[l][a];
+    attribDescription.innerHTML = mapattribs[a].description;
 }
 
 /**
