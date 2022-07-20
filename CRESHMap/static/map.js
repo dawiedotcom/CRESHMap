@@ -8,6 +8,7 @@ const layerSelector = document.getElementById('layer');
 const attribSelector = document.getElementById('attrib');
 const searchPostcodeButton = document.getElementById('button-search-postcode');
 const searchPostcode = document.getElementById('search-postcode');
+const attribDescription = document.getElementById('attrib_description');
 
 var layers = {};
 
@@ -61,6 +62,8 @@ layerSelector.onchange = function() {
 /* the attribute changed */
 attribSelector.onchange = function() {
     setLayer(layerSelector.value, attribSelector.value);
+    attribDescription.innerHTML = mappattribs[attribSelector.value].description;
+    console.log(attribSelector.value);
 }
 
 function setLayer(l,a) {
