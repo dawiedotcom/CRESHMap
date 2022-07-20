@@ -1,4 +1,5 @@
 from CRESHMap import init_app, db
+from CRESHMap.models import Attribute
 from CRESHMap.models import DataZone
 from CRESHMap.models import WestminsterConstituency
 from CRESHMap.models import LocalAuthority
@@ -14,7 +15,10 @@ from shapely.ops import transform
 import pyproj
 
 from pathlib import Path
+import configparser
 import pandas
+import markdown
+import sys
 
 
 DB_PROJECTION = pyproj.CRS('EPSG:4326')
@@ -45,6 +49,8 @@ def main():
                        'Constituency, (L) local authority')
     group.add_argument('-y', '--year', type=int, choices=MAPPING.keys(),
                        help="load data for YEAR")
+    group.add_argument('-a', '--attributes', type=Path,
+                       help="read configuration file describing attributes")
     parser.add_argument('data', type=Path, nargs='?',
                         help="the data file to load")
     args = parser.parse_args()
@@ -111,6 +117,31 @@ def main():
                         Data.datazone_id.in_(datazones)).one()
                     zoneData = DataTable(code_id=zone.code, **data._asdict())
                     db.session.add(zoneData)
+                db.session.commit()
+    elif args.attributes is not None:
+        cfg = configparser.ConfigParser()
+        cfg.read(args.attributes)
+        for a in cfg.keys():
+            if a in ['setup', 'DEFAULT']:
+                continue
+            if not hasattr(Data, a):
+                print(f'Error, unknown attribute {a}')
+                sys.exit(1)
+            if 'name' not in cfg[a]:
+                name = a
+            else:
+                name = cfg[a]['name']
+            dfile = (args.attributes.parent / 'descriptions' / a).with_suffix(
+                '.md')
+            if dfile.exists():
+                with dfile.open('r') as dfile:
+                    description = markdown.markdown(dfile.read())
+            else:
+                description = ''
+
+            with app.app_context():
+                db.session.merge(
+                    Attribute(attribute=a, name=name, description=description))
                 db.session.commit()
 
 

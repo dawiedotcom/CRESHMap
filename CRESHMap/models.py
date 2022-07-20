@@ -5,6 +5,14 @@ from sqlalchemy.orm.collections import attribute_mapped_collection
 import math
 
 
+class Attribute(db.Model):
+    __tablename__ = 'attribute'
+
+    attribute = db.Column(db.String(), primary_key=True)
+    name = db.Column(db.String())
+    description = db.Column(db.String())
+
+
 class DataZone(db.Model):
     __tablename__ = 'datazone'
 
