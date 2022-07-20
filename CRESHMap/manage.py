@@ -1,11 +1,11 @@
-from CRESHMap import init_app, db
-from CRESHMap.models import Attribute
-from CRESHMap.models import DataZone
-from CRESHMap.models import WestminsterConstituency
-from CRESHMap.models import LocalAuthority
-from CRESHMap.models import Data
-from CRESHMap.models import DataWestminster
-from CRESHMap.models import DataLocalAuthority
+from . import init_app, db
+from .models import Attribute
+from .models import DataZone
+from .models import WestminsterConstituency
+from .models import LocalAuthority
+from .models import Data
+from .models import DataWestminster
+from .models import DataLocalAuthority
 
 from collections import namedtuple
 import argparse

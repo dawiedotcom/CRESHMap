@@ -1,5 +1,5 @@
 """Application entry point."""
-from CRESHMap import init_app
+from . import init_app
 
 
 app = init_app()

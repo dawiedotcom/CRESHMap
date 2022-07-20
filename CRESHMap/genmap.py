@@ -1,5 +1,5 @@
-from CRESHMap import init_app, db
-from CRESHMap.models import DataZone, Data
+from . import init_app, db
+from .models import DataZone, Data
 
 from collections import namedtuple
 from pathlib import Path

@@ -7,6 +7,8 @@ from sqlalchemy.event import listen
 from sqlalchemy.sql import select, func
 from sqlalchemy import inspect
 
+from .config import Config
+
 pages = FlatPages()
 db = SQLAlchemy()
 
@@ -24,7 +26,7 @@ def load_spatialite(dbapi_conn, connection_record):
 def init_app():
     """Construct core Flask application."""
     app = Flask(__name__, instance_relative_config=False)
-    app.config.from_object('config.Config')
+    app.config.from_object(Config)
     app.config['FLATPAGES_HTML_RENDERER'] = renderer
 
     db.init_app(app)
