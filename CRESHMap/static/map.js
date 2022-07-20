@@ -62,7 +62,7 @@ layerSelector.onchange = function() {
 /* the attribute changed */
 attribSelector.onchange = function() {
     setLayer(layerSelector.value, attribSelector.value);
-    attribDescription.innerHTML = mappattribs[attribSelector.value].description;
+    attribDescription.innerHTML = mapattribs[attribSelector.value].description;
     console.log(attribSelector.value);
 }
 

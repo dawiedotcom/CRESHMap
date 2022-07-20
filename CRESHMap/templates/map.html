@@ -86,7 +86,7 @@
 {% block scripts %}
 <script type='text/javascript'>
   const mapserverurl = "{{ mapserverurl }}";
-  const mappattribs = {
+  const mapattribs = {
   {% for a in attributes %}
       "{{ a }}": {"name": "{{ attributes[a]['name'] }}",
 		  "description": "{{ attributes[a]['description']|safe }}" },
