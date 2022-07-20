@@ -13,7 +13,7 @@ export DATABASE_URL='postgresql://cresh:PASSWORD@pow/cresh
 ```
 Run the [manage.py](manage.py) script to create the database tables:
 ```
-python3 manage.py --init-db
+creshmap-manage --init-db
 ```
 You can use the `--delete-db` to delete the tables.
 
@@ -25,7 +25,7 @@ The mapserver is controlled via a [mapfile](https://mapserver.org/mapfile/index.
 
 ```
 export DATABASE_URL='postgresql://creshro:PASSWORD@pow/cresh?options=-c%20search_path=cresh,public,topology'
-python3 genmap.py creshmap.cfg -o /path/to/webdir
+creshmap-genmap creshmap.cfg -o /path/to/webdir
 ```
 
 Note, that the read-ony user needs access to all database schemas to work correctly. The script will put the mapfile and template into the `/path/to/webdir` directory. Attributes that can be displayed by the map are configured in the configuration file.
