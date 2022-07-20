@@ -1,3 +1,6 @@
 *~
 __pycache__
 app.db
+CRESHMap.egg-info/
+build/
+dist/

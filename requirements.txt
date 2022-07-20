@@ -5,6 +5,4 @@ psycopg2
 geoalchemy2
 fiona
 shapely
-geopandas
-plotly
 pandas
