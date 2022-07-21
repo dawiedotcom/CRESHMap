@@ -148,7 +148,6 @@ function showInfo(coordinate) {
 		    name.scope="row";
 		    value.innerHTML = popup_data.attributes[a].value;
 		}
-		console.log(popup_data);
 		popupTable.replaceChild(tbody, old_tbody);
 		overlay.setPosition(coordinate);
 	    });
