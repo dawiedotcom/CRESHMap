@@ -2,7 +2,7 @@
  * Elements that make up the popup.
  */
 const container = document.getElementById('popup');
-const content = document.getElementById('popup-content');
+const popupTable = document.getElementById('popup-data');
 const closer = document.getElementById('popup-closer');
 const layerSelector = document.getElementById('layer');
 const attribSelector = document.getElementById('attrib');
@@ -124,7 +124,32 @@ function showInfo(coordinate) {
 	fetch(url)
 	    .then((response) => response.text())
 	    .then((data) => {
-		content.innerHTML = data;
+		//content.innerHTML = data;
+		//popupTable
+		const popup_data = JSON.parse(data);
+		var old_thead = popupTable.getElementsByTagName("thead")[0];
+		var thead = document.createElement('thead');
+		var row = thead.insertRow(-1);
+		attribName = document.createElement('th');
+		row.appendChild(attribName);
+		attribName.innerHTML = popup_data.name;
+		attribName.colspan = "2";
+		attribName.scope="col";
+		popupTable.replaceChild(thead, old_thead);
+		
+		var old_tbody = popupTable.getElementsByTagName("tbody")[0];
+		var tbody = document.createElement('tbody');
+		for (a in popup_data.attributes) {
+		    var row = tbody.insertRow(-1);
+		    var name = document.createElement('th');
+		    row.appendChild(name);
+		    var value = row.insertCell(1);
+		    name.innerHTML = popup_data.attributes[a].name;
+		    name.scope="row";
+		    value.innerHTML = popup_data.attributes[a].value;
+		}
+		console.log(popup_data);
+		popupTable.replaceChild(tbody, old_tbody);
 		overlay.setPosition(coordinate);
 	    });
     }

@@ -16,7 +16,7 @@ MAP
           "wms_onlineresource" "{{ mapserverurl }}"
           "wms_srs"            "EPSG:4326 EPSG:4269 EPSG:3978 EPSG:3857"
           "wms_enable_request" "*"
-          "wms_getfeatureinfo_formatlist" "text/plain,text/html,application/vnd.ogc.gml,gml"
+          "wms_getfeatureinfo_formatlist" "text/plain,text/html,application/vnd.ogc.gml,gml,geojson"
       END
   END
 

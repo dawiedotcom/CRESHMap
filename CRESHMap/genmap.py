@@ -39,9 +39,11 @@ def main():  # noqa C901
 
     app = init_app()
 
-    popup_name = Path('popup.html')
+    popup_base_name = Path('popup.js')
     if args.output is not None:
-        popup_name = args.output / popup_name
+        popup_name = args.output / popup_base_name
+    else:
+        popup_name = popup_base_name
 
     with app.app_context():
 
@@ -91,7 +93,7 @@ def main():  # noqa C901
             'cresh.map', bbox=bbox,
             mapserverurl=app.config['MAPSERVER_URL'], dburl=db.engine.url,
             attributes=attributes, popup=popup_name, layers=LAYERS)
-        popup = render_template('popup.html', attributes=attributes)
+        popup = render_template(str(popup_base_name), attributes=attributes)
 
         if args.output is not None:
             with (args.output / cfg['setup']['mapfilename']).open('w') as out:
