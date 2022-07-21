@@ -1,5 +1,6 @@
 from . import init_app, db
 from .models import Attribute
+from .models import Geography
 from .models import DataZone
 from .models import WestminsterConstituency
 from .models import LocalAuthority
@@ -29,12 +30,18 @@ MAPPING = {2020: {
     "ALCOHOL": "alcohol",
     "DRUG": "drug"}}
 
-Geography = namedtuple('Geography', ['cls', 'dbid', 'id', 'name'])
+GeographyItem = namedtuple('Geography', [
+    'geography', 'geography_name', 'cls', 'dbid', 'id', 'name'])
 
 GEOGRAPHIES = {
-    'D': Geography(DataZone, 'datazone', 'DataZone', 'Name'),
-    'W': Geography(WestminsterConstituency, 'code', 'CODE', 'NAME'),
-    'L': Geography(LocalAuthority, 'code', 'code', 'local_auth')}
+    'D': GeographyItem(
+        'datazone', 'Datazones', DataZone, 'datazone', 'DataZone', 'Name'),
+    'W': GeographyItem(
+        'westminster_const', 'Westminster Constituencies',
+        WestminsterConstituency, 'code', 'CODE', 'NAME'),
+    'L': GeographyItem(
+        'local_authority', 'Local Authority',
+        LocalAuthority, 'code', 'code', 'local_auth')}
 
 
 def main():
@@ -68,6 +75,9 @@ def main():
             parser.error('no shape file specified')
         with app.app_context():
             geography = GEOGRAPHIES[args.geography]
+            geo = Geography(geography=geography.geography,
+                            name=geography.geography_name)
+            db.session.add(geo)
             with fiona.open(args.data, 'r') as geography_data:
                 # setup projection
                 shp_projection = pyproj.CRS(geography_data.crs_wkt)

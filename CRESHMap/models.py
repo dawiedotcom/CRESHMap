@@ -5,6 +5,13 @@ from sqlalchemy.orm.collections import attribute_mapped_collection
 import math
 
 
+class Geography(db.Model):
+    __tablename__ = 'geography'
+
+    geography = db.Column(db.String(), primary_key=True)
+    name = db.Column(db.String())
+
+
 class Attribute(db.Model):
     __tablename__ = 'attribute'
 
