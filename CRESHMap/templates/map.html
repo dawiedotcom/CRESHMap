@@ -45,6 +45,7 @@
       <thead></thead>
       <tbody></tbody>
     </table>
+    <div id="histogram"></div>
   </div>
 </div>
 {% endblock %}
@@ -100,6 +101,7 @@
   </style>
 {% endblock %}
 {% block scripts %}
+<script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
 <script type='text/javascript'>
   const mapserverurl = "{{ mapserverurl }}";
   const mapattribs = {

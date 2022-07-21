@@ -9,6 +9,7 @@ const attribSelector = document.getElementById('attrib');
 const searchPostcodeButton = document.getElementById('button-search-postcode');
 const searchPostcode = document.getElementById('search-postcode');
 const attribDescription = document.getElementById('attrib_description');
+const histogramPlot = document.getElementById("histogram");
 
 var layers = {};
 
@@ -21,6 +22,18 @@ for (var a in mapattribs) {
     option.text = mapattribs[a]['name'];
     option.value = a;
     attribSelector.appendChild(option);
+}
+
+function getHistogram(geography, attribute){
+    const url = encodeURI(
+	window.location.href + '/histogram/' + geography + '/' + attribute);
+    fetch(url)
+        .then((response) => response.text())
+        .then((data) => {
+	    const histogram_data = JSON.parse(data);
+	    layers[geography][attribute].histogram = histogram_data;
+	})
+
 }
 
 /* get capabilities */
@@ -42,6 +55,7 @@ function capsListener () {
 	    });
 	    layers[item.Title][st_item.Title] = new ol.layer.Tile({
 		source: wmsSource});
+	    getHistogram(item.Title, st_item.Title);
 	});
     });
     map.once('postrender', function(event) {
@@ -124,8 +138,6 @@ function showInfo(coordinate) {
 	fetch(url)
 	    .then((response) => response.text())
 	    .then((data) => {
-		//content.innerHTML = data;
-		//popupTable
 		const popup_data = JSON.parse(data);
 		var old_thead = popupTable.getElementsByTagName("thead")[0];
 		var thead = document.createElement('thead');
@@ -149,6 +161,41 @@ function showInfo(coordinate) {
 		    value.innerHTML = popup_data.attributes[a].value;
 		}
 		popupTable.replaceChild(tbody, old_tbody);
+		Plotly.newPlot(histogramPlot, [{
+		    type: 'bar',
+		    x: map.CRESHattrib.histogram.x,
+		    y: map.CRESHattrib.histogram.y }], {
+			autosize: true,
+			title: {
+			    text: mapattribs[attribSelector.value].name,
+			    font: {
+				size: 24
+			    },
+			    xref: 'paper',
+			    x: 0.05,
+			},
+			shapes: [{
+			    type: 'line',
+			    xref: 'x',
+			    yref: 'paper',
+			    y0: 0,
+			    y1: 1,
+			    x0: popup_data.attributes[attribSelector.value].value ,
+			    x1: popup_data.attributes[attribSelector.value].value ,
+			    line: {
+				color: 'rgb(255, 0, 0)',
+				width: 2
+			    }}
+				],
+			margin: {
+			    l: 25,
+			    r: 5,
+			    b: 25,
+			    t: 35,
+			    pad: 4
+			},
+			width: 250,
+			height:300}) ;
 		overlay.setPosition(coordinate);
 	    });
     }

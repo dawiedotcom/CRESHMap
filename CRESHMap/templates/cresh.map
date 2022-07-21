@@ -43,14 +43,7 @@ MAP
       PROCESSING "CLOSE_CONNECTION=DEFER" # for maximum performance
       OFFSITE 0 0 0
       TRANSPARENCY 70
-      CLASS
-          NAME "Datazones"
-          GROUP "outlines"
-          STYLE
-              COLOR 240 240 240
-              OUTLINECOLOR 199 199 199
-          END
-      END
+
       {% for a in attributes %}
       CLASS
           NAME "{{ attributes[a]['name'] }}"
