@@ -188,7 +188,7 @@ function showInfo(coordinate) {
 			    }}
 				],
 			margin: {
-			    l: 25,
+			    l: 35,
 			    r: 5,
 			    b: 25,
 			    t: 35,
