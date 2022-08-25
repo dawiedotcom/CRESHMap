@@ -1,0 +1,12 @@
+<!-- MapServer Template -->
+<div>
+  <strong>[name]</strong>
+  <table>
+    {% for a in attributes %}
+    <tr>
+      <td>{{ attributes[a]['name'] }}</td>
+      <td>[item name="{{ a }}" precision = "2"]</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>

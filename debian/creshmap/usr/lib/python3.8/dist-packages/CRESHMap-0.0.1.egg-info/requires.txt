@@ -1,0 +1,12 @@
+Flask-FlatPages
+fiona
+flask>=1.0
+flask_sqlalchemy
+geoalchemy2
+pandas
+psycopg2
+shapely
+sqlalchemy
+
+[lint]
+flake8>=3.5.0

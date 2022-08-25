@@ -1,0 +1,10 @@
+Metadata-Version: 2.1
+Name: CRESHMap
+Version: 0.0.1
+Summary: CRESHMap webmap application
+Home-page: UNKNOWN
+Author: Magnus Hagdorn
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Provides-Extra: lint

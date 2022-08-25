@@ -1,0 +1,4 @@
+[console_scripts]
+creshmap-genmap = CRESHMap.genmap:main
+creshmap-manage = CRESHMap.manage:main
+

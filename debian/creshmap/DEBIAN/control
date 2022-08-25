@@ -1,0 +1,9 @@
+Package: creshmap
+Version: 0.0-1
+Architecture: all
+Maintainer: Chris Hill <c.hill@ed.ac.uk>
+Installed-Size: 1116
+Section: unknown
+Priority: optional
+Homepage: <insert the upstream URL, if relevant>
+Description: Webmap for CRESH health data

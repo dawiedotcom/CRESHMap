@@ -1,0 +1,116 @@
+{% set page = namespace(path='/') %}
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="input-group">
+	<select class="form-select" aria-label=".form-select layer" id="layer">
+	</select>
+      </div>
+      <div class="input-group">
+	<select class="form-select" aria-label=".form-select attrib" id="attrib">
+	</select>
+      </div>
+      <div class="input-group">
+	<button class="btn btn-outline-secondary" type="submit" id="button-search-postcode"><i class="fa fa-search"></i></button>
+	<input type="text" class="form-control" placeholder="postcode" aria-label="search for postcode" aria-describedby="button-search-postcode" id="search-postcode" name="search-postcode">
+      </div>
+
+      <div class="accordion" id="description">
+	<div class="accordion-item">
+	  <h2 class="accordion-header" id="attributeHeading">
+	    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAttribute" aria-expanded="true" aria-controls="collapseAttribute">
+              <div id="attributeLabel">Description</div>
+	    </button>
+	  </h2>
+	  <div id="collapseAttribute" class="accordion-collapse collapse show" aria-labelledby="attributeHeading" data-bs-parent="#description">
+	    <div class="accordion-body" id='attrib_description'>
+	    </div>
+	  </div>
+	</div>
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div id='map' class='map'></div>
+    </div>
+  </div>
+</div>
+
+<div id="popup" class="ol-popup">
+  <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+  <div>
+    <table class="table table-sm" id="popup-data">
+      <thead></thead>
+      <tbody></tbody>
+    </table>
+    <div id="histogram"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/css/ol.css" type="text/css">
+<style>
+  .map {
+      width: 100%;
+      height: 400px;
+  }
+  .ol-popup {
+      position: absolute;
+      background-color: white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #cccccc;
+      bottom: 12px;
+      left: -50px;
+      min-width: 280px;
+  }
+  .ol-popup:after, .ol-popup:before {
+      top: 100%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+  }
+  .ol-popup:after {
+      border-top-color: white;
+      border-width: 10px;
+      left: 48px;
+      margin-left: -10px;
+  }
+  .ol-popup:before {
+      border-top-color: #cccccc;
+      border-width: 11px;
+      left: 48px;
+      margin-left: -11px;
+  }
+  .ol-popup-closer {
+      text-decoration: none;
+      position: absolute;
+      top: 2px;
+      right: 8px;
+  }
+  .ol-popup-closer:after {
+      content: "✖";
+  }
+  </style>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
+<script type='text/javascript'>
+  const mapserverurl = "{{ mapserverurl }}";
+  const mapattribs = {
+  {% for a in attributes %}
+      "{{ a }}": {"name": "{{ attributes[a]['name'] }}",
+		  "description": "{{ attributes[a]['description']|safe }}" },
+  {% endfor %}};
+</script>
+<script src='https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/
+en/v6.14.1/build/ol.js'></script>
+<script src="{{ url_for('static', filename='map.js') }}"></script>
+{% endblock %}

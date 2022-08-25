@@ -1,0 +1,15 @@
+Source: creshmap
+Section: unknown
+Priority: optional
+Maintainer: Chris Hill <c.hill@ed.ac.uk>
+Build-Depends: debhelper-compat (= 12), dh-python, python3-setuptools, python3-all, python3-sphinx, python3-docutils, python3-flask, python3-flask-flatpages
+Standards-Version: 4.4.1
+Homepage: <insert the upstream URL, if relevant>
+#Vcs-Browser: https://salsa.debian.org/debian/creshmap
+#Vcs-Git: https://salsa.debian.org/debian/creshmap.git
+
+Package: creshmap
+Architecture: all
+Depends: ${misc:Depends}
+Description: Webmap for CRESH health data
+
