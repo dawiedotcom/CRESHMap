@@ -5,9 +5,9 @@ from flask import json
 from flask import abort
 from collections import namedtuple
 import numpy
-from .models import Geography
-from .models import Attribute
-from .models import BaseData
+#from .models import Geography
+#from .models import Attribute
+#from .models import BaseData
 
 from . import db
 
