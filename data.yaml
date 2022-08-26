@@ -1,0 +1,73 @@
+---
+tmp_directory: /scratch/mhagdorn/CRESHMap
+projection: EPSG:4326
+geography_types:
+  - code:     S01
+    name:     Data Zone
+    db_name:  dz
+    col_name: DZ2011
+  - code:     S02
+    name:     Intermediate Zone
+    db_name:  iz
+    col_name: IZ2011
+  - code:     S13
+    name:     Multi Member Electoral Wards
+    db_name:  mmward
+    col_name: MMWard
+  - code:     S12
+    name:     Local Authority
+    db_name:  la
+    col_name: LA
+  - code:     S16
+    name:     Scottish Parliamentary Constituencies
+    db_name:  spc
+    col_name: SPC
+  - code:     S14
+    name:     UK Parliamentary Constituencies
+    db_name:  ukpc
+    col_name: UKPC
+  - code:     S08
+    name:     NHS Health Board
+    db_name:  hb
+    col_name: HB
+  - code:     S37
+    name:     NHS Integration Authorities
+    db_name:  hia
+    col_name: HIA
+  - code:     S32
+    name:     Scottish Police Divisions
+    db_name:  spd
+    col_name: SPD
+  - code:     S39
+    name:     Scottish Fire and Rescue Local Senior Officer Areas
+    db_name:  sfrlso
+    col_name: SFRLSO
+  - code:     S40
+    name:     Scottish Fire and Rescue Service Delivery Areas
+    db_name:  sfrsda
+    col_name: SFRSDA
+  - code:     S43
+    name:     Regional Resilience Partnerships
+    db_name:  rrp
+    col_name: RRP
+  - code:     S42
+    name:     Local Resilience Partnerships
+    db_name:  lrp
+    col_name: LRP
+  - code:     S22
+    name:     Travel to Work Areas
+    db_name:  ttwa
+    col_name: TTWA2011
+  - code:     K01
+    name:     cross-border Travel to Work
+    db_name:
+data:
+  - name: datazone boundaries
+    download: https://maps.gov.scot/ATOM/shapefiles/SG_DataZoneBdry_2011.zip
+    file: SG_DataZone_Bdry_2011.zip
+  - name: datazone lookup
+    url: https://statistics.gov.scot/data/data-zone-lookup
+    download: https://statistics.gov.scot/downloads/file?id=13360f3a-ca68-4f3e-8b7f-caffed8712eb%2FDataZone2011lookup_2022-05-31.csv
+    file: lookup.csv
+    encoding: Windows-1252
+...
