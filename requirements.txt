@@ -6,3 +6,4 @@ geoalchemy2
 fiona
 shapely
 pandas
+requests
