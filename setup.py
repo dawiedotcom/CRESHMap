@@ -32,8 +32,9 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'creshmap-manage=CRESHMap.manage:main',
-            'creshmap-genmap=CRESHMap.genmap:main',
+            'creshmap-load-geographies=CRESHMap.load_geographies:main',
+            # 'creshmap-manage=CRESHMap.manage:main',
+            # 'creshmap-genmap=CRESHMap.genmap:main',
         ],
     },
     author=author,
