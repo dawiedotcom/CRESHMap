@@ -30,7 +30,7 @@ class Lookup(db.Model):
 
 
 class GeographyTypes(db.Model):
-    __tablename__ = 'geography_types'
+    __tablename__ = 'cresh_geography_types'
 
     gss_code = db.Column(db.String(3), primary_key=True)
     name = db.Column(db.String())
@@ -40,11 +40,11 @@ class GeographyTypes(db.Model):
 
 
 class Geography(db.Model):
-    __tablename__ = 'geography'
+    __tablename__ = 'cresh_geography'
 
     gss_id = db.Column(db.String(10), primary_key=True)
     gss_code = db.Column(
-        db.String(3), db.ForeignKey('geography_types.gss_code'))
+        db.String(3), db.ForeignKey('cresh_geography_types.gss_code'))
     name = db.Column(db.String())
     geometry = db.Column(Geometry('GEOMETRY'))
 
@@ -61,7 +61,8 @@ class Variables(db.Model):
 class Data(db.Model):
     __tablename__ = 'data'
 
+    id = db.Column(db.Integer, primary_key=True)
     variable_id = db.Column(db.Integer, db.ForeignKey('variables.id'))
-    gss_id = db.Column(db.String(10), db.ForeignKey('geography.gss_id'))
+    gss_id = db.Column(db.String(10), db.ForeignKey('cresh_geography.gss_id'))
     year = db.Column(db.Integer)
     value = db.Column(db.Float)
