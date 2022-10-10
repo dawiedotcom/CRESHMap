@@ -1,0 +1,221 @@
+---
+variables:
+  - name: Population Density
+    domain: Sociodemographics|Population
+    description: Population per square kilometer
+    source: CRESH, from National Records of Scotland, 2012; 2016; 2020.
+  - name:
+      - UR2
+      - UR3
+      - UR6
+      - UR8
+    domain: Sociodemographics|Urban status
+    description: >
+      The classification is based upon two main criteria:
+      (i) population, as defined by the National Records of Scotland (NRS),
+      and (ii) accessibility, based on drive time analysis to differentiate
+      between accessible and remote areas in Scotland.
+    source: Scottish Government, 2016 
+    values:
+      - value: 1
+        description: Large Urban Areas (Settlements of 125,000 people and over)
+      - value: 2
+        description: Other Urban Areas (Settlements of 10,000 to 124,999 people).
+      - value: 3
+        description: Accessible Small Towns (Settlements of 3,000 to 9,999 people, and within a 30 minute drive time of a Settlement of 10,000 or more)
+      - value: 4
+        description: Remote Small Towns (Settlements of 3,000 to 9,999 people, and with a drive time of over 30 minutes to a settlement of 10,000 or more)
+      - value: 5
+        description: Accessible Rural Areas (Areas with a population of less than 3,000 people, and within a 30 minute drive time of a settlement of 10,000 or more)
+      - value: 6
+        description: Remote Rural Areas (Areas with a population of less than 3,000 peolpe, and with a drive time of over 30 minutes to a settlement of 10,000 or more).
+    - name: Overall SIMD
+      domain: Sociodemographics|Deprivation Index
+      description: >
+        Relative value of deprivation estimated by a combination of indicators
+        covering 7 domains: income, employment, health, education, geographic access
+        to services, crime, and housing. Values ranks datazones from the most deprived
+        (ranked 1) to the least deprived (ranked 6,976). More information on these measure
+        might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/.
+      source: Scottish Government, 2020.
+    - name: Income Rank
+      domain: Sociodemographics|Deprivation Index
+      description: >
+        Income domain rank in SIMD 2020. Values ranks datazones from the most deprived
+        (ranked 1) to the least deprived (ranked 6,976). More information on these measure
+        might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/.
+      source: Scottish Government, 2020.
+    - name: Employment Rank
+      domain: Sociodemographics|Deprivation Index
+      description: >-
+        Employment domain rank in SIMD 2020. Values ranks datazones from the most deprived
+        (ranked 1) to the least deprived (ranked 6,976). More information on these measure
+        might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/.
+      source: Scottish Government, 2020.
+    - name: Health Rank
+      domain: Sociodemographics|Deprivation Index
+      description: >
+        Health domain rank in SIMD 2020. Values ranks datazones from the most deprived
+        (ranked 1) to the least deprived (ranked 6,976). More information on these measure
+        might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/.
+      source: Scottish Government, 2020.
+    - name: Education Rank
+      domain: Sociodemographics|Deprivation Index
+      description: >
+        Education domain rank at SIMD 2020. Values ranks datazones from the most deprived
+        (ranked 1) to the least deprived (ranked 6,976). More information on these measure
+        might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/.
+    - name: Geographic Access domain rank
+      domain: Sociodemographics|Deprivation Index
+      description: >
+        Geographical access domain rank at SIMD 2020. This indicator consider drive-time
+        and public transport-time accessibility to a range of service slocations
+        (i.e. GP surgery, post office, retail centre, primary and secondary schools,
+        and petrol station) as well as the percentage of premises that do not have
+        access to superfast broadband. Values ranks datazones from the most accessible
+        (ranked 1) to the least accessible (ranked 6,976).
+        More information on these measure might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/
+      source: Scottish Government, 2020.
+    - name: Crime Rank
+      domain: Sociodemographics|Deprivation Index
+      description: >
+        Crime domain rank at SIMD 2020. Values ranks datazones from the most deprived
+        (ranked 1) to the least deprived (ranked 6,976). More information on these
+        measure might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/
+      source: Scottish Government, 2020.
+    - name: Housing Rank
+      domain: Sociodemographics|Deprivation Index
+      description: >
+        Housing domain rank at 2020. Values ranks datazones from the most deprived
+        (ranked 1) to the least deprived (ranked 6,976). More information on these
+        measure might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/.
+      source: Scottish Government, 2020.
+    - name: Income Rate
+      domain: Sociodemographics
+      description: >
+        Percentage of people who are income deprived (i.e. receiving income support,
+        income-based employment, support allowance, Jobseeker's allowance, guaranteed pension
+        credit, claiminig Universal Credit, or in Tax Credit families on low incomes HMRC).
+      source: Scottish Government, from Department of Work and Pensions and HM Revenue and Customs, 2020.
+    - name: Employment Rate
+      domain: Sociodemographics
+      description: >
+        Percentage of working age people who are employment deprived (i.e. recipients
+        of jobseeker's allowance, incapacity benefit, employment and support allowance,
+        severe disablement allowance, or Universal Credit claimants not in employment).
+      source: Scottish Government, from Department of Work and Pensions, 2020.
+    - name: Hospital stays alcohol
+      domain: Sociodemographics|Health
+      description: >
+        Age-sex standardised ratio of observed to expected stays in acute NHS hospitals in
+        Scotland with a diagnosis of alcohol-related conditions. Figures are based on
+        the continuous inpatient stay. Individual hospital episodes for each patient
+        are linked together usign probability matching to create linked patient histories
+        and stays. Each ratio is expressed as a number. A ratio value of 100
+        means that the observed and expected number of stays
+        for a data zone was exactly the same. A value lower than
+        100 indicates that there were fewer stays than expected.
+        A value higher than 100 indicates that there were more
+        stays than expected.
+      source: Scottish Government, from NHS Scotland, 2020.
+    - name: Hospital stays drugs
+      domain: Sociodemographics|Health
+      description: >
+        Age-sex standardised ratio of observed to expected stays in acute NHS hospitals in
+        Scotland with a diagnosis of drug use or poisoning. Figures are based on the
+        continuous inpatient stay. Individual hospital episodes for each patient are
+        linked together usign probability matching to create linked patient histories
+        and stays. Each ratio is expressed as a number. A ratio value of 100
+        means that the observed and expected number of stays
+        for a data zone was exactly the same. A value lower than
+        100 indicates that there were fewer stays than expected.
+        A value higher than 100 indicates that there were more
+        stays than expected.
+      source: Scottish Government, from NHS Scotland, 2020.
+    - name: Mortality
+      domain: Sociodemographics|Health
+      description: >
+        Age-Sex standardised ratio between deaths of all ages registered from all causes
+        and the corresponding sum of expected deaths (calculated from indirect
+        standardisation to Scotland). Data standaridised by 5-year age band and sex.
+        Each ratio is expressed as a number. A ratio value of 100 means that the
+        observed mortality are similar to the Scotland average, and values higher of
+        100 means that data zones are worse than the Scotland average.
+      source: Scottish Government, from National Records of Scotland, 2020.
+    - name: Drugs prescription
+      domain: Sociodemographics|Health
+      description: >
+        Proportion of population being prescribed drugs for anxiety, depression or
+        psychosis (I.e. anxiolytic, antipsychotic or antidepressant drugs).
+      source: Scottish Government, from NHS Scotland Information Services Division (ISD), 2020.
+    - name: Low weight at birth
+      domain: Sociodemographics|Health
+      description: >
+        Proportion of live singleton births of low birth weight (i.e. less than 2,500 grams).
+      source: Scottish Government, from NHS Scotland Information Services Division (ISD) and Scottish Morbidity Record (maternity records), 2020.
+    - name: School pupil attendance
+      domain: Sociodemographics|Education
+      description: >
+        Percentage of pupils who attend school 90% or more of
+        the time for each data zone in Scotland; includes pupils
+        who attend publicly funded primary, secondary and
+        special schools.
+      source: Scottish Government by the local authorities and managers of mainstream grantaided schools, 2020.
+    - name: Education Attainment
+      domain: Sociodemographics|Education
+      description: >
+        Score based on the average school leavers’ highest level of the qualification for
+        pupils who attend publicly funded secondary schools in the last 3 years.
+      source: Scottish Government, from Scottish Qualifications Authority (SQA), 2020.
+    - name: People without qualifications
+      domain: Sociodemographics|Education
+      description: >
+        Proportion of working age adults (25-64) that were recorded as having no qualifications.
+      source: Scottish Government, from National Records of Scotland and 2011 Census.
+    - name: Teenagers not studying or working
+      domain: Sociodemographics|Education
+      description: >
+        Proportion of people aged 16-19 not participating in education, employment or training.
+      source: Scottish Government, from Skills Development Scotland, 2020.
+    - name: Youth University attendance
+      domain: Sociodemographics|Education
+      description: >
+        Percentage of people aged 17-21 years old entering to first degree courses at University.
+      source: Scottish Government, Higher Education Statistics Agency, 2020.
+    - name: Crime Rate
+      domain: Sociodemographics
+      description: >
+        Recorded crimes of violence, sexual offences, domestic housebreaking, vandalism, 
+        drugs offences, and common assault per 10,000 population
+      source: Scottish Government, from Police Scotland, 2020.
+    - name: Overcrowded housing
+      domain: Sociodemographics|Housing
+      description: >
+        Percentage of people in households that are overcrowded (i.e. at least one room
+        too few in the household).
+      source: Scottish Government, from National Records of Scotland, 2020.
+    - name: Housing without central heating
+      domain: Sociodemographics|Housing
+      description: >
+        Percentage of people in households without central heating.
+      source: Scottish Government, from National Records of Scotland, 2020.
+    - name: Alcohol retailer density
+      domain: Built Environment Retail|Alcohol
+      description: >
+        Number of outlets within a datazone per 1000 persons.
+      source: Data estimated by CRESH from ********.
+    - name: Alcohol on-premise retailer density
+      domain: Built Environment Retail|Alcohol
+      description: >
+        Number of outlets within a datazone per 1000 persons.
+      source: Data estimated by CRESH from ********.
+    - name: Alcohol off-premise retailer density
+      domain: Built Environment Retail|Alcohol
+      description: >
+        Number of outlets within a datazone per 1000 persons.
+      source: Data estimated by CRESH from ********.
+    - name: Tobacco retailer density
+      domain: Built Environment Retail
+      description: >
+        Number of outlets within a datazone per 1000 persons.
+      source: Data estimated by CRESH from ********.
