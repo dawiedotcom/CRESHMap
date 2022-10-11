@@ -52,7 +52,7 @@ class Geography(db.Model):
 class Variables(db.Model):
     __tablename__ = 'variables'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(), primary_key=True)
     variable = db.Column(db.String(), unique=True)
     domain = db.Column(db.String())
     description = db.Column(db.String())
@@ -62,7 +62,7 @@ class Data(db.Model):
     __tablename__ = 'data'
 
     id = db.Column(db.Integer, primary_key=True)
-    variable_id = db.Column(db.Integer, db.ForeignKey('variables.id'))
+    variable_id = db.Column(db.String(), db.ForeignKey('variables.id'))
     gss_id = db.Column(db.String(10), db.ForeignKey('cresh_geography.gss_id'))
     year = db.Column(db.Integer)
     value = db.Column(db.Float)
