@@ -1,0 +1,98 @@
+---
+path: ../data/simd2020_withinds_clean.csv
+type: csv
+variables:
+  - geometry: Data_Zone
+    db_var: overall_simd
+    file_var: SIMD2020v2_Rank
+    year: 2020
+  - geometry: Data_Zone
+    db_var: income_rank
+    file_var: SIMD2020v2_Income_Domain_Rank
+    year: 2020
+  - geometry: Data_Zone
+    db_var: employment_rank
+    file_var: SIMD2020_Employment_Domain_Rank
+    year: 2020
+  - geometry: Data_Zone
+    db_var: health_rank
+    file_var: SIMD2020_Health_Domain_Rank
+    year: 2020
+  - geometry: Data_Zone
+    db_var: education_rank
+    file_var: SIMD2020_Education_Domain_Rank
+    year: 2020
+  - geometry: Data_Zone
+    db_var: geographic_access_domain_rank
+    file_var: SIMD2020_Access_Domain_Rank
+    year: 2020
+  - geometry: Data_Zone
+    db_var: crime_rank
+    file_var: SIMD2020_Crime_Domain_Rank
+    year: 2020
+  - geometry: Data_Zone
+    db_var: housing_rank
+    file_var: SIMD2020_Housing_Domain_Rank
+    year: 2020
+  - geometry: Data_Zone
+    db_var: income_rate
+    file_var: income_rate
+    year: 2020
+  - geometry: Data_Zone
+    db_var: employment_rate
+    file_var: employment_rate
+    year: 2020
+  - geometry: Data_Zone
+    db_var: hospital_stays_alcohol
+    file_var: ALCOHOL
+    year: 2020
+  - geometry: Data_Zone
+    db_var: hospital_stay_drugs
+    file_var: DRUG
+    year: 2020
+  - geometry: Data_Zone
+    db_var: mortality
+    file_var: SMR
+    year: 2020
+  - geometry: Data_Zone
+    db_var: drug_prescription
+    file_var: DEPRESS
+    year: 2020
+  - geometry: Data_Zone
+    db_var: low_weight_at_birth
+    file_var: LBWT
+    year: 2020
+  - geometry: Data_Zone
+    db_var: pupil_attendance
+    file_var: Attendance
+    year: 2020
+  - geometry: Data_Zone
+    db_var: education_attainment
+    file_var: Attainment
+    year: 2020
+  - geometry: Data_Zone
+    db_var: people_without_qualifications
+    file_var: no_qualifications
+    year: 2020
+  - geometry: Data_Zone
+    db_var: teenagers_not_studying_or_working
+    file_var: not_participating
+    year: 2020
+  - geometry: Data_Zone
+    db_var: youth_university_attendance
+    file_var: University
+    year: 2020
+  - geometry: Data_Zone
+    db_var: crime_rate
+    file_var: crime_rate
+    year: 2020
+  - geometry: Data_Zone
+    db_var: overvrowded_housing
+    file_var: overcrowded_count
+    year: 2020
+  - geometry: Data_Zone
+    db_var: housing_without_central_heating
+    file_var: nocentralheating_rate
+    year: 2020
+
+
