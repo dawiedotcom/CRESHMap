@@ -34,6 +34,8 @@ def download_file(url, destination):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('config', type=Path, help="name of configuration file")
+    parser.add_argument('--only-data-zones', action="store_true",
+                        default=False, help="only load datazone geography")
     args = parser.parse_args()
 
     app = init_app()
@@ -118,23 +120,24 @@ def main():
                     update({'geometry': poly.wkt})
             db.session.commit()
 
-        # compute boundaries for remaining zones
-        for geotype in db.session.query(GeographyTypes).all():
-            if geotype.gss_code in ['S01', 'K01']:
-                # nothing to be done for data zones
-                continue
-            print(geotype.gss_code, geotype.column_name)
-            id_col = getattr(Lookup, geotype.column_name)
+        if not args.only_data_zones:
+            # compute boundaries for remaining zones
+            for geotype in db.session.query(GeographyTypes).all():
+                if geotype.gss_code in ['S01', 'K01']:
+                    # nothing to be done for data zones
+                    continue
+                print(geotype.gss_code, geotype.column_name)
+                id_col = getattr(Lookup, geotype.column_name)
 
-            for gss_id, bdry in db.session.query(
-                    id_col,
-                    Geography.geometry.ST_Union().label('geometry')).\
-                    join(Lookup, Lookup.dz == Geography.gss_id).\
-                    group_by(id_col).all():
-                db.session.execute(update(Geography).
-                                   where(Geography.gss_id == gss_id).
-                                   values(geometry=bdry))
-            db.session.commit()
+                for gss_id, bdry in db.session.query(
+                        id_col,
+                        Geography.geometry.ST_Union().label('geometry')).\
+                        join(Lookup, Lookup.dz == Geography.gss_id).\
+                        group_by(id_col).all():
+                    db.session.execute(update(Geography).
+                                       where(Geography.gss_id == gss_id).
+                                       values(geometry=bdry))
+                db.session.commit()
 
 
 if __name__ == '__main__':
