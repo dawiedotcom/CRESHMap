@@ -1,0 +1,64 @@
+---
+path: ../data/Datazones_TimeSeriesData.xlsx
+type: excel
+variables:
+  - geometry: DataZone11_ID
+    db_var: population_density
+    file_var: PopDen_2012psqkm
+    year: 2012
+  - geometry: DataZone11_ID
+    db_var: population_density
+    file_var: PopDen_2016psqkm
+    year: 2016
+  - geometry: DataZone11_ID
+    db_var: population_density
+    file_var: PopDen_2020psqkm
+    year: 2020
+  - geometry: DataZone11_ID
+    db_var: alcohol_retailer_density
+    file_var: AR12_All_PopAdjCnt
+    year: 2012
+  - geometry: DataZone11_ID
+    db_var: alcohol_retailer_density
+    file_var: AR16_All_PopAdjCnt
+    year: 2016
+  - geometry: DataZone11_ID
+    db_var: alcohol_retailer_density
+    file_var: AR20_All_PopAdjCnt
+    year: 2020
+  - geometry: DataZone11_ID
+    db_var: alcohol_on_premise_retailer_density
+    file_var: AR12_On_PopAdjCnt
+    year: 2012
+  - geometry: DataZone11_ID
+    db_var: alcohol_on_premise_retailer_density
+    file_var: AR16_On_PopAdjCnt
+    year: 2016
+  - geometry: DataZone11_ID
+    db_var: alcohol_on_premise_retailer_density
+    file_var: AR20_On_PopAdjCnt
+    year: 2020
+  - geometry: DataZone11_ID
+    db_var: alcohol_off_premise_retailer_density
+    file_var: AR12_Off_PopAdjCnt
+    year: 2012
+  - geometry: DataZone11_ID
+    db_var: alcohol_off_premise_retailer_density
+    file_var: AR16_Off_PopAdjCnt
+    year: 2016
+  - geometry: DataZone11_ID
+    db_var: alcohol_off_premise_retailer_density
+    file_var: AR20_Off_PopAdjCnt
+    year: 2020
+  - geometry: DataZone11_ID
+    db_var: tobacco_retailer_density
+    file_var: TR12_PopAdjCnt
+    year: 2012
+  - geometry: DataZone11_ID
+    db_var: tobacco_retailer_density
+    file_var: TR16_PopAdjCnt
+    year: 2016
+  - geometry: DataZone11_ID
+    db_var: tobacco_retailer_density
+    file_var: TR20_PopAdjCnt
+    year: 2020

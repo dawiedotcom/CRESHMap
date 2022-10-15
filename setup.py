@@ -34,6 +34,7 @@ setup(
         'console_scripts': [
             'creshmap-load-geographies=CRESHMap.load_geographies:main',
             'creshmap-define-variables=CRESHMap.define_variables:main',
+            'creshmap-load-variables=CRESHMap.load_variables:main',
             # 'creshmap-manage=CRESHMap.manage:main',
             # 'creshmap-genmap=CRESHMap.genmap:main',
         ],
