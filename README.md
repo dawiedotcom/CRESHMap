@@ -15,7 +15,7 @@ export DATABASE_URL='postgresql://cresh:PASSWORD@pow/cresh
 ### Loading Data
 There are multiple programs involved loading data:
 1. `creshmap-load-geographies` creates all tables (after dropping them if they already exist). Geographies are loaded following the plan in [data.yaml](data.yaml). Compound geographies are aggregated from the smallest ones.
-2. `creshmap-load-variables` reads the variable definition file [variables.yaml](variables.yaml) and updates the database with any changes. Variable IDs should not change.
+2. `creshmap-define-variables` reads the variable definition file [variables.yaml](variables.yaml) and updates the database with any changes. Variable IDs should not change.
 
 ### Generating the mapserver map file
 The mapserver is controlled via a [mapfile](https://mapserver.org/mapfile/index.html). This file is generated using the [genmap.py](genmap.py) script together with a [configuration file](creshmap.cfg). The script also configures the database connection for mapserver. Use the read-only user.
