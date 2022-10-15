@@ -66,3 +66,7 @@ class Data(db.Model):
     gss_id = db.Column(db.String(10), db.ForeignKey('cresh_geography.gss_id'))
     year = db.Column(db.Integer)
     value = db.Column(db.Float)
+
+    __table_args__ = (
+        db.UniqueConstraint(
+            "variable_id", "gss_id", "year", name='_unique_data'), )
