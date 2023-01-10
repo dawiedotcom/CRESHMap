@@ -1,5 +1,6 @@
 ---
-path: ../data/simd2020_withinds_clean.csv
+# path: ../data/simd2020_withinds_clean.csv
+path: /home/chill2/code/cresh/data/processed/simd2020_withinds_clean.csv
 type: csv
 variables:
   - geometry: Data_Zone
@@ -87,7 +88,7 @@ variables:
     file_var: crime_rate
     year: 2020
   - geometry: Data_Zone
-    db_var: overvrowded_housing
+    db_var: overcrowded_housing
     file_var: overcrowded_count
     year: 2020
   - geometry: Data_Zone
