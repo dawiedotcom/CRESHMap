@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export FLASK_APP=CHRESHMap
-export SCRIPT_NAME=/dev/mhagdorn
+export FLASK_APP=CRESHMap
+export SCRIPT_NAME=/dev/cresh
 
-gunicorn --log-level debug --bind 0.0.0.0:55401 CRESHMap.wsgi:app
+gunicorn --log-level debug --bind 0.0.0.0:55405 CRESHMap.wsgi:app
 
