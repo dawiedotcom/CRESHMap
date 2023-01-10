@@ -1,5 +1,6 @@
 ---
-path: ../data/Datazones_TimeSeriesData.xlsx
+# path: ../data/Datazones_TimeSeriesData.xlsx
+path: /home/chill2/code/cresh/data/rx_20220812/Datazones_TimeSeriesData.xlsx
 type: excel
 variables:
   - geometry: DataZone11_ID
