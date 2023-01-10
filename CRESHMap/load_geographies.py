@@ -26,10 +26,16 @@ def download_file(url, destination):
     if destination.exists():
         return
 
-    with requests.get(url, stream=True) as r:
-        with destination.open('wb') as f:
-            shutil.copyfileobj(r.raw, f)
-
+    # https://maps.gov.scot/ certificate isn't working properly with SSL and fails so:
+    try:
+        with requests.get(url, stream=True) as r:
+            with destination.open('wb') as f:
+                shutil.copyfileobj(r.raw, f)
+    except:
+        # If SSL fails ignore the certificate
+        with requests.get(url, stream=True, verify=False) as r:
+            with destination.open('wb') as f:
+                shutil.copyfileobj(r.raw, f)
 
 def main():
     parser = argparse.ArgumentParser()
