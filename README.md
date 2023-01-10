@@ -1,13 +1,13 @@
 # CRESHMap
-CHRESMap is a web application written in python using the [flask framework](https://flask.palletsprojects.com/en/2.1.x/). It uses a [postgis](https://postgis.net/) database for storing the data. The data map layer is generated using [mapserver](https://mapserver.org/) and displayed using [OpenLayers](https://openlayers.org/). Static pages are produced from [markdown](https://www.markdownguide.org/basic-syntax/) input files kept in the [CRESHMap/pages/](CRESHMap/pages/) directory.
+CRESHMap is a web application written in python using the [flask framework](https://flask.palletsprojects.com/en/2.1.x/). It uses a [postgis](https://postgis.net/) database for storing the data. The data map layer is generated using [mapserver](https://mapserver.org/) and displayed using [OpenLayers](https://openlayers.org/). Static pages are produced from [markdown](https://www.markdownguide.org/basic-syntax/) input files kept in the [CRESHMap/pages/](CRESHMap/pages/) directory.
 
 ## Setup
-Install all the requirements into a python virtual envrionment.
+Install all the requirements into a python virtual environment.
 
 ### Database Setup
 Install postgis, create a database (let's call it `cresh`) with support for spatial data and create a read-write (`cresh`) and a read-only user (`creshro`). The actual user names and database names can be different. 
 
-The application uses an evnironment variable to figure out how to connect to the database:
+The application uses an environment variable to figure out how to connect to the database:
 ```
 export DATABASE_URL='postgresql://cresh:PASSWORD@pow/cresh
 ```
