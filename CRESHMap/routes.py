@@ -6,7 +6,7 @@ from flask import abort
 from collections import namedtuple
 import numpy
 #from .models import Geography
-#from .models import Attribute
+from .models import Variables
 #from .models import BaseData
 
 from . import db
@@ -26,13 +26,14 @@ def menu_items():
 
 @app.route('/')
 def index():
-    attributes = {}
-    for a in db.session.query(Attribute):
-        attributes[a.attribute] = {'name': a.name,
-                                   'description': a.description}
+    variables = {}
+    # TODO: Select variables from DB
+    for v in db.session.query(Variables):
+        variables[v.variable] = {'name': v.domain + "|" + v.variable,
+                                'description': v.description.replace('\n', '')}
     return render_template(
         'map.html', mapserverurl=app.config['MAPSERVER_URL'],
-        navigation=menu_items(), attributes=attributes)
+        navigation=menu_items(), variables=variables)
 
 
 @app.route('/<path:path>')
@@ -47,6 +48,7 @@ def histogram(geography, attribute):
     try:
         attrib = getattr(BaseData, attribute)
     except Exception:
+        print('Attribute not found:', attribute)
         abort(404, f'no such attribute: {attribute}')
 
     geog = db.session.query(Geography.geography).filter(
