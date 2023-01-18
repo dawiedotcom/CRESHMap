@@ -23,7 +23,7 @@ setup(
     ],
     package_data={
         'CRESHMap': [
-            'templates/*.html', 'templates/cresh.map',
+            'templates/*.html', 'templates/cresh.map', 'templates/popup.js',
             'static/favicon.ico', 'static/map.js', 'static/images/*']},
     extras_require={
         'lint': [
@@ -36,7 +36,7 @@ setup(
             'creshmap-define-variables=CRESHMap.define_variables:main',
             'creshmap-load-variables=CRESHMap.load_variables:main',
             # 'creshmap-manage=CRESHMap.manage:main',
-            # 'creshmap-genmap=CRESHMap.genmap:main',
+            'creshmap-genmap=CRESHMap.genmap:main',
         ],
     },
     author=author,

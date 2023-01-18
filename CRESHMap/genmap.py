@@ -1,5 +1,11 @@
 from . import init_app, db
-from .models import DataZone, Data
+from .models import (
+    Geography,
+    GeographyTypes,
+    Variables,
+    Data
+)
+#from .models import Variables
 
 from collections import namedtuple
 from pathlib import Path
@@ -15,16 +21,16 @@ ATTRIBUTE_DEFAULTS = {
     'start_colour': "0 255 0",
     'end_colour': "255 0 0"}
 
-Layer = namedtuple('Layer', ['title', 'abstract', 'id', 'table'])
+Layer = namedtuple('Layer', ['gss_code', 'name', 'column_name'])
 
-LAYERS = {'datazone': Layer('Datazones', "data by Data Zone",
-                            'datazone', 'data'),
-          'westminster_const': Layer('Westminster Constituencies',
-                                     "data by Westminster Constituency",
-                                     'code', 'data_westminster'),
-          'local_authority': Layer('Local Authority',
-                                   "Data by Local Authority",
-                                   'code', 'data_local_authority')}
+#LAYERS = {'datazone': Layer('Datazones', "data by Data Zone",
+#                            'datazone', 'data'),
+#          'westminster_const': Layer('Westminster Constituencies',
+#                                     "data by Westminster Constituency",
+#                                     'code', 'data_westminster'),
+#          'local_authority': Layer('Local Authority',
+#                                   "Data by Local Authority",
+#                                   'code', 'data_local_authority')}
 
 
 def main():  # noqa C901
@@ -51,36 +57,48 @@ def main():  # noqa C901
             print('Error, need a postgres database')
             sys.exit(1)
 
+        layers = {}
+        for geo_type in db.session.query(GeographyTypes):
+            layers[geo_type.gss_code] = Layer(
+                geo_type.name,
+                geo_type.name,
+                geo_type.column_name
+            )
+
         attributes = {}
-        for a in cfg.keys():
-            if a in ['setup', 'DEFAULT']:
-                continue
+        #for a in cfg.keys():  #TODO: loop over entries in variables table
+        for a in db.session.query(Variables):
 
-            if not hasattr(Data, a):
-                print(f'Error, unknown attribute {a}')
-                sys.exit(1)
+            #if a in ['setup', 'DEFAULT']:
+            #    continue
 
-            attributes[a] = {}
+            #if not hasattr(Data, a):
+            #    print(f'Error, unknown attribute {a}')
+            #    sys.exit(1)
+
+            attributes[a.id] = {}
             for k in ['name', 'start', 'end',
                       'start_colour', 'end_colour']:
-                if k not in cfg[a]:
+                if not a.id in cfg.keys() or k not in cfg[a.id]:
                     if k == 'name':
-                        v = a
+                        v = a.variable
                     elif k == 'end':
-                        col = getattr(Data, a)
+                        value = getattr(Data, 'value')
+                        variable_id = getattr(Data, 'variable_id')
                         v = db.session.query(
-                            db.func.max(col)).filter(col != 'NaN').one()[0]
+                            db.func.max(value)
+                            ).  filter(variable_id == a.id and value != 'NaN').  one()[0]
                     else:
                         v = ATTRIBUTE_DEFAULTS[k]
                 else:
-                    v = cfg[a][k]
-                attributes[a][k] = v
+                    v = cfg[a.id][k]
+                attributes[a.id][k] = v
 
         if len(attributes) == 0:
             print('Error, no attribures specified')
             sys.exit(1)
 
-        bbox = db.session.query(DataZone.geometry.ST_Extent()).one()[0]
+        bbox = db.session.query(Geography.geometry.ST_Extent()).one()[0]
         try:
             bbox = wkb.loads(bytes(bbox.data)).bounds
         except Exception:
@@ -89,10 +107,11 @@ def main():  # noqa C901
                 bb += pnt.split()
             bbox = bb
 
+        print(db.engine.url)
         cresh_map = render_template(
             'cresh.map', bbox=bbox,
             mapserverurl=app.config['MAPSERVER_URL'], dburl=db.engine.url,
-            attributes=attributes, popup=popup_name, layers=LAYERS)
+            attributes=attributes, popup=popup_name, layers=layers)
         popup = render_template(str(popup_base_name), attributes=attributes)
 
         if args.output is not None:
