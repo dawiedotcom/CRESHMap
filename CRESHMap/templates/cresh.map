@@ -5,7 +5,7 @@ MAP
   EXTENT {% for b in bbox %}{{ b }} {% endfor %}
   PROJECTION
       "init=epsg:4326"
-  END  
+  END
 
   WEB
       IMAGEPATH "/tmp/"
@@ -24,7 +24,7 @@ MAP
   LAYER
       NAME "{{ l }}"
       METADATA
-          "wms_title"         "{{ layers[l].title }}"
+          "wms_title"         "{{ layers[l].name }}"
           "wms_abstract"      "{{ layers[l].abstract }}"
           "wms_srs"           "EPSG:4326"
           "gml_include_items" "all"
@@ -36,7 +36,7 @@ MAP
       STATUS ON
       CONNECTIONTYPE POSTGIS
       CONNECTION "{% if dburl.host is not none %}host={{ dburl.host }} {% endif %}{% if dburl.username is not none %}user={{ dburl.username }} {% endif %}{% if dburl.password is not none %}password={{ dburl.password }} {% endif %}{% if dburl.port is not none %}port={{ dburl.port }} {% endif %}{% if dburl.database is not none %}dbname={{ dburl.database }}{% endif %}"
-      DATA "geometry from (select z.{{ layers[l].id }}, z.geometry, z.name,
+      DATA "geometry from (select z.{{ layers[l].gss_code }}, z.geometry, z.name,
             {% for a in attributes %}bd.{{ a }}{% if not loop.last %}, {% endif %}{% endfor %} from cresh.{{ l }} z join cresh.{{ layers[l].table }} d on z.{{ layers[l].id }} = d.{{ layers[l].id }}_id join cresh.base_data bd on d.id = bd.id) as subquery using unique {{ layers[l].id }}"
 
 
