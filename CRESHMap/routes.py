@@ -7,7 +7,7 @@ from collections import namedtuple
 import numpy
 #from .models import Geography
 from .models import Variables
-#from .models import BaseData
+from .models import Data
 
 from . import db
 
@@ -27,10 +27,20 @@ def menu_items():
 @app.route('/')
 def index():
     variables = {}
-    # TODO: Select variables from DB
-    for v in db.session.query(Variables):
-        variables[v.variable] = {'name': v.domain + "|" + v.variable,
-                                'description': v.description.replace('\n', '')}
+    query = db.session.query(
+        Variables,
+        Data.year
+    ).join(Data).group_by(Variables.id, Data.year).order_by(Variables.id, Data.year)
+
+    for v, year in query:
+        index = v.id + '_' + str(year)
+        variables[index] = {
+            'id': v.id,
+            #'name': v.domain + "|" + v.variable,
+            'name': f'{v.variable} ({year})',
+            'description': v.description.replace('\n', ''),
+            'year': year,
+        }
     return render_template(
         'map.html', mapserverurl=app.config['MAPSERVER_URL'],
         navigation=menu_items(), variables=variables)
@@ -42,27 +52,25 @@ def page(path):
     return render_template('page.html', page=page, navigation=menu_items())
 
 
-@app.route('/histogram/<geography>/<attribute>')
-def histogram(geography, attribute):
+@app.route('/histogram/<gss_code>/<variable_id>/<year>')
+def histogram(gss_code, variable_id, year):
 
-    try:
-        attrib = getattr(BaseData, attribute)
-    except Exception:
-        print('Attribute not found:', attribute)
-        abort(404, f'no such attribute: {attribute}')
+    q = db.session.query(getattr(Data, 'value')).filter(
+        Data.gss_id.like(gss_code + '%'),
+        Data.variable_id == variable_id,
+        Data.year == year,
+        Data.value >= 0,
+    ).all()
 
-    geog = db.session.query(Geography.geography).filter(
-        Geography.name == geography)
-    q = db.session.query(attrib).filter(
-        BaseData.geography.in_(geog)).all()
     if len(q) == 0:
-        abort(404, f'no such geography: {geography}')
+        result = {'x': [0]*10, 'y': [0]*10}
 
-    data = numpy.array(q)[:, 0]
-    data = data[~numpy.isnan(data)]
-    count, bins = numpy.histogram(data, bins=10)
-    xvals = (bins[:-1] + bins[1:]) / 2
-    result = {'x': xvals.tolist(), 'y': count.tolist()}
+    else:
+        data = numpy.array(q)[:, 0]
+        data = data[~numpy.isnan(data)]
+        count, bins = numpy.histogram(data, bins=10)
+        xvals = (bins[:-1] + bins[1:]) / 2
+        result = {'x': xvals.tolist(), 'y': count.tolist()}
 
     response = app.response_class(
         response=json.dumps(result),
