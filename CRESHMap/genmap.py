@@ -14,6 +14,7 @@ from flask import render_template
 from shapely import wkb
 import argparse
 import sys
+from sqlalchemy.sql.expression import func
 
 
 ATTRIBUTE_DEFAULTS = {
@@ -65,34 +66,30 @@ def main():  # noqa C901
                 geo_type.column_name
             )
 
-        attributes = {}
-        #for a in cfg.keys():  #TODO: loop over entries in variables table
-        for a in db.session.query(Variables):
+        attributes = {} # TODO: Refactor to variables
+        query = db.session.query(
+            Variables,
+            Data.year,
+            func.max(Data.value)
+        ).join(Data).group_by(Variables.id, Data.year)
+        for a, year, v_max in query:
 
-            #if a in ['setup', 'DEFAULT']:
-            #    continue
-
-            #if not hasattr(Data, a):
-            #    print(f'Error, unknown attribute {a}')
-            #    sys.exit(1)
-
-            attributes[a.id] = {}
+            index = a.id + '_' + str(year)
+            attributes[index] = {}
+            attributes[index]['year'] = year
+            attributes[index]['id'] = a.id
             for k in ['name', 'start', 'end',
                       'start_colour', 'end_colour']:
                 if not a.id in cfg.keys() or k not in cfg[a.id]:
                     if k == 'name':
                         v = a.variable
                     elif k == 'end':
-                        value = getattr(Data, 'value')
-                        variable_id = getattr(Data, 'variable_id')
-                        v = db.session.query(
-                            db.func.max(value)
-                            ).  filter(variable_id == a.id and value != 'NaN').  one()[0]
+                        v = v_max
                     else:
                         v = ATTRIBUTE_DEFAULTS[k]
                 else:
                     v = cfg[a.id][k]
-                attributes[a.id][k] = v
+                attributes[index][k] = v
 
         if len(attributes) == 0:
             print('Error, no attribures specified')
@@ -111,7 +108,7 @@ def main():  # noqa C901
         cresh_map = render_template(
             'cresh.map', bbox=bbox,
             mapserverurl=app.config['MAPSERVER_URL'], dburl=db.engine.url,
-            attributes=attributes, popup=popup_name, layers=layers)
+            attributes=attributes, popup=popup_base_name, layers=layers)
         popup = render_template(str(popup_base_name), attributes=attributes)
 
         if args.output is not None:
