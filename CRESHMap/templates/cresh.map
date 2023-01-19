@@ -35,25 +35,29 @@ MAP
       TYPE POLYGON
       STATUS ON
       CONNECTIONTYPE POSTGIS
+      #TODO:
+      # * Add schemas
       CONNECTION "{% if dburl.host is not none %}host={{ dburl.host }} {% endif %}{% if dburl.username is not none %}user={{ dburl.username }} {% endif %}{% if dburl.password is not none %}password={{ dburl.password }} {% endif %}{% if dburl.port is not none %}port={{ dburl.port }} {% endif %}{% if dburl.database is not none %}dbname={{ dburl.database }}{% endif %}"
-      DATA "geometry from (select z.{{ layers[l].gss_code }}, z.geometry, z.name,
-            {% for a in attributes %}bd.{{ a }}{% if not loop.last %}, {% endif %}{% endfor %} from cresh.{{ l }} z join cresh.{{ layers[l].table }} d on z.{{ layers[l].id }} = d.{{ layers[l].id }}_id join cresh.base_data bd on d.id = bd.id) as subquery using unique {{ layers[l].id }}"
+      DATA "geometry from (select g.gss_id, g.geometry, g.name,
+            {% for a in attributes %} (select value from data where gss_id = g.gss_id and variable_id = '{{ attributes[a]['id'] }}' and year = {{ attributes[a]['year'] }}) as {{ a }}{% if not loop.last %}, {% endif %} {% endfor %}
+            from cresh_geography g where g.gss_code = '{{ l }}')
+            as subquery using unique gss_id using srid=0"
 
 
       PROCESSING "CLOSE_CONNECTION=DEFER" # for maximum performance
       OFFSITE 0 0 0
-      TRANSPARENCY 70
+      # TRANSPARENCY 70 FIXME
 
       {% for a in attributes %}
       CLASS
           NAME "{{ attributes[a]['name'] }}"
-	  GROUP "{{ a }}"
-	  STYLE
+	        GROUP "{{ a }}"
+	        STYLE
               RANGEITEM "{{ a }}"
-	      COLORRANGE {{ attributes[a]['start_colour'] }} {{ attributes[a]['end_colour'] }}
-	      DATARANGE {{ attributes[a]['start'] }} {{ attributes[a]['end'] }}
-	      OUTLINECOLOR 199 199 199
-	  END
+	            COLORRANGE {{ attributes[a]['start_colour'] }} {{ attributes[a]['end_colour'] }}
+	            DATARANGE {{ attributes[a]['start'] }} {{ attributes[a]['end'] }}
+	            OUTLINECOLOR 199 199 199
+	        END
       END
       {% endfor %}
       TEMPLATE "{{ popup }}"
