@@ -6,7 +6,32 @@ from pathlib import Path
 import yaml
 from yaml.loader import SafeLoader
 import pandas
+import colorbrewer
 
+def quantile_color_map(cmap_name, values, nbins=5):
+    def to_str(rgb):
+        return f'#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}'
+    # Result buffer
+    result = pandas.DataFrame(['']*values.size, columns=['color'])
+    # Find the data range. Note, some values are nonsensical such as negative numbers or NaN.
+    v_min = max(values[values == values].min(), 0)
+    v_max = values[values==values].max()
+    nbins = min(nbins, 9)
+    # Create color labels
+    cmap = getattr(colorbrewer, cmap_name)
+    cmap = cmap[nbins]
+    cmap = list(map(to_str, cmap)) # Convert list rgb tuples to hex format strings
+    # Assign colors for interval limits
+    result.loc[values <= v_min, 'color'] = cmap[0]
+    result.loc[values == v_max, 'color'] = cmap[-1]
+    # Assign colors according to quantiles everywhere else. Limits are not included, because
+    # for some quantities the vast majority of values can be at the limits.
+    result.loc[(values < v_max) & (values > v_min), 'color'] = pandas.qcut(
+        values[(values < v_max) & (values > v_min)],
+        nbins,
+        labels=cmap
+    )
+    return result
 
 def main():
     parser = argparse.ArgumentParser()
@@ -54,6 +79,17 @@ def main():
                                             variable["file_var"]: 'value'})
             values["year"] = variable["year"]
             values["variable_id"] = variable["db_var"]
+
+            colormethod = variable.get('colormethod', '')
+            if colormethod == "quantile":
+                values["color"] = quantile_color_map(
+                    variable["colormap"],
+                    values["value"].to_numpy(),
+                    nbins=variable["nclasses"]
+                )
+            else:
+                print('Color method {0} not supported.'.format(colormethod))
+
             values.to_sql("data", con=db.session.get_bind(),
                           index=False, if_exists="append", method="multi")
 
