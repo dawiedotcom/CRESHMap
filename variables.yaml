@@ -215,7 +215,7 @@ variables:
       Recorded crimes of violence, sexual offences, domestic housebreaking, vandalism, 
       drugs offences, and common assault per 10,000 population
     source: Scottish Government, from Police Scotland, 2020.
-  - id: overvrowded_housing
+  - id: overcrowded_housing
     name: Overcrowded housing
     domain: Sociodemographics|Housing
     description: >
