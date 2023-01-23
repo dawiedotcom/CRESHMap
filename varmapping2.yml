@@ -77,23 +77,26 @@ variables:
     db_var: hospital_stays_alcohol
     file_var: ALCOHOL
     year: 2020
-    colormethod: quantile # TODO manual break [25, 50, 100, 150]
+    colormethod: manual 
     colormap: RdYlBu
-    nclasses: 5
+    break_values: [0, 25, 50, 100, 150, 1000000]
+    reverse_color: True
   - geometry: Data_Zone
     db_var: hospital_stay_drugs
     file_var: DRUG
     year: 2020
-    colormethod: quantile # TODO manual break [25, 50, 100, 150]
+    colormethod: manual 
     colormap: RdYlBu
-    nclasses: 5
+    break_values: [0, 25, 50, 100, 150, 1000000]
+    reverse_color: True
   - geometry: Data_Zone
     db_var: mortality
     file_var: SMR
     year: 2020
-    colormethod: quantile # TODO manual break [25, 50, 100, 150]
+    colormethod: manual 
     colormap: RdYlBu
-    nclasses: 5
+    break_values: [0, 25, 50, 100, 150, 1000000]
+    reverse_color: True
   - geometry: Data_Zone
     db_var: drug_prescription
     file_var: DEPRESS
