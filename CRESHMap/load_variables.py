@@ -12,9 +12,6 @@ from yaml.loader import SafeLoader
 import pandas
 import colorbrewer
 
-from icecream import (ic, install)
-install()
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('config', type=Path, help="name of configuration file")
