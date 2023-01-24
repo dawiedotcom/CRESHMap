@@ -1,5 +1,9 @@
 from . import init_app, db
 from .models import Variables
+from .models import Geography
+from .models import GeographyTypes
+from .aggregate import Aggregator
+from .color import color
 
 import argparse
 from pathlib import Path
@@ -8,52 +12,8 @@ from yaml.loader import SafeLoader
 import pandas
 import colorbrewer
 
-def color_to_str(rgb, alpha=200):
-    return f'#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}{alpha:02x}'
-
-def quantile_color_map(cmap_name, values, nbins=5, reverse_colors=False):
-    # Result buffer
-    result = pandas.DataFrame(['']*values.size, columns=['color'])
-    # Find the data range. Note, some values are nonsensical such as negative numbers or NaN.
-    v_min = max(values[values == values].min(), 0)
-    v_max = values[values==values].max()
-    nbins = min(nbins, 9)
-    # Create color labels
-    cmap = getattr(colorbrewer, cmap_name)
-    cmap = cmap[nbins]
-    cmap = list(map(color_to_str, cmap)) # Convert list rgb tuples to hex format strings
-    if reverse_colors:
-        cmap.reverse()
-    # Assign colors for interval limits
-    result.loc[values <= v_min, 'color'] = cmap[0]
-    result.loc[values == v_max, 'color'] = cmap[-1]
-    # Assign colors according to quantiles everywhere else. Limits are not included, because
-    # for some quantities the vast majority of values can be at the limits.
-    result.loc[(values <= v_max) & (values > v_min), 'color'] = pandas.qcut(
-        values[(values <= v_max) & (values > v_min)],
-        nbins,
-        labels=cmap
-    )
-    return result
-
-def manual_color_map(cmap_name, values, bin_values=[], reverse_colors=False):
-    nbins = len(bin_values) - 1
-    if nbins > 9:
-        print('Colorbrewer support at most 9 different colors')
-        nbins = 9
-        print('  The following bins will be ignored:', bin_values[nbins:])
-    # Create color labels
-    cmap = getattr(colorbrewer, cmap_name)
-    cmap = cmap[nbins]
-    cmap = list(map(color_to_str, cmap))
-    if reverse_colors:
-        cmap.reverse()
-    # Find values in the specified intervals
-    result = pandas.DataFrame(['']*values.size, columns=['color'])
-    for i in range(nbins):
-        idx = (values >= bin_values[i]) & (values < bin_values[i+1])
-        result.loc[idx, 'color'] = cmap[i]
-    return result
+from icecream import (ic, install)
+install()
 
 def main():
     parser = argparse.ArgumentParser()
@@ -94,6 +54,7 @@ def main():
         if error:
             parser.error(f'errors in variable description file {cfg["path"]}')
 
+        agg = Aggregator()
         for variable in cfg["variables"]:
             print(variable['db_var'])
             values = data[[variable["geometry"], variable["file_var"]]]
@@ -102,32 +63,53 @@ def main():
             values["year"] = variable["year"]
             values["variable_id"] = variable["db_var"]
 
-            colormethod = variable.get('colormethod', '')
-            if colormethod == "quantile":
-                if not "nclasses" in variable:
-                    print("nclasses should be specified for quantile colormothed")
-                    exit(1)
-                values["color"] = quantile_color_map(
-                    variable["colormap"],
-                    values["value"].to_numpy(),
-                    nbins=variable["nclasses"],
-                    reverse_colors=variable.get("reverse_color", False)
+            # Calculate color values
+            values["color"] = color(variable, values["value"].to_numpy())
+            # Aggregate data for composite geometries
+            #aggregate_values = pandas.from_sql()
+            # TODO: loop over geography_types
+            if 'aggregatemethod' in variable:
+                population = data[[
+                    variable["geometry"],
+                    variable["file_var"],
+                    cfg["population"][variable["year"]],
+                   ]]
+                population = population.rename(columns={
+                    variable["geometry"]: 'gss_id',
+                    variable["file_var"]: 'value',
+                    cfg["population"][variable["year"]]: 'population',
+                   })
+                population.set_index('gss_id', inplace=True)
+
+                geography_types = db.session.query(GeographyTypes).where(
+                    (GeographyTypes.column_name != None),
+                    (GeographyTypes.gss_code != 'S01')
                 )
-            elif colormethod == "manual":
-                if not "break_values" in variable:
-                    print("{db_var}: break_values should be specified for manual colormethod".format(**variable))
-                    exit(1)
-                values["color"] = manual_color_map(
-                    variable["colormap"],
-                    values["value"].to_numpy(),
-                    bin_values=variable["break_values"],
-                    reverse_colors=variable.get("reverse_color", False)
-                )
-            else:
-                print('Color method {0} not supported.'.format(colormethod))
+                for geo_type in geography_types:
+                    print( 'aggregate {db_var} in {0} using {aggregatemethod}'.format(
+                        geo_type.gss_code,
+                        **variable,
+                    ))
+                    composite_geographies = db.session.query(Geography).where(
+                        Geography.gss_code == geo_type.gss_code
+                    )
+                    agg_values = agg.aggregate(
+                        variable['aggregatemethod'],
+                        composite_geographies,
+                        population,
+                        variable["year"],
+                        variable["db_var"],
+                    )
+                    # TODO: Assign geotype color
+                    agg_values['color'] = color(variable, agg_values['value'].to_numpy())
+                    # TODO: Populate db
+                    #values.append(agg_values)
+                    values = pandas.concat((values, agg_values))
+                    #print(agg_values)
 
             values.to_sql("data", con=db.session.get_bind(),
                           index=False, if_exists="append", method="multi")
+
 
 
 if __name__ == "__main__":

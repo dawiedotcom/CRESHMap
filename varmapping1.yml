@@ -1,7 +1,10 @@
 ---
-# path: ../data/Datazones_TimeSeriesData.xlsx
-path: /home/chill2/code/cresh/data/rx_20220812/Datazones_TimeSeriesData.xlsx
+path: data/Datazones_TimeSeriesData.xlsx
 type: excel
+population:
+  2012: MidYr2012DZPop
+  2016: MidYr2016DZPop
+  2020: MidYr2020DZPop
 variables:
   - geometry: DataZone11_ID
     db_var: population_density
@@ -10,6 +13,7 @@ variables:
     colormethod: quantile
     colormap: Reds
     nclasses: 5
+    aggregatemethod: population_density
   - geometry: DataZone11_ID
     db_var: population_density
     file_var: PopDen_2016psqkm
@@ -17,6 +21,7 @@ variables:
     colormethod: quantile
     colormap: Reds
     nclasses: 5
+    aggregatemethod: population_density
   - geometry: DataZone11_ID
     db_var: population_density
     file_var: PopDen_2020psqkm
@@ -24,6 +29,7 @@ variables:
     colormethod: quantile
     colormap: Reds
     nclasses: 5
+    aggregatemethod: population_density
   - geometry: DataZone11_ID
     db_var: alcohol_retailer_density
     file_var: AR12_All_PopAdjCnt
@@ -31,6 +37,7 @@ variables:
     colormethod: quantile
     colormap: YlGn
     nclasses: 10
+    aggregatemethod: per_1000_capita
   - geometry: DataZone11_ID
     db_var: alcohol_retailer_density
     file_var: AR16_All_PopAdjCnt
@@ -38,6 +45,7 @@ variables:
     colormethod: quantile
     colormap: YlGn
     nclasses: 10
+    aggregatemethod: per_1000_capita
   - geometry: DataZone11_ID
     db_var: alcohol_retailer_density
     file_var: AR20_All_PopAdjCnt
@@ -45,6 +53,7 @@ variables:
     colormethod: quantile
     colormap: YlGn
     nclasses: 10
+    aggregatemethod: per_1000_capita
   - geometry: DataZone11_ID
     db_var: alcohol_on_premise_retailer_density
     file_var: AR12_On_PopAdjCnt
@@ -52,6 +61,7 @@ variables:
     colormethod: quantile
     colormap: YlGn
     nclasses: 10
+    aggregatemethod: per_1000_capita
   - geometry: DataZone11_ID
     db_var: alcohol_on_premise_retailer_density
     file_var: AR16_On_PopAdjCnt
@@ -59,6 +69,7 @@ variables:
     colormethod: quantile
     colormap: YlGn
     nclasses: 10
+    aggregatemethod: per_1000_capita
   - geometry: DataZone11_ID
     db_var: alcohol_on_premise_retailer_density
     file_var: AR20_On_PopAdjCnt
@@ -66,6 +77,7 @@ variables:
     colormethod: quantile
     colormap: YlGn
     nclasses: 10
+    aggregatemethod: per_1000_capita
   - geometry: DataZone11_ID
     db_var: alcohol_off_premise_retailer_density
     file_var: AR12_Off_PopAdjCnt
@@ -73,6 +85,7 @@ variables:
     colormethod: quantile
     colormap: YlGn
     nclasses: 10
+    aggregatemethod: per_1000_capita
   - geometry: DataZone11_ID
     db_var: alcohol_off_premise_retailer_density
     file_var: AR16_Off_PopAdjCnt
@@ -80,6 +93,7 @@ variables:
     colormethod: quantile
     colormap: YlGn
     nclasses: 10
+    aggregatemethod: per_1000_capita
   - geometry: DataZone11_ID
     db_var: alcohol_off_premise_retailer_density
     file_var: AR20_Off_PopAdjCnt
@@ -87,6 +101,7 @@ variables:
     colormethod: quantile
     colormap: YlGn
     nclasses: 10
+    aggregatemethod: per_1000_capita
   - geometry: DataZone11_ID
     db_var: tobacco_retailer_density
     file_var: TR12_PopAdjCnt
@@ -94,6 +109,7 @@ variables:
     colormethod: quantile
     colormap: YlOrRd
     nclasses: 10
+    aggregatemethod: per_1000_capita
   - geometry: DataZone11_ID
     db_var: tobacco_retailer_density
     file_var: TR16_PopAdjCnt
@@ -101,6 +117,7 @@ variables:
     colormethod: quantile
     colormap: YlOrRd
     nclasses: 10
+    aggregatemethod: per_1000_capita
   - geometry: DataZone11_ID
     db_var: tobacco_retailer_density
     file_var: TR20_PopAdjCnt
@@ -108,3 +125,4 @@ variables:
     colormethod: quantile
     colormap: YlOrRd
     nclasses: 10
+    aggregatemethod: per_1000_capita
