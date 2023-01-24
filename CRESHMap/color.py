@@ -68,7 +68,7 @@ def color(cfg_variable_entry, values):
             exit(1)
         return manual_color_map(
             cfg_variable_entry["colormap"],
-            values["value"].to_numpy(),
+            values,
             bin_values=cfg_variable_entry["break_values"],
             reverse_colors=cfg_variable_entry.get("reverse_color", False)
         )

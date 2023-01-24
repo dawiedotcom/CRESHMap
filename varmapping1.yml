@@ -1,10 +1,11 @@
 ---
 path: data/Datazones_TimeSeriesData.xlsx
 type: excel
-population:
-  2012: MidYr2012DZPop
-  2016: MidYr2016DZPop
-  2020: MidYr2020DZPop
+metadata:
+  population:
+    2012: MidYr2012DZPop
+    2016: MidYr2016DZPop
+    2020: MidYr2020DZPop
 variables:
   - geometry: DataZone11_ID
     db_var: population_density

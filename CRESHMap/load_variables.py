@@ -66,15 +66,17 @@ def main():
             #aggregate_values = pandas.from_sql()
             # TODO: loop over geography_types
             if 'aggregatemethod' in variable:
+                meta_column_label = variable.get("aggregatemeta", "population")
+                meta_column = cfg["metadata"][meta_column_label][variable["year"]]
                 population = data[[
                     variable["geometry"],
                     variable["file_var"],
-                    cfg["population"][variable["year"]],
+                    meta_column,
                    ]]
                 population = population.rename(columns={
                     variable["geometry"]: 'gss_id',
                     variable["file_var"]: 'value',
-                    cfg["population"][variable["year"]]: 'population',
+                    meta_column: 'population'
                    })
                 population.set_index('gss_id', inplace=True)
 
@@ -97,12 +99,8 @@ def main():
                         variable["year"],
                         variable["db_var"],
                     )
-                    # TODO: Assign geotype color
                     agg_values['color'] = color(variable, agg_values['value'].to_numpy())
-                    # TODO: Populate db
-                    #values.append(agg_values)
                     values = pandas.concat((values, agg_values))
-                    #print(agg_values)
 
             values.to_sql("data", con=db.session.get_bind(),
                           index=False, if_exists="append", method="multi")

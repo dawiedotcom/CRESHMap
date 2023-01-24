@@ -58,11 +58,31 @@ class AggregatePerCapita(AggregateBy):
         parent_abs_value = popval['abs_value'].sum()
         return parent_abs_value / parent_per_n
 
+class AggregatePercentage(AggregateBy):
+    # For if we know the population, but not the number of things in the category
+    def _calc_parent_quantity(self, parent, children, popval):
+        popval['abs_value'] = popval['value'] / 100 * popval['population']
+        parent_total = popval['abs_value'].sum()
+        parent_population = popval['population'].sum()
+        return (100.0 * parent_total / parent_population)
+
+class AggregatePercentageWithCount(AggregateBy):
+    # For if we know the number of things in the category, but not the total
+    def _calc_parent_quantity(self, parent, children, popval):
+        popval['abs_value'] = popval['population']
+        popval['population'] = popval['abs_value'] / (popval['value'] / 100)
+        parent_total = popval['abs_value'].sum()
+        parent_population = popval['population'].sum()
+        return (100.0 * parent_total / parent_population)
+
+
 class Aggregator:
     _dispatch = {
         'population_density': AggregatePopulationDensity(),
         'per_1000_capita': AggregatePerCapita(1000),
         'per_10000_capita': AggregatePerCapita(10000),
+        'percentage': AggregatePercentage(),
+        'percentage_with_count': AggregatePercentageWithCount(),
     }
     def aggregate(self, agg_method, composite_geographies, population, year, variable_id):
         if not agg_method in self._dispatch:
