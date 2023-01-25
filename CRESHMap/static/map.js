@@ -24,7 +24,7 @@ for (var a in mapattribs) {
     attribSelector.appendChild(option);
 }
 
-function getHistogram(layer_title, gss_code, attribute, year){
+async function getHistogram(layer_title, gss_code, attribute, year){
     const url = encodeURI(
         window.location.href + '/histogram/' + gss_code + '/' + attribute + '/' + year
     );
@@ -37,14 +37,14 @@ function getHistogram(layer_title, gss_code, attribute, year){
 }
 
 /* get capabilities */
-function capsListener () {
+async function capsListener () {
     var wmsCapabilitiesFormat = new ol.format.WMSCapabilities();
     var c = wmsCapabilitiesFormat.read(this.responseText);
-    c.Capability.Layer.Layer.forEach(function(item, index) {
+    await Promise.all(c.Capability.Layer.Layer.map(async function(item, index) {
         var option = document.createElement("option");
         option.text = item.Title;
         option.value = item.Title;
-        layerSelector.appendChild(option);
+        layerSelector.appendChild(option); // TODO: Move this to when the attrib selector changes
         layers[item.Title] = {};
         item.Style.forEach(function(st_item,st_index) {
             var wmsSource = new ol.source.TileWMS({
@@ -56,14 +56,16 @@ function capsListener () {
             layers[item.Title][st_item.Title] = new ol.layer.Tile({
                 source: wmsSource
             });
-            getHistogram(
+        });
+        await Promise.all (item.Style.map(async (st_item, st_index) => {
+            await getHistogram(
                 item.Title,
                 item.Name,
                 mapattribs[st_item.Title]['id'],
                 mapattribs[st_item.Title]['year'],
             );
-        });
-    });
+        }));
+    }));
     map.once('postrender', function(event) {
         var l = Object.keys(layers)[0];
         var a = Object.keys(layers[l])[0];
