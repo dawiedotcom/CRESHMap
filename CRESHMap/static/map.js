@@ -36,15 +36,25 @@ async function getHistogram(layer_title, gss_code, attribute, year){
         });
 }
 
+function updateLayerOptions() {
+    while (layerSelector.firstChild)
+        layerSelector.removeChild(layerSelector.lastChild);
+    for (layerTitle in layers) {
+        var attrib = mapattribs[attribSelector.value];
+        if (!attrib['data_zones'].includes(layerTitle))
+            continue;
+        var option = document.createElement("option");
+        option.text = layerTitle;
+        option.value = layerTitle;
+        layerSelector.appendChild(option); 
+    }
+}
+
 /* get capabilities */
 async function capsListener () {
     var wmsCapabilitiesFormat = new ol.format.WMSCapabilities();
     var c = wmsCapabilitiesFormat.read(this.responseText);
     await Promise.all(c.Capability.Layer.Layer.map(async function(item, index) {
-        var option = document.createElement("option");
-        option.text = item.Title;
-        option.value = item.Title;
-        layerSelector.appendChild(option); // TODO: Move this to when the attrib selector changes
         layers[item.Title] = {};
         item.Style.forEach(function(st_item,st_index) {
             var wmsSource = new ol.source.TileWMS({
@@ -65,6 +75,7 @@ async function capsListener () {
                 mapattribs[st_item.Title]['year'],
             );
             if (st_index == 0) {
+                updateLayerOptions();
                 var l = Object.keys(layers)[0];
                 var a = Object.keys(layers[l])[0];
                 setLayer(l, Object.keys(mapattribs)[0]);
@@ -86,6 +97,7 @@ layerSelector.onchange = function() {
 
 /* the attribute changed */
 attribSelector.onchange = function() {
+    updateLayerOptions();
     setLayer(layerSelector.value, attribSelector.value);
 }
 

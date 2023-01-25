@@ -6,12 +6,12 @@
   <div class="row">
     <div class="col">
       <div class="input-group">
-	<select class="form-select" aria-label=".form-select layer" id="layer">
-	</select>
+           <select class="form-select" aria-label=".form-select attrib" id="attrib">
+           </select>
       </div>
       <div class="input-group">
-	<select class="form-select" aria-label=".form-select attrib" id="attrib">
-	</select>
+           <select class="form-select" aria-label=".form-select layer" id="layer">
+	         </select>
       </div>
       <div class="input-group">
 	<button class="btn btn-outline-secondary" type="submit" id="button-search-postcode"><i class="fa fa-search"></i></button>
@@ -118,7 +118,8 @@
       "{{ v }}": {"name": "{{ variables[v]['name'] }}",
 		  "description": "{{ variables[v]['description']|safe }}",
 		  "year": "{{ variables[v]['year'] }}",
-		  "id": "{{ variables[v]['id'] }}"
+		  "id": "{{ variables[v]['id'] }}",
+      "data_zones": {{ variables[v]['data_zones']|safe}},
       },
   {% endfor %}};
 </script>

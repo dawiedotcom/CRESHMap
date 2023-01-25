@@ -3,9 +3,10 @@ from flask_flatpages import FlatPages
 from flask import current_app as app
 from flask import json
 from flask import abort
+from sqlalchemy import func
 from collections import namedtuple
 import numpy
-#from .models import Geography
+from .models import GeographyTypes
 from .models import Variables
 from .models import Data
 
@@ -30,16 +31,37 @@ def index():
     query = db.session.query(
         Variables,
         Data.year
-    ).join(Data).group_by(Variables.id, Data.year).order_by(Variables.id, Data.year)
+    ).join(Data).group_by(Variables.id, Data.year).order_by(
+        Variables.domain,
+        Variables.id,
+        Data.year
+    )
 
     for v, year in query:
         index = v.id + '_' + str(year)
+        # Get all populated geography types for this variable/year.
+        gss_codes = db.session.query(
+            func.substr(Data.gss_id, 1, 3).label("gss_code"),
+        ).where(
+            Data.variable_id == v.id,
+            Data.year == year
+        ).group_by("gss_code").subquery()
+
+        data_zones = db.session.query(
+            GeographyTypes.name
+        ).where(
+            GeographyTypes.gss_code == gss_codes.c.gss_code
+        ).all()
+
+        data_zones = [dz[0] for dz in data_zones]
+
         variables[index] = {
             'id': v.id,
-            #'name': v.domain + "|" + v.variable,
-            'name': f'{v.variable} ({year})',
+            'name': f'{v.domain}|{v.variable} ({year})',
+            #'name': f'{v.variable} ({year})',
             'description': v.description.replace('\n', ''),
             'year': year,
+            'data_zones': data_zones,
         }
     return render_template(
         'map.html', mapserverurl=app.config['MAPSERVER_URL'],
