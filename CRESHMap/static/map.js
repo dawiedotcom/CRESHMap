@@ -64,13 +64,14 @@ async function capsListener () {
                 mapattribs[st_item.Title]['id'],
                 mapattribs[st_item.Title]['year'],
             );
+            if (st_index == 0) {
+                var l = Object.keys(layers)[0];
+                var a = Object.keys(layers[l])[0];
+                setLayer(l, Object.keys(mapattribs)[0]);
+            }
         }));
-        map.once('postrender', function(event) {
-            var l = Object.keys(layers)[0];
-            var a = Object.keys(layers[l])[0];
-            setLayer(l, Object.keys(mapattribs)[0]);
-        });
     }));
+
 }
 
 var capsRequest = new XMLHttpRequest();
