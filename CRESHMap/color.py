@@ -22,12 +22,13 @@ def quantile_color_map(cmap_name, values, nbins=5, reverse_colors=False):
     result.loc[values == v_max, 'color'] = cmap[-1]
     # Assign colors according to quantiles everywhere else. Limits are not included, because
     # for some quantities the vast majority of values can be at the limits.
-    result.loc[(values <= v_max) & (values > v_min), 'color'] = pandas.qcut(
+    result.loc[(values <= v_max) & (values > v_min), 'color'], bins = pandas.qcut(
         values[(values <= v_max) & (values > v_min)],
         nbins,
-        labels=cmap
+        labels=cmap,
+        retbins=True,
     )
-    return result
+    return result, cmap, bins
 
 def manual_color_map(cmap_name, values, bin_values=[], reverse_colors=False):
     nbins = len(bin_values) - 1
@@ -46,7 +47,7 @@ def manual_color_map(cmap_name, values, bin_values=[], reverse_colors=False):
     for i in range(nbins):
         idx = (values >= bin_values[i]) & (values < bin_values[i+1])
         result.loc[idx, 'color'] = cmap[i]
-    return result
+    return result, cmap, bin_values
 
 def color(cfg_variable_entry, values):
     # Assign color values based on data values and specifications in the

@@ -50,6 +50,12 @@ function updateLayerOptions() {
     }
 }
 
+function updateLegend() {
+    const filename = window.location.href + '/static/images/legends/' + attribSelector.value + '_' + layerSelector.value + '.svg';
+    const img = document.getElementById('legendimg');
+    img.src = filename;
+}
+
 /* get capabilities */
 async function capsListener () {
     var wmsCapabilitiesFormat = new ol.format.WMSCapabilities();
@@ -105,6 +111,7 @@ function setLayer(l,a) {
     map.setLayers([baselayer, layers[l][a]]);
     map.CRESHattrib = layers[l][a];
     attribDescription.innerHTML = mapattribs[a].description;
+    updateLegend();
 }
 
 /**

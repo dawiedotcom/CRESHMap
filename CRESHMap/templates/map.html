@@ -14,24 +14,40 @@
 	         </select>
       </div>
       <div class="input-group">
-	<button class="btn btn-outline-secondary" type="submit" id="button-search-postcode"><i class="fa fa-search"></i></button>
-	<input type="text" class="form-control" placeholder="postcode" aria-label="search for postcode" aria-describedby="button-search-postcode" id="search-postcode" name="search-postcode">
+        <button class="btn btn-outline-secondary" type="submit" id="button-search-postcode"><i class="fa fa-search"></i></button>
+        <input type="text" class="form-control" placeholder="postcode" aria-label="search for postcode" aria-describedby="button-search-postcode" id="search-postcode" name="search-postcode">
       </div>
 
-      <div class="accordion" id="description">
-	<div class="accordion-item">
-	  <h2 class="accordion-header" id="attributeHeading">
-	    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAttribute" aria-expanded="true" aria-controls="collapseAttribute">
-              <div id="attributeLabel">Description</div>
-	    </button>
-	  </h2>
-	  <div id="collapseAttribute" class="accordion-collapse collapse show" aria-labelledby="attributeHeading" data-bs-parent="#description">
-	    <div class="accordion-body" id='attrib_description'>
+      <div class="accordion" id="legend">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="legendHeading">
+	          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLegend" aria-expanded="true" aria-controls="collapseLegend">
+              <div id="legendLabel">Legend</div>
+	          </button>
+	        </h2>
+	        <div id="collapseLegend" class="accordion-collapse collapse show" aria-labelledby="legendHeading" data-bs-parent="#legend">
+	          <div class="accordion-body">
+              <img id="legendimg" />
+	          </div>
+	        </div>
+	      </div>
 	    </div>
+      <div class="accordion" id="description">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="attributeHeading">
+	          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAttribute" aria-expanded="true" aria-controls="collapseAttribute">
+              <div id="attributeLabel">Description</div>
+	          </button>
+	        </h2>
+	        <div id="collapseAttribute" class="accordion-collapse collapse show" aria-labelledby="attributeHeading" data-bs-parent="#description">
+	          <div class="accordion-body" id='attrib_description'>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+
+      
 	  </div>
-	</div>
-      </div>
-    </div>
     <div class="col-md-10">
       <div id='map' class='map'></div>
     </div>

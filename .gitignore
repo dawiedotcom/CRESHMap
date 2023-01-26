@@ -4,3 +4,4 @@ app.db
 CRESHMap.egg-info/
 build/
 dist/
+CRESHMap/static/images/legends/
