@@ -166,7 +166,7 @@ variables:
     colormethod: quantile 
     colormap: BuPu
     nclasses: 5
-    aggergatemethod: per_10000_capita
+    aggregatemethod: per_10000_capita
   - geometry: Data_Zone # TODO add to variables table
     db_var: overcrowded_housing
     file_var: overcrowded_rate
