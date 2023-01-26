@@ -4,6 +4,7 @@ from .models import Geography
 from .models import GeographyTypes
 from .aggregate import Aggregator
 from .color import color
+from .legend import make_legend
 
 import argparse
 from pathlib import Path
@@ -14,6 +15,8 @@ import colorbrewer
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--update-legends', action='store_true', default=False,
+                        help="don't perform database commits, only update legends")
     parser.add_argument('config', type=Path, help="name of configuration file")
     args = parser.parse_args()
 
@@ -61,10 +64,11 @@ def main():
             values["variable_id"] = variable["db_var"]
 
             # Calculate color values
-            values["color"] = color(variable, values["value"].to_numpy())
+            values["color"], cmap, limits = color(variable, values["value"].to_numpy())
+            layer_name = '{db_var}_{year}_Data Zone'.format(**variable)
+            make_legend(layer_name, cmap, limits)
+
             # Aggregate data for composite geometries
-            #aggregate_values = pandas.from_sql()
-            # TODO: loop over geography_types
             if 'aggregatemethod' in variable:
                 meta_column_label = variable.get("aggregatemeta", "population")
                 meta_column = cfg["metadata"][meta_column_label][variable["year"]]
@@ -99,11 +103,17 @@ def main():
                         variable["year"],
                         variable["db_var"],
                     )
-                    agg_values['color'] = color(variable, agg_values['value'].to_numpy())
+                    agg_values['color'], cmap, limits = color(
+                        variable,
+                        agg_values['value'].to_numpy(),
+                    )
+                    layer_name = '{db_var}_{year}_{0}'.format(geo_type.name, **variable)
+                    make_legend(layer_name, cmap, limits)
                     values = pandas.concat((values, agg_values))
 
-            values.to_sql("data", con=db.session.get_bind(),
-                          index=False, if_exists="append", method="multi")
+            if not args.update_legends:
+                values.to_sql("data", con=db.session.get_bind(),
+                              index=False, if_exists="append", method="multi")
 
 
 
