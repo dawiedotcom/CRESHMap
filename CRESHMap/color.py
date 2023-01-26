@@ -2,7 +2,7 @@ import colorbrewer
 import pandas
 
 def color_to_str(rgb, alpha=200):
-    return f'#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}{alpha:02x}'
+    return f'#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}' #{alpha:02x}'
 
 def quantile_color_map(cmap_name, values, nbins=5, reverse_colors=False):
     # Result buffer
@@ -76,6 +76,3 @@ def color(cfg_variable_entry, values):
     else:
         print('Color method {0} not supported.'.format(colormethod))
         exit(1)
-
-
-

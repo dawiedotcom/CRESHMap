@@ -14,7 +14,8 @@ def make_legend(layer_name, colors, limits, width=150, border=10, box_size=25, f
     text_h_offset = (box_size - font_size)//2
     limits = format_limits(limits)
     for i, c in enumerate(colors):
-        r = draw.Rectangle(0, border + i*box_size, box_size, box_size, fill=c)
+        # Add 70% transparency to match the mapserver layer
+        r = draw.Rectangle(0, border + i*box_size, box_size, box_size, fill=c + 'b2')
         #r.appendT
         if i == 0:
             limit_label = f' < {limits[i+1]}'

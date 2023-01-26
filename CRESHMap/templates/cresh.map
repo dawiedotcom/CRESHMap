@@ -47,7 +47,9 @@ MAP
 
       PROCESSING "CLOSE_CONNECTION=DEFER" # for maximum performance
       OFFSITE 0 0 0
-      # TRANSPARENCY 70 FIXME
+      COMPOSITE
+        OPACITY 70
+      END
 
       {% for a in attributes %}
       CLASS
