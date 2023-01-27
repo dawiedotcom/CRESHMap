@@ -1,3 +1,4 @@
+import os
 import drawSvg as draw
 
 def format_limits(limits):
@@ -33,5 +34,8 @@ def make_legend(layer_name, colors, limits, width=150, border=10, box_size=25, f
         )
         d.append(r)
         d.append(t)
-    filename = f'CRESHMap/static/images/legends/{layer_name}.svg'
+    dirname = 'CRESHMap/static/images/legends'
+    if not os.path.exists(dirname):
+        os.mkdir(dirname)
+    filename = f'{dirname}/{layer_name}.svg'
     d.saveSvg(filename)
