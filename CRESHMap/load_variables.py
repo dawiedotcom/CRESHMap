@@ -65,7 +65,7 @@ def main():
 
             # Calculate color values
             values["color"], cmap, limits = color(variable, values["value"].to_numpy())
-            layer_name = '{db_var}_{year}_Data Zone'.format(**variable)
+            layer_name = '{db_var}_{year}_S01'.format(**variable)
             make_legend(layer_name, cmap, limits)
 
             # Aggregate data for composite geometries
@@ -107,7 +107,7 @@ def main():
                         variable,
                         agg_values['value'].to_numpy(),
                     )
-                    layer_name = '{db_var}_{year}_{0}'.format(geo_type.name, **variable)
+                    layer_name = '{db_var}_{year}_{0}'.format(geo_type.gss_code, **variable)
                     make_legend(layer_name, cmap, limits)
                     values = pandas.concat((values, agg_values))
 

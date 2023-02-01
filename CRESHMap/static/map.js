@@ -24,29 +24,33 @@ for (var a in mapattribs) {
     attribSelector.appendChild(option);
 }
 
-async function getHistogram(layer_title, gss_code, attribute, year){
+function getHistogram(layer_name, attribute, year){
+    const attrib_index = attribute + '_' + year;
+    if ("histogram" in layers[layer_name][attrib_index])
+        return;
     const url = encodeURI(
-        window.location.href + '/histogram/' + gss_code + '/' + attribute + '/' + year
+        window.location.href + '/histogram/' + layer_name + '/' + attribute + '/' + year
     );
     fetch(url)
         .then((response) => response.text())
         .then((data) => {
             const histogram_data = JSON.parse(data);
-            layers[layer_title][attribute + '_' + year].histogram = histogram_data;
+            layers[layer_name][attrib_index].histogram = histogram_data;
         });
 }
 
 function updateLayerOptions() {
     while (layerSelector.firstChild)
         layerSelector.removeChild(layerSelector.lastChild);
-    for (layerTitle in layers) {
-        var attrib = mapattribs[attribSelector.value];
-        if (!attrib['data_zones'].includes(layerTitle))
+    for (layerName in layers) {
+        const attrib = mapattribs[attribSelector.value];
+        const layer = layers[layerName];
+        if (!attrib['data_zones'].includes(layer.Title))
             continue;
-        var option = document.createElement("option");
-        option.text = layerTitle;
-        option.value = layerTitle;
-        layerSelector.appendChild(option); 
+        const option = document.createElement("option");
+        option.text = layer.Title;
+        option.value = layerName;
+        layerSelector.appendChild(option);
     }
 }
 
@@ -60,8 +64,8 @@ function updateLegend() {
 async function capsListener () {
     var wmsCapabilitiesFormat = new ol.format.WMSCapabilities();
     var c = wmsCapabilitiesFormat.read(this.responseText);
-    await Promise.all(c.Capability.Layer.Layer.map(async function(item, index) {
-        layers[item.Title] = {};
+    c.Capability.Layer.Layer.forEach( (item, index) => {
+        layers[item.Name] = {Title: item.Title};
         item.Style.forEach(function(st_item,st_index) {
             var wmsSource = new ol.source.TileWMS({
                 url: mapserverurl,
@@ -69,26 +73,16 @@ async function capsListener () {
                 crossOrigin: 'anonymous',
                 transition: 0,
             });
-            layers[item.Title][st_item.Title] = new ol.layer.Tile({
+            layers[item.Name][st_item.Title] = new ol.layer.Tile({
                 source: wmsSource
             });
         });
-        await Promise.all (item.Style.map(async (st_item, st_index) => {
-            await getHistogram(
-                item.Title,
-                item.Name,
-                mapattribs[st_item.Title]['id'],
-                mapattribs[st_item.Title]['year'],
-            );
-            if (st_index == 0) {
-                updateLayerOptions();
-                var l = Object.keys(layers)[0];
-                var a = Object.keys(layers[l])[0];
-                setLayer(l, Object.keys(mapattribs)[0]);
-            }
-        }));
-    }));
+    });
 
+    updateLayerOptions();
+    var l = Object.keys(layers)[0];
+    var a = Object.keys(mapattribs)[0];
+    setLayer(l, a);
 }
 
 var capsRequest = new XMLHttpRequest();
@@ -112,6 +106,7 @@ function setLayer(l,a) {
     map.CRESHattrib = layers[l][a];
     attribDescription.innerHTML = mapattribs[a].description;
     updateLegend();
+    getHistogram(l, mapattribs[a].id, mapattribs[a].year);
 }
 
 /**

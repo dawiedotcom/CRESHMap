@@ -1,3 +1,4 @@
+from functools import lru_cache
 from flask import render_template
 from flask_flatpages import FlatPages
 from flask import current_app as app
@@ -15,7 +16,6 @@ from . import db
 pages = FlatPages(app)
 
 MenuItem = namedtuple("MenuItem", "title path order")
-
 
 def menu_items():
     menu = [MenuItem("Map", "/", 1)]
@@ -75,6 +75,7 @@ def page(path):
 
 
 @app.route('/histogram/<gss_code>/<variable_id>/<year>')
+@lru_cache()
 def histogram(gss_code, variable_id, year):
 
     q = db.session.query(getattr(Data, 'value')).filter(
