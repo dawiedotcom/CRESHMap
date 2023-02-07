@@ -1,12 +1,6 @@
 ---
-# simd2020_withinds_clean.csv can be obtained by downloading and extracting
-#  https://simd.scot/data/simd2020_withgeog.zip
-# simd2020_withinds.csv contains '%' and '*' symbols in data fields that should
-# be removed:
-#  sed 's/[%*]//g' simd2020_withinds.csv > simd2020_withinds_clean.csv
-# TODO: automate this step in load_variables.py
+# The data file can be downloaded by running the get_simd.sh script in data/
 path: data/simd2020_withinds_clean.csv
-#path: /home/chill2/code/cresh/data/processed/simd2020_withinds_clean.csv
 type: csv
 metadata:
   population:

@@ -5,3 +5,15 @@ CRESHMap.egg-info/
 build/
 dist/
 CRESHMap/static/images/legends/
+*.zip
+*.zip.*
+*.shp
+*.dbf
+*.prj
+*.qpj
+*.shx
+*.csv
+*.xls
+*.xlsx
+__MACOSX/
+.DS_Store
