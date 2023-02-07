@@ -1,11 +1,14 @@
 /**
  * Elements that make up the popup.
  */
-const container = document.getElementById('popup');
+const containerHist = document.getElementById('popup');
 const popupTable = document.getElementById('popup-data');
-const closer = document.getElementById('popup-closer');
+const containerQual = document.getElementById('qual-popup');
+const closerHist = document.getElementById('popup-closer');
+const closerQual = document.getElementById('qual-popup-closer');
 const layerSelector = document.getElementById('layer');
 const attribSelector = document.getElementById('attrib');
+const popupSelector = document.getElementById('popup-select');
 const searchPostcodeButton = document.getElementById('button-search-postcode');
 const searchPostcode = document.getElementById('search-postcode');
 const attribDescription = document.getElementById('attrib_description');
@@ -80,9 +83,7 @@ async function capsListener () {
     });
 
     updateLayerOptions();
-    var l = Object.keys(layers)[0];
-    var a = Object.keys(mapattribs)[0];
-    setLayer(l, a);
+    setLayer(layerSelector.value, attribSelector.value);
 }
 
 var capsRequest = new XMLHttpRequest();
@@ -101,8 +102,9 @@ attribSelector.onchange = function() {
     setLayer(layerSelector.value, attribSelector.value);
 }
 
+
 function setLayer(l,a) {
-    map.setLayers([baselayer, layers[l][a]]);
+    map.setLayers([baselayer, layers[l][a], layers["Quotes"]["Quotes"]]);
     map.CRESHattrib = layers[l][a];
     attribDescription.innerHTML = mapattribs[a].description;
     updateLegend();
@@ -110,26 +112,51 @@ function setLayer(l,a) {
 }
 
 /**
- * Add a click handler to hide the popup.
+ * Add a click handler to hide the histogram popup.
  * @return {boolean} Don't follow the href.
  */
-closer.onclick = function () {
-    overlay.setPosition(undefined);
-    closer.blur();
+closerHist.onclick = function () {
+    overlayHist.setPosition(undefined);
+    closerHist.blur();
     return false;
 };
 
 /**
- * Create an overlay to anchor the popup to the map.
+ * Add a click handler to hide the qualitative data popup.
+ * @return {boolean} Don't follow the href.
  */
-const overlay = new ol.Overlay({
-    element: container,
+closerQual.onclick = function () {
+    overlayQual.setPosition(undefined);
+    closerQual.blur();
+    return false;
+};
+
+
+/**
+ * Create an overlay to anchor the histogram popup to the map.
+ */
+const overlayHist = new ol.Overlay({
+    element: containerHist,
     autoPan: {
         animation: {
             duration: 250,
         },
     },
 });
+
+/**
+ * Create an overlay to anchor the qualitative popup to the map.
+ */
+const overlayQual = new ol.Overlay({
+    element: containerQual,
+    autoPan: {
+        animation: {
+            duration: 250,
+        },
+    },
+});
+
+
 
 const view = new ol.View({
     center: ol.proj.fromLonLat([-4.352258, 57.009659]),
@@ -140,13 +167,18 @@ const view = new ol.View({
 var map = new ol.Map({
     target: 'map',
     layers: [baselayer],
-    overlays: [overlay],
+    overlays: [overlayHist, overlayQual],
     view: view,
 });
 
 map.on('singleclick', function (evt) {
     const coordinate = evt.coordinate;
-    showInfo(coordinate);
+    if (popupSelector.value === "histogram") {
+        showInfo(coordinate);
+    }
+    else {
+        showQualitative(coordinate);
+    }
 });
 
 function showInfo(coordinate) {
@@ -161,6 +193,7 @@ function showInfo(coordinate) {
         fetch(url)
             .then((response) => response.text())
             .then((data) => {
+                if (data === '') return;
                 const popup_data = JSON.parse(data);
                 var old_thead = popupTable.getElementsByTagName("thead")[0];
                 var thead = document.createElement('thead');
@@ -221,7 +254,49 @@ function showInfo(coordinate) {
                         },
                         width: 250,
                         height:300}) ;
-                overlay.setPosition(coordinate);
+                overlayHist.setPosition(coordinate);
+            });
+    }
+}
+
+function showQualitative(coordinate) {
+    const viewResolution = /** @type {number} */ (view.getResolution());
+    const url = layers["Quotes"]["Quotes"].A.source.getFeatureInfoUrl(
+        coordinate,
+        viewResolution,
+        'EPSG:3857',
+        {'INFO_FORMAT': 'text/html'}
+    );
+    if (url) {
+        fetch(url)
+            .then((response) => response.text())
+            .then((data) => {
+                if (data === '') return;
+                const popup_data = JSON.parse(data);
+                var popupTable = containerQual.getElementsByTagName("table")[0];
+                var old_thead = popupTable.getElementsByTagName("thead")[0];
+                var thead = document.createElement('thead');
+                var row = thead.insertRow(-1);
+                attribName = document.createElement('th');
+                row.appendChild(attribName);
+                attribName.innerHTML = popup_data.name;
+                attribName.colspan = "2";
+                attribName.scope="col";
+                popupTable.replaceChild(thead, old_thead);
+
+                const old_tbody = popupTable.getElementsByTagName("tbody")[0];
+
+                var tbody = document.createElement('tbody');
+                const quotes = popup_data["Quotes"].split("|");
+                for (q in quotes) {
+                    var row = tbody.insertRow(-1);
+                    row.appendChild(document.createElement('th'));
+                    var quote = row.insertCell(1);
+                    row.appendChild(quote);
+                    row.innerHTML = quotes[q];
+                }
+                popupTable.replaceChild(tbody, old_tbody);
+                overlayQual.setPosition(coordinate);
             });
     }
 }

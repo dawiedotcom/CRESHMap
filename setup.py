@@ -37,6 +37,7 @@ setup(
             'creshmap-load-variables=CRESHMap.load_variables:main',
             # 'creshmap-manage=CRESHMap.manage:main',
             'creshmap-genmap=CRESHMap.genmap:main',
+            'creshmap-load-qualitative=CRESHMap.load_qualitative:main',
         ],
     },
     author=author,

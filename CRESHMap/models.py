@@ -71,3 +71,9 @@ class Data(db.Model):
     __table_args__ = (
         db.UniqueConstraint(
             "variable_id", "gss_id", "year", name='_unique_data'), )
+
+class TextQuotes(db.Model):
+    __tablename__ = 'cresh_text_quotes'
+    id = db.Column(db.Integer, primary_key=True)
+    gss_id = db.Column(db.String(10), db.ForeignKey('cresh_geography.gss_id'))
+    value = db.Column(db.String())
