@@ -8,7 +8,6 @@ const closerHist = document.getElementById('popup-closer');
 const closerQual = document.getElementById('qual-popup-closer');
 const layerSelector = document.getElementById('layer');
 const attribSelector = document.getElementById('attrib');
-const popupSelector = document.getElementById('popup-select');
 const searchPostcodeButton = document.getElementById('button-search-postcode');
 const searchPostcode = document.getElementById('search-postcode');
 const attribDescription = document.getElementById('attrib_description');
@@ -173,12 +172,7 @@ var map = new ol.Map({
 
 map.on('singleclick', function (evt) {
     const coordinate = evt.coordinate;
-    if (popupSelector.value === "histogram") {
-        showInfo(coordinate);
-    }
-    else {
-        showQualitative(coordinate);
-    }
+    showQualitative(coordinate);
 });
 
 function showInfo(coordinate) {
@@ -194,6 +188,7 @@ function showInfo(coordinate) {
             .then((response) => response.text())
             .then((data) => {
                 if (data === '') return;
+                closerQual.onclick();
                 const popup_data = JSON.parse(data);
                 var old_thead = popupTable.getElementsByTagName("thead")[0];
                 var thead = document.createElement('thead');
@@ -263,7 +258,7 @@ function showQualitative(coordinate) {
     const viewResolution = /** @type {number} */ (view.getResolution());
     const url = layers["Quotes"]["Quotes"].A.source.getFeatureInfoUrl(
         coordinate,
-        viewResolution,
+        3*viewResolution,
         'EPSG:3857',
         {'INFO_FORMAT': 'text/html'}
     );
@@ -271,7 +266,11 @@ function showQualitative(coordinate) {
         fetch(url)
             .then((response) => response.text())
             .then((data) => {
-                if (data === '') return;
+                if (data === '') {
+                    showInfo(coordinate);
+                    return;
+                }
+                closerHist.onclick();
                 const popup_data = JSON.parse(data);
                 var popupTable = containerQual.getElementsByTagName("table")[0];
                 var old_thead = popupTable.getElementsByTagName("thead")[0];

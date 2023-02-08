@@ -8,11 +8,17 @@ MAP
   END
 
   SYMBOL
+      NAME "circle"
       TYPE ellipse
       FILLED true
-      POINTS 20 20 END
-      NAME "circle"
+      POINTS 30 30 END
   END
+  SYMBOL
+      NAME "chat"
+      TYPE svg
+      IMAGE "{{ quotes_icon_name }}" 
+  END
+
 
   WEB
       IMAGEPATH "/tmp/"
@@ -48,23 +54,18 @@ MAP
 
       PROCESSING "CLOSE_CONNECTION=DEFER" # for maximum performance
       OFFSITE 0 0 0
-      COMPOSITE
-        OPACITY 70
-      END
 
       CLASS
           NAME "Text Quotes"
 	        GROUP "Quotes"
-	        STYLE
-              COLOR 220 220 220
+          STYLE
               SYMBOL "circle"
-	            #OUTLINECOLOR 199 199 199
-	            OUTLINECOLOR 20 20 20
-	        END
-          LABEL
-              TEXT "[count]"
-	            COLOR 20 20 20
+              COLOR 255 255 255
           END
+	        STYLE
+              SYMBOL "chat"
+              SIZE 25
+	        END
       END
       TEMPLATE "quotes.js"
       PROJECTION #source

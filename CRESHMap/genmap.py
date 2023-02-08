@@ -14,6 +14,7 @@ from flask import render_template
 from shapely import wkb
 import argparse
 import sys
+import shutil
 from sqlalchemy.sql.expression import func
 
 
@@ -47,6 +48,8 @@ def main():  # noqa C901
     app = init_app()
 
     popup_base_name = Path('popup.js')
+    quotes_base_name = Path('quotes.js')
+    quotes_icon_base_name = Path('chat-left-dots-fill.svg')
     if args.output is not None:
         popup_name = args.output / popup_base_name
     else:
@@ -106,9 +109,16 @@ def main():  # noqa C901
 
         print(db.engine.url)
         cresh_map = render_template(
-            'cresh.map', bbox=bbox,
-            mapserverurl=app.config['MAPSERVER_URL'], dburl=db.engine.url,
-            attributes=attributes, popup=popup_base_name, layers=layers)
+            'cresh.map',
+            bbox=bbox,
+            mapserverurl=app.config['MAPSERVER_URL'],
+            dburl=db.engine.url,
+            attributes=attributes,
+            popup=popup_base_name,
+            layers=layers,
+            quotes_template=quotes_base_name,
+            quotes_icon_name=quotes_icon_base_name
+        )
         popup = render_template(str(popup_base_name), attributes=attributes)
 
         if args.output is not None:
@@ -116,6 +126,15 @@ def main():  # noqa C901
                 out.write(cresh_map)
             with (popup_name).open('w') as out:
                 out.write(popup)
+
+            shutil.copy(
+                str(Path('CRESHMap/templates') / quotes_base_name),
+                str(args.output / quotes_base_name)
+            )
+            shutil.copy(
+                str(Path('CRESHMap/static/images') / quotes_icon_base_name),
+                str(args.output / quotes_icon_base_name)
+            )
         else:
             print(cresh_map)
             print(popup)

@@ -23,7 +23,7 @@ setup(
     ],
     package_data={
         'CRESHMap': [
-            'templates/*.html', 'templates/cresh.map', 'templates/popup.js',
+            'templates/*.html', 'templates/cresh.map', 'templates/*.js',
             'static/favicon.ico', 'static/map.js', 'static/images/*']},
     extras_require={
         'lint': [
