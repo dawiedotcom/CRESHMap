@@ -63,7 +63,7 @@ class Data(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     variable_id = db.Column(db.String(), db.ForeignKey('variables.id'))
-    gss_id = db.Column(db.String(10), db.ForeignKey('cresh_geography.gss_id'))
+    gss_id = db.Column(db.String(10), db.ForeignKey('cresh_geography.gss_id'), index=True)
     year = db.Column(db.Integer)
     value = db.Column(db.Float)
     color = db.Column(db.String(10))
@@ -75,5 +75,11 @@ class Data(db.Model):
 class TextQuotes(db.Model):
     __tablename__ = 'cresh_text_quotes'
     id = db.Column(db.Integer, primary_key=True)
-    gss_id = db.Column(db.String(10), db.ForeignKey('cresh_geography.gss_id'))
+    gss_id = db.Column(db.String(10), db.ForeignKey('cresh_geography.gss_id'), index=True)
     value = db.Column(db.String())
+
+class Images(db.Model):
+    __tablename__ = 'cresh_images'
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    gss_id = db.Column(db.String(10), db.ForeignKey('cresh_geography.gss_id'))
+    filename = db.Column(db.String())

@@ -50,6 +50,7 @@ def main():  # noqa C901
     popup_base_name = Path('popup.js')
     quotes_base_name = Path('quotes.js')
     quotes_icon_base_name = Path('chat-left-dots-fill.svg')
+    camera_icon_base_name = Path('camera-fill.svg')
     if args.output is not None:
         popup_name = args.output / popup_base_name
     else:
@@ -117,7 +118,8 @@ def main():  # noqa C901
             popup=popup_base_name,
             layers=layers,
             quotes_template=quotes_base_name,
-            quotes_icon_name=quotes_icon_base_name
+            quotes_icon_name=quotes_icon_base_name,
+            camera_icon_name=camera_icon_base_name,
         )
         popup = render_template(str(popup_base_name), attributes=attributes)
 
@@ -134,6 +136,10 @@ def main():  # noqa C901
             shutil.copy(
                 str(Path('CRESHMap/static/images') / quotes_icon_base_name),
                 str(args.output / quotes_icon_base_name)
+            )
+            shutil.copy(
+                str(Path('CRESHMap/static/images') / camera_icon_base_name),
+                str(args.output / camera_icon_base_name)
             )
         else:
             print(cresh_map)

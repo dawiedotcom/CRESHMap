@@ -27,7 +27,25 @@
 	        </h2>
 	        <div id="collapseLegend" class="accordion-collapse collapse show" aria-labelledby="legendHeading" data-bs-parent="#legend">
 	          <div class="accordion-body">
-              <img id="legendimg" />
+              <div>
+                <img id="legendimg" />
+              </div>
+              <div>
+                <span class="legend-icon">
+                  <img src="static/images/chat-left-dots-fill.svg"/>
+                </span>
+                <span class="legend-text">Text</span>
+              </div>
+              <div>
+                <span class="legend-icon">
+                  <img src="static/images/camera-fill.svg"/>
+                </span>
+                <span class="legend-text">Images</span>
+              </div>
+              <div>
+                (Click map for info)
+              </div>
+
 	          </div>
 	        </div>
 	      </div>
@@ -130,6 +148,15 @@
   }
   .ol-popup-closer:after {
       content: "✖";
+  }
+  .legend-icon {
+      width: 25px;
+      display: inline-block;
+      text-align: center;
+  }
+  .legend-text {
+      padding-left: 5px;
+      display: inline-block;
   }
   </style>
 {% endblock %}

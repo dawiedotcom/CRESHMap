@@ -5,6 +5,7 @@ CRESHMap.egg-info/
 build/
 dist/
 CRESHMap/static/images/legends/
+CRESHMap/static/images/qual/
 *.zip
 *.zip.*
 *.shp

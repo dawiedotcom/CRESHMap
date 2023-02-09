@@ -103,7 +103,7 @@ attribSelector.onchange = function() {
 
 
 function setLayer(l,a) {
-    map.setLayers([baselayer, layers[l][a], layers["Quotes"]["Quotes"]]);
+    map.setLayers([baselayer, layers[l][a], layers["Quotes"]["Quotes"], layers["Images"]["Images"]]);
     map.CRESHattrib = layers[l][a];
     attribDescription.innerHTML = mapattribs[a].description;
     updateLegend();
@@ -254,50 +254,70 @@ function showInfo(coordinate) {
     }
 }
 
-function showQualitative(coordinate) {
+async function showQualitative(coordinate) {
     const viewResolution = /** @type {number} */ (view.getResolution());
-    const url = layers["Quotes"]["Quotes"].A.source.getFeatureInfoUrl(
-        coordinate,
-        3*viewResolution,
-        'EPSG:3857',
-        {'INFO_FORMAT': 'text/html'}
+    const qualLayers = [layers["Images"]["Images"], layers["Quotes"]["Quotes"]];
+    const urls = qualLayers.map(
+        layer => layer.A.source.getFeatureInfoUrl(
+            coordinate,
+            3*viewResolution,
+            'EPSG:3857',
+            {'INFO_FORMAT': 'text/html'}
+        )
     );
-    if (url) {
-        fetch(url)
-            .then((response) => response.text())
-            .then((data) => {
-                if (data === '') {
-                    showInfo(coordinate);
-                    return;
-                }
-                closerHist.onclick();
-                const popup_data = JSON.parse(data);
-                var popupTable = containerQual.getElementsByTagName("table")[0];
-                var old_thead = popupTable.getElementsByTagName("thead")[0];
-                var thead = document.createElement('thead');
-                var row = thead.insertRow(-1);
-                attribName = document.createElement('th');
-                row.appendChild(attribName);
-                attribName.innerHTML = popup_data.name;
-                attribName.colspan = "2";
-                attribName.scope="col";
-                popupTable.replaceChild(thead, old_thead);
+    const qualDataP = await Promise.all(
+        urls.map(url =>
+            fetch(url)
+                .then(response => response.json())
+                .then(data => data)
+                .catch(error => {})
+        )
+    );
+    const qualData = qualDataP.filter(d => d);
 
-                const old_tbody = popupTable.getElementsByTagName("tbody")[0];
-
-                var tbody = document.createElement('tbody');
-                const quotes = popup_data["Quotes"].split("|");
-                for (q in quotes) {
-                    var row = tbody.insertRow(-1);
-                    row.appendChild(document.createElement('th'));
-                    var quote = row.insertCell(1);
-                    row.appendChild(quote);
-                    row.innerHTML = quotes[q];
-                }
-                popupTable.replaceChild(tbody, old_tbody);
-                overlayQual.setPosition(coordinate);
-            });
+    console.log(qualData);
+    if (qualData.length == 0) {
+        showInfo(coordinate);
+        return;
     }
+    closerHist.onclick();
+    // Set the heading text in the popup to the data zone's name
+    var popup_data = qualData[0];
+    console.log(popup_data);
+    var popupTable = containerQual.getElementsByTagName("table")[0];
+    var old_thead = popupTable.getElementsByTagName("thead")[0];
+    var thead = document.createElement('thead');
+    var row = thead.insertRow(-1);
+    attribName = document.createElement('th');
+    row.appendChild(attribName);
+    attribName.innerHTML = popup_data.name;
+    attribName.colspan = "2";
+    attribName.scope="col";
+    popupTable.replaceChild(thead, old_thead);
+
+    // New content for the popup
+    const old_tbody = popupTable.getElementsByTagName("tbody")[0];
+    var tbody = document.createElement('tbody');
+
+    // Populate with quotes and images
+    qualData.forEach( popup_data => {
+        console.log(popup_data);
+        const quotes = popup_data["Quotes"].split("|");
+        quotes.forEach( q => {
+            var row = tbody.insertRow(-1);
+            row.appendChild(document.createElement('th'));
+            var quote = row.insertCell(1);
+            row.appendChild(quote);
+            if (q.includes("static/images/qual/")) {
+                row.innerHTML = "<div><img src=\"" + window.location.href + "/" + q + "\"/></div>";
+            }
+            else {
+                row.innerHTML = q;
+            }
+        });
+    });
+    popupTable.replaceChild(tbody, old_tbody);
+    overlayQual.setPosition(coordinate);
 }
 
 /*******************/

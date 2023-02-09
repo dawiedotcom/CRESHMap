@@ -18,6 +18,11 @@ MAP
       TYPE svg
       IMAGE "{{ quotes_icon_name }}" 
   END
+  SYMBOL
+      NAME "camera"
+      TYPE svg
+      IMAGE "{{ camera_icon_name }}" 
+  END
 
 
   WEB
@@ -30,6 +35,46 @@ MAP
           "wms_srs"            "EPSG:4326 EPSG:4269 EPSG:3978 EPSG:3857"
           "wms_enable_request" "*"
           "wms_getfeatureinfo_formatlist" "text/plain,text/html,application/vnd.ogc.gml,gml,geojson"
+      END
+  END
+
+  LAYER
+      NAME "Images"
+      METADATA
+          "wms_title"         "Images"
+          "wms_abstract"      "User quotes"
+          "wms_srs"           "EPSG:4326"
+          "gml_include_items" "all"
+          "gml_featureid"     "ID"
+          "gml_types"         "auto"
+          "wfs_enable_request" "*"
+      END
+      TYPE POINT
+      STATUS ON
+      CONNECTIONTYPE POSTGIS
+      CONNECTION "{% if dburl.host is not none %}host={{ dburl.host }} {% endif %}{% if dburl.username is not none %}user={{ dburl.username }} {% endif %}{% if dburl.password is not none %}password={{ dburl.password }} {% endif %}{% if dburl.port is not none %}port={{ dburl.port }} {% endif %}{% if dburl.database is not none %}dbname={{ dburl.database }}{% endif %}"
+
+      DATA "geometry from (select g.gss_id, ST_Centroid(g.geometry) as geometry, g.name, STRING_AGG(q.filename, '|') as value, count(*) as count from cresh_images q join cresh_geography g on q.gss_id = g.gss_id group by g.gss_id)
+            as subquery using unique gss_id using srid=0"
+
+      PROCESSING "CLOSE_CONNECTION=DEFER" # for maximum performance
+      OFFSITE 0 0 0
+
+      CLASS
+          NAME "Images"
+	        GROUP "Images"
+          #STYLE
+          #    SYMBOL "circle"
+          #    COLOR 255 255 255
+          #END
+          STYLE
+              SYMBOL "camera"
+              SIZE 25
+          END
+      END
+      TEMPLATE "quotes.js"
+      PROJECTION #source
+          "init=epsg:4326"
       END
   END
 
@@ -58,14 +103,14 @@ MAP
       CLASS
           NAME "Text Quotes"
 	        GROUP "Quotes"
+          #STYLE
+          #    SYMBOL "circle"
+          #    COLOR 255 255 255
+          #END
           STYLE
-              SYMBOL "circle"
-              COLOR 255 255 255
-          END
-	        STYLE
               SYMBOL "chat"
               SIZE 25
-	        END
+          END
       END
       TEMPLATE "quotes.js"
       PROJECTION #source
