@@ -54,7 +54,7 @@ MAP
       CONNECTIONTYPE POSTGIS
       CONNECTION "{% if dburl.host is not none %}host={{ dburl.host }} {% endif %}{% if dburl.username is not none %}user={{ dburl.username }} {% endif %}{% if dburl.password is not none %}password={{ dburl.password }} {% endif %}{% if dburl.port is not none %}port={{ dburl.port }} {% endif %}{% if dburl.database is not none %}dbname={{ dburl.database }}{% endif %}"
 
-      DATA "geometry from (select g.gss_id, ST_Centroid(g.geometry) as geometry, g.name, STRING_AGG(q.filename, '|') as value, count(*) as count from cresh_images q join cresh_geography g on q.gss_id = g.gss_id group by g.gss_id)
+      DATA "geometry from (select im.gss_id as gss_id, im.geometry as geometry, im.dz_name as name, im.filename as value from cresh_images im)
             as subquery using unique gss_id using srid=0"
 
       PROCESSING "CLOSE_CONNECTION=DEFER" # for maximum performance

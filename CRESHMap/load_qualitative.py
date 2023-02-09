@@ -1,6 +1,7 @@
 from . import init_app, db
 from .models import TextQuotes
 from .models import Images
+from .models import Geography
 
 import argparse
 from pathlib import Path
@@ -12,6 +13,7 @@ from pathlib import Path
 import os
 import shutil
 import uuid
+from sqlalchemy.sql.expression import func
 
 def import_text(data):
     # Load text columns
@@ -74,7 +76,19 @@ def import_images(filename, data):
         image_dir = Path('static/images/qual')
         new_name =  image_dir / Path(new_name)
 
-        sql_data.append(Images(gss_id=image['datazone'], filename=str(new_name)))
+        dz_name, geometry = db.session.query(
+            Geography.name,
+            func.ST_AsText(func.ST_Centroid(Geography.geometry))
+        ).where(
+            Geography.gss_id == image["datazone"]
+        ).one()
+
+        sql_data.append(Images(
+            dz_name=dz_name,
+            geometry=geometry,
+            gss_id=image['datazone'],
+            filename=str(new_name),
+        ))
 
         if not os.path.exists(str(local_dir / image_dir)):
             os.mkdir(str(local_dir / image_dir))
