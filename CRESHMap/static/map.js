@@ -71,7 +71,10 @@ async function capsListener () {
         item.Style.forEach(function(st_item,st_index) {
             var wmsSource = new ol.source.TileWMS({
                 url: mapserverurl,
-                params: {'LAYERS': item.Name, 'STYLES': st_item.Name},
+                params: {
+                    'LAYERS': item.Name, //+",Quotes,Images",
+                    'STYLES': st_item.Name, //+",Quotes,Images",
+                },
                 crossOrigin: 'anonymous',
                 transition: 0,
             });
@@ -275,7 +278,6 @@ async function showQualitative(coordinate) {
     );
     const qualData = qualDataP.filter(d => d);
 
-    console.log(qualData);
     if (qualData.length == 0) {
         showInfo(coordinate);
         return;
@@ -283,7 +285,6 @@ async function showQualitative(coordinate) {
     closerHist.onclick();
     // Set the heading text in the popup to the data zone's name
     var popup_data = qualData[0];
-    console.log(popup_data);
     var popupTable = containerQual.getElementsByTagName("table")[0];
     var old_thead = popupTable.getElementsByTagName("thead")[0];
     var thead = document.createElement('thead');
@@ -301,7 +302,6 @@ async function showQualitative(coordinate) {
 
     // Populate with quotes and images
     qualData.forEach( popup_data => {
-        console.log(popup_data);
         const quotes = popup_data["Quotes"].split("|");
         quotes.forEach( q => {
             var row = tbody.insertRow(-1);

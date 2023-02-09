@@ -94,7 +94,7 @@ MAP
       CONNECTIONTYPE POSTGIS
       CONNECTION "{% if dburl.host is not none %}host={{ dburl.host }} {% endif %}{% if dburl.username is not none %}user={{ dburl.username }} {% endif %}{% if dburl.password is not none %}password={{ dburl.password }} {% endif %}{% if dburl.port is not none %}port={{ dburl.port }} {% endif %}{% if dburl.database is not none %}dbname={{ dburl.database }}{% endif %}"
 
-      DATA "geometry from (select g.gss_id, ST_Centroid(g.geometry) as geometry, g.name, STRING_AGG(q.value, '|') as value, count(*) as count from cresh_text_quotes q join cresh_geography g on q.gss_id = g.gss_id group by g.gss_id)
+      DATA "geometry from (select q.gss_id as gss_id, q.geometry as geometry, q.dz_name as name, STRING_AGG(q.value, '|') as value from cresh_text_quotes q group by q.gss_id, q.geometry, q.dz_name)
             as subquery using unique gss_id using srid=0"
 
       PROCESSING "CLOSE_CONNECTION=DEFER" # for maximum performance

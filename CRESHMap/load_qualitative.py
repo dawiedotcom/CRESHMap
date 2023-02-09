@@ -18,7 +18,7 @@ from sqlalchemy.sql.expression import func
 def import_text(data):
     # Load text columns
     data_zone_id = data.columns[0]
-    text_data = pandas.DataFrame(columns=['gss_id', 'value'])
+    text_data = pandas.DataFrame(columns=['dz_name', 'geometry', 'gss_id', 'value'])
     for column in data.columns[1:]:
         idx = data.loc[:, column] == data.loc[:, column]
         new_data = data.loc[idx, [data_zone_id, column]]
@@ -26,6 +26,15 @@ def import_text(data):
             data_zone_id: 'gss_id',
             column: 'value'
         })
+        names_geoms = db.session.query(
+            Geography.name,
+            func.ST_AsText(func.ST_Centroid(Geography.geometry))
+        ).where(
+            Geography.gss_id.in_(new_data['gss_id'])
+        ).all()
+        new_data['dz_name'] = [ng[0] for ng in names_geoms]
+        new_data['geometry'] = [ng[1] for ng in names_geoms]
+
         text_data = pandas.concat((text_data, new_data))
 
     text_data.to_sql(

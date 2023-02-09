@@ -75,6 +75,9 @@ class Data(db.Model):
 class TextQuotes(db.Model):
     __tablename__ = 'cresh_text_quotes'
     id = db.Column(db.Integer, primary_key=True)
+    # NOTE: ST_Centroid is slow on stream/pow so the geometry is cached when reading data
+    dz_name = db.Column(db.String())
+    geometry = db.Column(Geometry(geometry_type='POINT'))
     gss_id = db.Column(db.String(10), db.ForeignKey('cresh_geography.gss_id'), index=True)
     value = db.Column(db.String())
 
