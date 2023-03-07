@@ -106,7 +106,8 @@ attribSelector.onchange = function() {
 
 
 function setLayer(l,a) {
-    map.setLayers([baselayer, layers[l][a], layers["Quotes"]["Quotes"], layers["Images"]["Images"]]);
+    //map.setLayers([baselayer, layers[l][a], layers["Quotes"]["Quotes"], layers["Images"]["Images"]]);
+    map.setLayers([baselayer, layers[l][a]]);
     map.CRESHattrib = layers[l][a];
     attribDescription.innerHTML = mapattribs[a].description;
     updateLegend();
