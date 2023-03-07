@@ -16,7 +16,10 @@ const histogramPlot = document.getElementById("histogram");
 var layers = {};
 
 const baselayer = new ol.layer.Tile({
-    source: new ol.source.OSM()});
+    source: new ol.source.Stamen({
+        layer: 'toner-lite'
+    })
+});
 
 /* set attribute selector */
 for (var a in mapattribs) {
