@@ -11,7 +11,7 @@ const attribSelector = document.getElementById('attrib');
 const searchPostcodeButton = document.getElementById('button-search-postcode');
 const searchPostcode = document.getElementById('search-postcode');
 const attribDescription = document.getElementById('attrib_description');
-const histogramPlot = document.getElementById("histogram");
+//const histogramPlot = document.getElementById("histogram");
 
 var layers = {};
 
@@ -29,19 +29,26 @@ for (var a in mapattribs) {
     attribSelector.appendChild(option);
 }
 
-function getHistogram(layer_name, attribute, year){
+function getStatistic(stat_name, layer_name, attribute, year){
     const attrib_index = attribute + '_' + year;
-    if ("histogram" in layers[layer_name][attrib_index])
+    if (stat_name in layers[layer_name][attrib_index])
         return;
     const url = encodeURI(
-        window.location.href + '/histogram/' + layer_name + '/' + attribute + '/' + year
+        window.location.href + '/' + stat_name + '/' + layer_name + '/' + attribute + '/' + year
     );
     fetch(url)
         .then((response) => response.text())
         .then((data) => {
-            const histogram_data = JSON.parse(data);
-            layers[layer_name][attrib_index].histogram = histogram_data;
+            const stat_data = JSON.parse(data);
+            layers[layer_name][attrib_index][stat_name] = stat_data;
         });
+}
+
+function getHistogram(layer_name, attribute, year) {
+    getStatistic('histogram', layer_name, attribute, year);
+}
+function getQuintile(layer_name, attribute, year) {
+    getStatistic('quintile', layer_name, attribute, year);
 }
 
 function updateLayerOptions() {
@@ -114,7 +121,8 @@ function setLayer(l,a) {
     map.CRESHattrib = layers[l][a];
     attribDescription.innerHTML = mapattribs[a].description;
     updateLegend();
-    getHistogram(l, mapattribs[a].id, mapattribs[a].year);
+    //getHistogram(l, mapattribs[a].id, mapattribs[a].year);
+    getQuintile(l, mapattribs[a].id, mapattribs[a].year);
 }
 
 /**
@@ -179,8 +187,47 @@ var map = new ol.Map({
 
 map.on('singleclick', function (evt) {
     const coordinate = evt.coordinate;
-    showQualitative(coordinate);
+    //showQualitative(coordinate);
+    showInfo(coordinate);
 });
+
+function geography_plural(geography) {
+    if (geography === "Data Zone")
+        return "Data Zones";
+    if (geography === "Intermediate Zone")
+        return "Intermediate Zones";
+    if (geography === "Local Authority")
+        return "Local Authorities";
+    if (geography === "NHS Health Board")
+        return "NHS Health Boards";
+    return geography;
+}
+
+function make_count_blurb(popup_data) {
+    console.log(popup_data);
+    return '<div></div>';
+}
+
+function num_description(i) {
+    if (i == 1) return '1st';
+    if (i == 2) return '2nd';
+    if (i == 3) return '3rd';
+    if (i == 4) return '4th';
+    if (i == 5) return '5th';
+}
+function make_stat_blurb(popup_data) {
+
+    var i_quintile=1;
+    while (popup_data.attributes[a].value > map.CRESHattrib.quintile.bins[i_quintile])
+        i_quintile++;
+    const geography = layerSelector.options[layerSelector.selectedIndex].text;
+    const geography_pl = geography_plural(geography);
+    return (
+        '<div>' + popup_data.name + ' is in the ' +
+            num_description(i_quintile) + ' quintile of ' +
+            geography_pl + ' in Scotland.</div>'
+    );
+}
 
 function showInfo(coordinate) {
     const viewResolution = /** @type {number} */ (view.getResolution());
@@ -219,9 +266,13 @@ function showInfo(coordinate) {
                     name.innerHTML = popup_data.attributes[a].name + " (" + popup_data.attributes[a].year + ")";
                     name.scope="row";
                     value.innerHTML = popup_data.attributes[a].value;
+                    break;
                 }
                 popupTable.replaceChild(tbody, old_tbody);
-                Plotly.newPlot(histogramPlot, [{
+                var popupInfoText = document.getElementById('popupInfoText');
+                popupInfoText.innerHTML = make_count_blurb(popup_data);
+                popupInfoText.innerHTML += make_stat_blurb(popup_data);
+                /*Plotly.newPlot(histogramPlot, [{
                     type: 'bar',
                     x: map.CRESHattrib.histogram.x,
                     y: map.CRESHattrib.histogram.y }], {
@@ -255,7 +306,7 @@ function showInfo(coordinate) {
                             pad: 4
                         },
                         width: 250,
-                        height:300}) ;
+                        height:300}) ;*/
                 overlayHist.setPosition(coordinate);
             });
     }

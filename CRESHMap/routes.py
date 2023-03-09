@@ -7,6 +7,7 @@ from flask import abort
 from sqlalchemy import func
 from collections import namedtuple
 import numpy
+import pandas
 from .models import GeographyTypes
 from .models import Variables
 from .models import Data
@@ -74,31 +75,64 @@ def page(path):
     return render_template('page.html', page=page, navigation=menu_items())
 
 
-@app.route('/histogram/<gss_code>/<variable_id>/<year>')
-@lru_cache()
-def histogram(gss_code, variable_id, year):
-
-    q = db.session.query(getattr(Data, 'value')).filter(
+def select_values(gss_code, variable_id, year):
+    return db.session.query(getattr(Data, 'value')).filter(
         Data.gss_id.like(gss_code + '%'),
         Data.variable_id == variable_id,
         Data.year == year,
         Data.value >= 0,
     ).all()
 
-    if len(q) == 0:
-        result = {'x': [0]*10, 'y': [0]*10}
 
-    else:
-        data = numpy.array(q)[:, 0]
-        data = data[~numpy.isnan(data)]
-        count, bins = numpy.histogram(data, bins=10)
-        xvals = (bins[:-1] + bins[1:]) / 2
-        result = {'x': xvals.tolist(), 'y': count.tolist()}
-
+def make_json_response(data):
     response = app.response_class(
-        response=json.dumps(result),
+        response=json.dumps(data),
         status=200,
-        mimetype='application/json'
+        mimetype='application/json',
     )
     response.headers.add('Access-Control-Allow-Origin', '*'),
     return response
+
+@app.route('/histogram/<gss_code>/<variable_id>/<year>')
+@lru_cache()
+def histogram(gss_code, variable_id, year):
+
+    values = select_values(gss_code, variable_id, year)
+
+    if len(values) == 0:
+        return make_json_response({'x': [0]*10, 'y': [0]*10})
+
+    data = numpy.array(values)[:, 0]
+    data = data[~numpy.isnan(data)]
+    count, bins = numpy.histogram(data, bins=10)
+    xvals = (bins[:-1] + bins[1:]) / 2
+    result = {'x': xvals.tolist(), 'y': count.tolist()}
+
+    return make_json_response(result)
+
+
+@app.route('/quintile/<gss_code>/<variable_id>/<year>')
+@lru_cache()
+def quintile(gss_code, variable_id, year):
+
+    values = select_values(gss_code, variable_id, year)
+    nbins = 5
+
+    if len(values) == 0:
+        return make_json_response({'bins': [0]*nbins})
+
+    data = numpy.array(values)[:, 0]
+    data = data[~numpy.isnan(data)]
+    v_min = numpy.max(data[data == data].min(), 0)
+    v_max = data[data==data].max()
+
+    _, bins = pandas.qcut(
+        data[(data<=v_max) & (data > v_min)],
+        nbins,
+        retbins=True,
+    )
+    bins[0] = v_min
+    print(v_min, v_max, bins)
+    result = {'bins': bins.tolist()}
+
+    return make_json_response(result)
