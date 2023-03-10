@@ -179,7 +179,6 @@ def quintile(gss_code, variable_id, year):
         retbins=True,
     )
     bins[0] = v_min
-    print(v_min, v_max, bins)
     result = {'bins': bins.tolist()}
 
     return make_json_response(result)

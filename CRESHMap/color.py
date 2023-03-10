@@ -1,5 +1,6 @@
 import colorbrewer
 import pandas
+import numpy as np
 
 def color_to_str(rgb, alpha=200):
     return f'#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}' #{alpha:02x}'
@@ -28,6 +29,9 @@ def quantile_color_map(cmap_name, values, nbins=5, reverse_colors=False):
         labels=cmap,
         retbins=True,
     )
+    if np.any(values != values):
+        result.loc[values != values, 'color'] = '#aaaaaa';
+        cmap.insert(0, '#aaaaaa')
     return result, cmap, bins
 
 def manual_color_map(cmap_name, values, bin_values=[], reverse_colors=False):

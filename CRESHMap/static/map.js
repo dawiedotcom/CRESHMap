@@ -268,7 +268,10 @@ function num_description(i) {
     if (i == 4) return '4th';
     if (i == 5) return '5th';
 }
-function make_stat_blurb(popup_data) {
+function make_stat_blurb(popup_data, a) {
+
+    if (popup_data.attributes[a].value === '')
+        return '<div>No data available</div>';
 
     var i_quintile=1;
     while (popup_data.attributes[a].value > map.CRESHattrib.quintile.bins[i_quintile])
@@ -324,7 +327,7 @@ function showInfo(coordinate) {
                 popupTable.replaceChild(tbody, old_tbody);
                 var popupInfoText = document.getElementById('popupInfoText');
                 popupInfoText.innerHTML = make_count_blurb(popup_data);
-                popupInfoText.innerHTML += make_stat_blurb(popup_data);
+                popupInfoText.innerHTML += make_stat_blurb(popup_data, a);
                 /*Plotly.newPlot(histogramPlot, [{
                     type: 'bar',
                     x: map.CRESHattrib.histogram.x,
