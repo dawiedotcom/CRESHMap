@@ -7,7 +7,9 @@ const containerQual = document.getElementById('qual-popup');
 const closerHist = document.getElementById('popup-closer');
 const closerQual = document.getElementById('qual-popup-closer');
 const layerSelector = document.getElementById('layer');
+const domainSelector = document.getElementById('domain');
 const attribSelector = document.getElementById('attrib');
+const yearSelector = document.getElementById('year');
 const searchPostcodeButton = document.getElementById('button-search-postcode');
 const searchPostcode = document.getElementById('search-postcode');
 const attribDescription = document.getElementById('attrib_description');
@@ -20,14 +22,6 @@ const baselayer = new ol.layer.Tile({
         layer: 'toner-lite'
     })
 });
-
-/* set attribute selector */
-for (var a in mapattribs) {
-    var option = document.createElement("option");
-    option.text = mapattribs[a]['name'];
-    option.value = a;
-    attribSelector.appendChild(option);
-}
 
 function getStatistic(stat_name, layer_name, attribute, year){
     const attrib_index = attribute + '_' + year;
@@ -51,23 +45,65 @@ function getQuintile(layer_name, attribute, year) {
     getStatistic('quintile', layer_name, attribute, year);
 }
 
-function updateLayerOptions() {
-    while (layerSelector.firstChild)
-        layerSelector.removeChild(layerSelector.lastChild);
-    for (layerName in layers) {
-        const attrib = mapattribs[attribSelector.value];
-        const layer = layers[layerName];
-        if (!attrib['data_zones'].includes(layer.Title))
-            continue;
-        const option = document.createElement("option");
-        option.text = layer.Title;
-        option.value = layerName;
-        layerSelector.appendChild(option);
+function removeAllOptions(selector) {
+    while (selector.firstChild)
+        selector.removeChild(selector.lastChild);
+}
+
+function addOptions(selector, options) {
+    for (i in options) {
+        var option = document.createElement("option");
+        option.text = options[i].text;
+        option.value = options[i].value;
+        selector.appendChild(option);
     }
 }
 
+function updateAttributeOptions() {
+    removeAllOptions(attribSelector);
+    const domain_name = domainSelector.value;
+    const domain_data = mapattribs[domainSelector.value];
+    attributes = [];
+    for (a in domain_data) {
+        attributes.push({
+            'text': domain_data[a].name,
+            'value': domain_data[a].id,
+        });
+    }
+    addOptions(attribSelector, attributes);
+}
+
+function updateYearOptions() {
+    removeAllOptions(yearSelector);
+    const domain_name = domainSelector.value;
+    const attrib_id = attribSelector.value;
+    const attrib_data = mapattribs[domainSelector.value][attrib_id];
+    var years = [];
+    for (year in attrib_data.id_year) {
+        const id_year = attrib_data.id_year[year];
+        years.push({
+            'text': year,
+            'value': id_year,
+        });
+    }
+    addOptions(yearSelector, years);
+}
+
+function updateLayerOptions() {
+    removeAllOptions(layerSelector);
+    const domain_name = domainSelector.value;
+    const attrib_id = attribSelector.value;
+    const year = yearSelector.value;
+    const data_zones = mapattribs[domainSelector.value][attrib_id]['data_zones'];
+    const layer_options = data_zones.map( data_zone => ({
+        'text': data_zone.name,
+        'value': data_zone.gss_code,
+    }));
+    addOptions(layerSelector, layer_options);
+}
+
 function updateLegend() {
-    const filename = window.location.href + '/static/images/legends/' + attribSelector.value + '_' + layerSelector.value + '.svg';
+    const filename = window.location.href + '/static/images/legends/' + yearSelector.value + '_' + layerSelector.value + '.svg';
     const img = document.getElementById('legendimg');
     img.src = filename;
 }
@@ -94,8 +130,10 @@ async function capsListener () {
         });
     });
 
+    updateAttributeOptions();
+    updateYearOptions();
     updateLayerOptions();
-    setLayer(layerSelector.value, attribSelector.value);
+    setLayer(layerSelector.value, yearSelector.value);
 }
 
 var capsRequest = new XMLHttpRequest();
@@ -105,13 +143,28 @@ capsRequest.send();
 
 /* the layer changed */
 layerSelector.onchange = function() {
-    setLayer(layerSelector.value, attribSelector.value);
+    setLayer(layerSelector.value, yearSelector.value);
 }
 
 /* the attribute changed */
 attribSelector.onchange = function() {
+    updateYearOptions();
     updateLayerOptions();
-    setLayer(layerSelector.value, attribSelector.value);
+    setLayer(layerSelector.value, yearSelector.value);
+}
+
+/* the domain changed */
+domainSelector.onchange = function() {
+    updateAttributeOptions();
+    updateYearOptions();
+    updateLayerOptions();
+    setLayer(layerSelector.value, yearSelector.value);
+}
+
+/* the year changed */
+yearSelector.onchange = function() {
+    updateLayerOptions();
+    setLayer(layerSelector.value, yearSelector.value);
 }
 
 
@@ -119,10 +172,11 @@ function setLayer(l,a) {
     //map.setLayers([baselayer, layers[l][a], layers["Quotes"]["Quotes"], layers["Images"]["Images"]]);
     map.setLayers([baselayer, layers[l][a]]);
     map.CRESHattrib = layers[l][a];
-    attribDescription.innerHTML = mapattribs[a].description;
+    const mapattrib = mapattribs[domainSelector.value][attribSelector.value];
+    attribDescription.innerHTML = mapattrib.description;
     updateLegend();
     //getHistogram(l, mapattribs[a].id, mapattribs[a].year);
-    getQuintile(l, mapattribs[a].id, mapattribs[a].year);
+    getQuintile(l, mapattrib.id, mapattrib.year_id[yearSelector.value]);
 }
 
 /**
@@ -204,7 +258,6 @@ function geography_plural(geography) {
 }
 
 function make_count_blurb(popup_data) {
-    console.log(popup_data);
     return '<div></div>';
 }
 
@@ -257,7 +310,7 @@ function showInfo(coordinate) {
                 var old_tbody = popupTable.getElementsByTagName("tbody")[0];
                 var tbody = document.createElement('tbody');
                 for (a in popup_data.attributes) {
-                    if (a != attribSelector.value)
+                    if (a != yearSelector.value)
                         continue;
                     var row = tbody.insertRow(-1);
                     var name = document.createElement('th');
@@ -388,7 +441,6 @@ searchPostcodeButton.onclick = function () {
 }
 
 function postcodeListener () {
-    console.log(this.responseText);
     const response = JSON.parse(this.responseText);
     if (response.status != 200) {
         console.log('error');

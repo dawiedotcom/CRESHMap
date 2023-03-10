@@ -27,46 +27,93 @@ def menu_items():
 
 
 @app.route('/')
+@lru_cache()
 def index():
-    variables = {}
-    query = db.session.query(
-        Variables,
-        Data.year
-    ).join(Data).group_by(Variables.id, Data.year).order_by(
+    selection = {}
+
+    domains = db.session.query(
         Variables.domain,
-        Variables.id,
-        Data.year
+    ).group_by(
+        Variables.domain,
+    ).order_by(
+        Variables.domain,
     )
 
-    for v, year in query:
-        index = v.id + '_' + str(year)
-        # Get all populated geography types for this variable/year.
-        gss_codes = db.session.query(
-            func.substr(Data.gss_id, 1, 3).label("gss_code"),
+    for domain, in domains:
+        selection[domain] = {}
+
+        variables = db.session.query(
+            Variables,
         ).where(
-            Data.variable_id == v.id,
-            Data.year == year
-        ).group_by("gss_code").subquery()
+            Variables.domain == domain,
+        ).group_by(Variables.id).order_by(
+            Variables.id,
+        ).order_by(
+            Variables.variable,
+        )
 
-        data_zones = db.session.query(
-            GeographyTypes.name
-        ).where(
-            GeographyTypes.gss_code == gss_codes.c.gss_code
-        ).all()
+        for v in variables:
+            # Get all populated geography types for this variable/year.
+            gss_codes = db.session.query(
+                func.substr(Data.gss_id, 1, 3).label("gss_code"),
+            ).where(
+                Data.variable_id == v.id,
+                #Data.year == year
+            ).group_by("gss_code").subquery()
+            
+            data_zones = db.session.query(
+                GeographyTypes.name,
+                GeographyTypes.gss_code
+            ).where(
+                GeographyTypes.gss_code == gss_codes.c.gss_code
+            ).order_by(
+                GeographyTypes.gss_code,
+            ).all()
+            data_zones = [{'name': dz[0], 'gss_code': dz[1]} for dz in data_zones]
 
-        data_zones = [dz[0] for dz in data_zones]
+            # Skip variables with no data 
+            if (len(data_zones) == 0):
+                continue
 
-        variables[index] = {
-            'id': v.id,
-            'name': f'{v.domain}|{v.variable} ({year})',
-            #'name': f'{v.variable} ({year})',
-            'description': v.description.replace('\n', ''),
-            'year': year,
-            'data_zones': data_zones,
-        }
+            selection[domain][v.id] = {
+                'id': v.id,
+                'name': v.variable,
+                'domain': v.domain,
+                'description': v.description.replace('\n', ''),
+                'data_zones': [],
+                'id_year': {},
+                'year_id': {},
+            }
+
+            years = db.session.query(
+                Data.year
+            ).group_by(Data.year).where(
+                Data.variable_id == v.id
+            ).all()
+            years = [y[0] for y in years]
+
+            for year in years:
+                index = f'{v.id}_{year}'
+                selection[domain][v.id]['id_year'][year] = index
+                selection[domain][v.id]['year_id'][index] = year
+
+            selection[domain][v.id]['data_zones'] = data_zones
+
+        if selection[domain] == {}:
+            selection.pop(domain)
+
+    domains = selection.keys()
+
+    mapattribs = json.dumps(selection, indent=2)
+
     return render_template(
-        'map.html', mapserverurl=app.config['MAPSERVER_URL'],
-        navigation=menu_items(), variables=variables)
+        'map.html',
+        mapserverurl=app.config['MAPSERVER_URL'],
+        navigation=menu_items(),
+        mapattribs=mapattribs,
+        domains=domains,
+        years=years,
+    )
 
 
 @app.route('/<path:path>')

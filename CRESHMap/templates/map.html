@@ -3,15 +3,26 @@
 
 {% block content %}
 <div class="container">
-  <div class="input-group">
-    <select class="form-select" aria-label=".form-select attrib" id="attrib">
-    </select>
-  </div>
   <div class="row">
     <div class="col">
       <div class="input-group">
-           <select class="form-select" aria-label=".form-select layer" id="layer">
-	         </select>
+        <select class="form-select" aria-label=".form-select attrib" id="domain">
+          {% for domain in domains %}
+            <option value="{{ domain }}">{{ domain }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="input-group">
+        <select class="form-select" aria-label=".form-select attrib" id="attrib">
+        </select>
+      </div>
+      <div class="input-group">
+        <select class="form-select" aria-label=".form-select attrib" id="year">
+        </select>
+      </div>
+      <div class="input-group">
+        <select class="form-select" aria-label=".form-select layer" id="layer">
+	      </select>
       </div>
       <div class="input-group">
         <button class="btn btn-outline-secondary" type="submit" id="button-search-postcode"><i class="fa fa-search"></i></button>
@@ -67,7 +78,7 @@
 
       
 	  </div>
-    <div class="col-md-10">
+    <div class="col-md-9">
       <div id='map' class='map'></div>
     </div>
   </div>
@@ -166,15 +177,8 @@
 <script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
 <script type='text/javascript'>
   const mapserverurl = "{{ mapserverurl }}";
-  const mapattribs = {
-  {% for v in variables %}
-      "{{ v }}": {"name": "{{ variables[v]['name'] }}",
-		  "description": "{{ variables[v]['description']|safe }}",
-		  "year": "{{ variables[v]['year'] }}",
-		  "id": "{{ variables[v]['id'] }}",
-      "data_zones": {{ variables[v]['data_zones']|safe}},
-      },
-  {% endfor %}};
+  const mapattribs = {{ mapattribs|safe }};
+  
 </script>
 <!-- <script src='https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/build/ol.js'></script> -->
 <!-- <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@main/dist/en/v7.0.0/legacy/ol.js"></script> -->
