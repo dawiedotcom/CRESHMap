@@ -230,25 +230,25 @@ variables:
     source: Scottish Government, from National Records of Scotland, 2020.
   - id: alcohol_retailer_density
     name: Alcohol retailer density
-    domain: Built Environment Retail|Alcohol
+    domain: Retail|Alcohol
     description: >
       Number of outlets within a datazone per 1000 persons.
     source: Data estimated by CRESH from ********.
   - id: alcohol_on_premise_retailer_density
     name: Alcohol on-premise retailer density
-    domain: Built Environment Retail|Alcohol
+    domain: Retail|Alcohol
     description: >
       Number of outlets within a datazone per 1000 persons.
     source: Data estimated by CRESH from ********.
   - id: alcohol_off_premise_retailer_density
     name: Alcohol off-premise retailer density
-    domain: Built Environment Retail|Alcohol
+    domain: Retail|Alcohol
     description: >
       Number of outlets within a datazone per 1000 persons.
     source: Data estimated by CRESH from ********.
   - id: tobacco_retailer_density
     name: Tobacco retailer density
-    domain: Built Environment Retail
+    domain: Retail
     description: >
       Number of outlets within a datazone per 1000 persons.
     source: Data estimated by CRESH from ********.
