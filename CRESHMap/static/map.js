@@ -81,7 +81,7 @@ function updateYearOptions() {
     var years = [];
     for (year in attrib_data.id_year) {
         const id_year = attrib_data.id_year[year];
-        years.push({
+        years.unshift({
             'text': year,
             'value': id_year,
         });
