@@ -273,6 +273,10 @@ function make_stat_blurb(popup_data, a) {
     if (popup_data.attributes[a].value === '')
         return '<div>No data available</div>';
 
+    const is_all_zeros = map.CRESHattrib.quintile.bins.reduce( (accum, value) => !accum && (value == 0), false);
+    if (is_all_zeros)
+        return '<div></div>';
+
     var i_quintile=1;
     while (popup_data.attributes[a].value > map.CRESHattrib.quintile.bins[i_quintile])
         i_quintile++;

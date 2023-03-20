@@ -128,7 +128,6 @@ variables:
     colormethod: quantile 
     colormap: PuRd
     nclasses: 5
-    aggregatemethod: percentage
   - geometry: Data_Zone
     db_var: education_attainment
     file_var: Attainment
@@ -143,8 +142,6 @@ variables:
     colormethod: quantile 
     colormap: PuRd
     nclasses: 5
-    #aggregatemethod: percentage
-    aggregatemeta: working_age_population
   - geometry: Data_Zone
     db_var: teenagers_not_studying_or_working
     file_var: not_participating
@@ -174,14 +171,13 @@ variables:
     colormethod: quantile 
     colormap: Reds
     nclasses: 5
-    aggregatemethod: percentage
-  #- geometry: Data_Zone
-  #  db_var: housing_without_central_heating
-  #  file_var: nocentralheating_rate
-  #  year: 2020
-  #  colormethod: quantile # TODO: Too many values are 1 which prevents a 5-quantile calculation 
-  #  colormap: Reds
-  #  nclasses: 5
+  - geometry: Data_Zone
+    db_var: housing_without_central_heating
+    file_var: nocentralheating_rate
+    year: 2020
+    colormethod: manual # TODO: Too many values are 1 which prevents a 5-quantile calculation 
+    colormap: Reds
+    break_values: [0, 1, 2, 5, 1000000]
   #  aggregatemethod: percentage
 
 

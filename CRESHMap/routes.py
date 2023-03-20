@@ -173,12 +173,15 @@ def quintile(gss_code, variable_id, year):
     v_min = numpy.max(data[data == data].min(), 0)
     v_max = data[data==data].max()
 
-    _, bins = pandas.qcut(
-        data[(data<=v_max) & (data > v_min)],
-        nbins,
-        retbins=True,
-    )
-    bins[0] = v_min
-    result = {'bins': bins.tolist()}
+    try:
+        _, bins = pandas.qcut(
+            data[(data<=v_max) & (data > v_min)],
+            nbins,
+            retbins=True,
+        )
+        bins[0] = v_min
+        result = {'bins': bins.tolist()}
+    except ValueError:
+        result = {'bins':[0]*nbins}
 
     return make_json_response(result)
