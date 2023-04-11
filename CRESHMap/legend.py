@@ -20,6 +20,28 @@ def is_grey(colorcode):
 def has_grey(colors):
     return is_grey(colors[0])
 
+def limit_to_str(i, limits):
+    interval = float(limits[i+1]) - float(limits[i])
+    # Limits with only one value
+    is_single_value = interval == 1.0 and limits[i].isnumeric()
+
+    # Single value limits should display as '= <lower bound>'
+    if is_single_value:
+        return f'{limits[i]}'
+
+    # Upper limit
+    if i==0:
+        return f' < {limits[i+1]}'
+
+    # Lower limit
+    if i == len(limits)-2:
+        return f' > {limits[i]}'
+
+    # Limits in the middle of the range
+    return f'{limits[i]} - {limits[i+1]}'
+
+
+
 def make_legend(layer_name, colors, limits, width=150, border=10, box_size=25, font_size=16):
     height = (box_size) * len(colors) + border
     d = draw.Drawing(width, height)
@@ -32,12 +54,8 @@ def make_legend(layer_name, colors, limits, width=150, border=10, box_size=25, f
         i_limit = i if not has_grey(colors) else i-1
         if is_grey(c):
             limit_label = 'No data'
-        elif i_limit == 0:
-            limit_label = f' < {limits[i_limit+1]}'
-        elif i_limit == len(limits)-2:
-            limit_label = f' > {limits[i_limit]}'
         else:
-            limit_label = f'{limits[i_limit]} - {limits[i_limit+1]}'
+            limit_label = limit_to_str(i_limit, limits)
 
         t = draw.Text(
             limit_label,
