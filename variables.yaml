@@ -248,7 +248,7 @@ variables:
     source: Data estimated by CRESH from ********.
   - id: tobacco_retailer_density
     name: Tobacco retailer density
-    domain: Retail
+    domain: Retail|Tobacco
     description: >
       Number of outlets within a datazone per 1000 persons.
     source: Data estimated by CRESH from ********.
