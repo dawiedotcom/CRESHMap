@@ -179,7 +179,7 @@ variables:
     domain: Sociodemographics|Education
     description: >
       Percentage of pupils who attend school 90% or more of
-      the time for each data zone in Scotland; includes pupils
+      the time; includes pupils
       who attend publicly funded primary, secondary and
       special schools.
     source: Scottish Government by the local authorities and managers of mainstream grantaided schools, 2020.
@@ -232,23 +232,23 @@ variables:
     name: Alcohol retailer density
     domain: Retail|Alcohol
     description: >
-      Number of outlets within a datazone per 1000 persons.
+      Number of outlets per 1000 persons.
     source: Data estimated by CRESH from ********.
   - id: alcohol_on_premise_retailer_density
     name: Alcohol on-premise retailer density
     domain: Retail|Alcohol
     description: >
-      Number of outlets within a datazone per 1000 persons.
+      Number of outlets per 1000 persons.
     source: Data estimated by CRESH from ********.
   - id: alcohol_off_premise_retailer_density
     name: Alcohol off-premise retailer density
     domain: Retail|Alcohol
     description: >
-      Number of outlets within a datazone per 1000 persons.
+      Number of outlets per 1000 persons.
     source: Data estimated by CRESH from ********.
   - id: tobacco_retailer_density
     name: Tobacco retailer density
     domain: Retail|Tobacco
     description: >
-      Number of outlets within a datazone per 1000 persons.
+      Number of outlets per 1000 persons.
     source: Data estimated by CRESH from ********.
