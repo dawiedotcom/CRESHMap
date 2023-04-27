@@ -43,15 +43,15 @@ variables:
       covering 7 domains: income, employment, health, education, geographic access
       to services, crime, and housing. Values ranks datazones from the most deprived
       (ranked 1) to the least deprived (ranked 6,976). More information on these measure
-      might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/.
-      source: Scottish Government, 2020.
+      might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
+    source: Scottish Government, 2020.
   - id: income_rank
     name: Income Rank
     domain: Sociodemographics|Deprivation Index
     description: >
       Income domain rank in SIMD 2020. Values ranks datazones from the most deprived
       (ranked 1) to the least deprived (ranked 6,976). More information on these measure
-      might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/.
+      might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
     source: Scottish Government, 2020.
   - id: employment_rank
     name: Employment Rank
@@ -59,7 +59,7 @@ variables:
     description: >-
       Employment domain rank in SIMD 2020. Values ranks datazones from the most deprived
       (ranked 1) to the least deprived (ranked 6,976). More information on these measure
-      might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/.
+      might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
     source: Scottish Government, 2020.
   - id: health_rank
     name: Health Rank
@@ -67,7 +67,7 @@ variables:
     description: >
       Health domain rank in SIMD 2020. Values ranks datazones from the most deprived
       (ranked 1) to the least deprived (ranked 6,976). More information on these measure
-      might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/.
+      might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
     source: Scottish Government, 2020.
   - id: education_rank
     name: Education Rank
@@ -75,7 +75,7 @@ variables:
     description: >
       Education domain rank at SIMD 2020. Values ranks datazones from the most deprived
       (ranked 1) to the least deprived (ranked 6,976). More information on these measure
-      might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/.
+      might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
   - id: geographic_access_domain_rank
     name: Geographic Access domain rank
     domain: Sociodemographics|Deprivation Index
@@ -86,7 +86,7 @@ variables:
       and petrol station) as well as the percentage of premises that do not have
       access to superfast broadband. Values ranks datazones from the most accessible
       (ranked 1) to the least accessible (ranked 6,976).
-      More information on these measure might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/
+      More information on these measure might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
     source: Scottish Government, 2020.
   - id: crime_rank
     name: Crime Rank
@@ -94,7 +94,7 @@ variables:
     description: >
       Crime domain rank at SIMD 2020. Values ranks datazones from the most deprived
       (ranked 1) to the least deprived (ranked 6,976). More information on these
-      measure might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/
+      measure might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
     source: Scottish Government, 2020.
   - id: housing_rank
     name: Housing Rank
@@ -102,7 +102,7 @@ variables:
     description: >
       Housing domain rank at 2020. Values ranks datazones from the most deprived
       (ranked 1) to the least deprived (ranked 6,976). More information on these
-      measure might be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/.
+      measure might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>
     source: Scottish Government, 2020.
   - id: income_rate
     name: Income Rate
