@@ -4,6 +4,9 @@ from flask_flatpages import FlatPages
 from flask import current_app as app
 from flask import json
 from flask import abort
+from flask import redirect
+from flask import request
+from flask import url_for
 from sqlalchemy import func
 from collections import namedtuple
 import numpy
@@ -19,7 +22,10 @@ pages = FlatPages(app)
 MenuItem = namedtuple("MenuItem", "title path order")
 
 def menu_items():
-    menu = [MenuItem("Map", "/", 1)]
+    menu = [
+        MenuItem("Map", "/", 1),
+        MenuItem("Download", '/download', 2),
+    ]
     for p in pages:
         menu.append(MenuItem(p['title'], p.path, p['order']))
     menu = sorted(menu, key=lambda item: item.order)
@@ -115,6 +121,17 @@ def index():
         years=years,
     )
 
+
+@app.route('/download', methods=('GET', 'POST'))
+def download():
+    if request.method == 'POST':
+        print(request.form)
+        return redirect(url_for('download'))
+
+    return render_template(
+        'download.html',
+        navigation=menu_items(),
+    )
 
 @app.route('/<path:path>')
 def page(path):
