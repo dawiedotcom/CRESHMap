@@ -1,0 +1,20 @@
+{% set page = namespace(path='/download') %}
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div style="width:600px; margin:0 auto;">
+        <form method="post">
+            Please provide an email address to receive the download link.
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" name="title" placeholder="Email" />
+            </div>
+            <br>
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
