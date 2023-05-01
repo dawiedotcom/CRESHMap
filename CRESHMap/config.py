@@ -1,15 +1,20 @@
 import os
 from pathlib import Path
+import random
+import string
 
 basedir = Path(__file__).parent.absolute()
 
+def random_string(k):
+    source = string.ascii_letters + string.digits
+    return ''.join(random.choices(source, k=k))
 
 class Config:
     """Set Flask config variables."""
 
     FLASK_ENV = 'development'
     TESTING = True
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'not-so-secret'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or random_string(24)
     STATIC_FOLDER = 'static'
     TEMPLATES_FOLDER = 'templates'
 

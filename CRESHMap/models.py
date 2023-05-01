@@ -89,3 +89,11 @@ class Images(db.Model):
     geometry = db.Column(Geometry(geometry_type='POINT'))
     gss_id = db.Column(db.String(10), db.ForeignKey('cresh_geography.gss_id'), index=True)
     filename = db.Column(db.String())
+
+class DownloadLink(db.Model):
+    __tablename__ = 'download_link'
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String())
+    download_hash = db.Column(db.String())
+    salt = db.Column(db.String())
+    last_accessed = db.Column(db.DateTime())
