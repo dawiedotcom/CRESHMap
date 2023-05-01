@@ -6,14 +6,22 @@ from flask import json
 from flask import abort
 from flask import redirect
 from flask import request
+from flask import session
 from flask import url_for
+from flask import flash
+from flask import send_from_directory
 from sqlalchemy import func
 from collections import namedtuple
 import numpy
 import pandas
+import random
+import re
+import hashlib
+import datetime
 from .models import GeographyTypes
 from .models import Variables
 from .models import Data
+from .models import DownloadLink
 
 from . import db
 
@@ -66,7 +74,7 @@ def index():
                 Data.variable_id == v.id,
                 #Data.year == year
             ).group_by("gss_code").subquery()
-            
+
             data_zones = db.session.query(
                 GeographyTypes.name,
                 GeographyTypes.gss_code
@@ -77,7 +85,7 @@ def index():
             ).all()
             data_zones = [{'name': dz[0], 'gss_code': dz[1]} for dz in data_zones]
 
-            # Skip variables with no data 
+            # Skip variables with no data
             if (len(data_zones) == 0):
                 continue
 
@@ -121,17 +129,81 @@ def index():
         years=years,
     )
 
+def is_valid_email(email):
+    return not re.fullmatch('.*@.*\..*', email) is None
+
+def hash_email(email, salt):
+    m = hashlib.sha256()
+    m.update(email.encode('utf-8'))
+    m.update(salt.encode('utf-8'))
+    return m.hexdigest()
 
 @app.route('/download', methods=('GET', 'POST'))
 def download():
+    session['from_download'] = True
+
     if request.method == 'POST':
-        print(request.form)
-        return redirect(url_for('download'))
+        if not session.get('from_download', False):
+            # Check that the session visited /download to prevent spam
+            return render_template(
+                'download.html',
+                navigation=menu_items(),
+            )
+
+        if not is_valid_email(request.form['email']):
+            flash("Please provide a valid email address")
+            return render_template(
+                'download.html',
+                navigation=menu_items(),
+            )
+
+        download_links = db.session.query(
+            DownloadLink
+        ).where(
+            DownloadLink.email == request.form['email']
+        ).all()
+
+        print(download_links)
+        if download_links == []:
+            # Create a new entry for this email address
+            download_link = DownloadLink()
+            download_link.email = request.form['email']
+            download_link.salt = str(random.randint(0, 1e24))
+            download_link.download_hash = hash_email(download_link.email, download_link.salt)
+            download_link.last_accessed = datetime.datetime(1970, 1, 1)
+
+            db.session.add(download_link)
+            db.session.commit()
+        else:
+            download_link = download_links[0]
+
+        flash("You should receive a download link in your Inbox shortly.")
 
     return render_template(
         'download.html',
         navigation=menu_items(),
     )
+
+@app.route('/download/<download_hash>')
+def download_data(download_hash):
+    download_links = db.session.query(
+        DownloadLink
+    ).where(
+        DownloadLink.download_hash == download_hash,
+    ).all()
+
+    if download_links == []:
+        return redirect(url_for('download'))
+
+    # TODO update accessed time in db
+
+
+    return send_from_directory(
+        'static/images',
+        'Edin.png'
+    )
+
+
 
 @app.route('/<path:path>')
 def page(path):
