@@ -18,6 +18,10 @@ class Config:
     STATIC_FOLDER = 'static'
     TEMPLATES_FOLDER = 'templates'
 
+    EMAIL_FROM_ADDR = os.environ.get('EMAIL_FROM_ADDR')
+    EMAIL_SMTP_SERV = os.environ.get('EMAIL_SMTP_SERV')
+    DOMAIN = os.environ.get('PUBLIC_DOMAIN')
+
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         f'sqlite:///{basedir}/app.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
