@@ -208,8 +208,8 @@ def download_data(download_hash):
 
 
     return send_from_directory(
-        'static/images',
-        'Edin.png'
+        'data',
+        'Creshmap_Dataset_Tobacco_Alcohol.xlsx'
     )
 
 

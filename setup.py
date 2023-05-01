@@ -24,7 +24,8 @@ setup(
     package_data={
         'CRESHMap': [
             'templates/*.html', 'templates/cresh.map', 'templates/*.js',
-            'static/favicon.ico', 'static/map.js', 'static/images/*']},
+            'static/favicon.ico', 'static/map.js', 'static/images/*', 
+            'data/Creshmap_Dataset_Tobacco_Alhocol.xlsx']},
     extras_require={
         'lint': [
             'flake8>=3.5.0',

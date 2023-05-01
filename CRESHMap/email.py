@@ -6,7 +6,7 @@ Dear Cresh Map user,
 
 Thank you for your interest in the Cresh Map data set. You can download the data set by clicking on the link below:
 
-<a href="https://{tldn}/download/{dl_hash}">https://{tldn}/download/{dl_hash}</a>
+https://{tldn}/download/{dl_hash}
 
 Best regards
 www.creshmap.com
