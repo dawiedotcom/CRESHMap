@@ -22,6 +22,7 @@ from .models import GeographyTypes
 from .models import Variables
 from .models import Data
 from .models import DownloadLink
+from .email import send_download_link
 
 from . import db
 
@@ -132,9 +133,9 @@ def index():
 def is_valid_email(email):
     return not re.fullmatch('.*@.*\..*', email) is None
 
-def hash_email(email, salt):
+def make_random_hash():
+    salt = str(random.randint(0, 1e24))
     m = hashlib.sha256()
-    m.update(email.encode('utf-8'))
     m.update(salt.encode('utf-8'))
     return m.hexdigest()
 
@@ -168,14 +169,22 @@ def download():
             # Create a new entry for this email address
             download_link = DownloadLink()
             download_link.email = request.form['email']
-            download_link.salt = str(random.randint(0, 1e24))
-            download_link.download_hash = hash_email(download_link.email, download_link.salt)
+            download_link.download_hash = make_random_hash()
             download_link.last_accessed = datetime.datetime(1970, 1, 1)
 
             db.session.add(download_link)
             db.session.commit()
         else:
             download_link = download_links[0]
+
+        if app.config['EMAIL_FROM_ADDR'] and app.config['EMAIL_SMTP_SERV']:
+            send_download_link(
+                app.config['EMAIL_FROM_ADDR'],
+                app.config['EMAIL_SMTP_SERV'],
+                download_link.email,
+                download_link.download_hash,
+                app.config['DOMAIN']
+            )
 
         flash("You should receive a download link in your Inbox shortly.")
 
