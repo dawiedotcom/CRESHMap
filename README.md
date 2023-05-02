@@ -28,6 +28,18 @@ creshmap-genmap creshmap.cfg -o /path/to/webdir
 
 Note, that the read-ony user needs access to all database schemas to work correctly. The script will put the mapfile and template into the `/path/to/webdir` directory. Attributes that can be displayed by the map are configured in the configuration file.
 
+### Environment
+
+The following environment variables are needed for the app to run correctly:
+
+| Variable name     | Value                                                    |
+|-------------------|----------------------------------------------------------|
+| `DATABASE_URL`    | See Database Setup                                       |
+| `MAPSERVER_URL`   | URL to mapserver. Must end in a `?`                      |
+| `SECRET_KEY`      | Long string of random characters                         |
+| `EMAIL_FROM_ADDR` | The From field in the email that sends the download link |
+| `EMAIL_SMTP_SERV` | Email SMPT server (set to `localhost`)                   |
+| `PUBLIC_DOMAIN`   | Public facing domain name used in the download email     |
 
 ## References
  * This application follows the [flask application factory pattern](https://hackersandslackers.com/flask-application-factory/).
