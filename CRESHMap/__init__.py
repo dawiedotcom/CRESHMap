@@ -2,7 +2,7 @@
 from flask import Flask, render_template_string
 from flask_sqlalchemy import SQLAlchemy
 from flask_flatpages import FlatPages
-from flask_flatpages.utils import pygmented_markdown
+import markdown
 from sqlalchemy.event import listen
 from sqlalchemy.sql import select, func
 from sqlalchemy import inspect
@@ -15,7 +15,7 @@ db = SQLAlchemy()
 
 def renderer(text):
     prerendered_body = render_template_string(text)
-    return pygmented_markdown(prerendered_body)
+    return markdown.markdown(prerendered_body, extensions=['footnotes'])
 
 
 def load_spatialite(dbapi_conn, connection_record):
