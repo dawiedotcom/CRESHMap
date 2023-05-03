@@ -12,3 +12,11 @@ The web map developed and hosted by the School of GeoSciences IT Support, Univer
 
 Data and information provided in the web map were informed and curated by a team of CRESH researchers, past and present: Dr Mark Cherrie, Dr Peter Lekkas, Dr Roberto Valente, Dr Tom Clemens, Professor Niamh Shortt, and Professor Jamie Pearce.
 
+
+<div style="text-align: center; padding: 20px">
+<a href="https://www.ed.ac.uk"><img src="{{ url_for('static', filename='images/Edin.png') }}" height="100"></a>
+<a href="https://www.cresh.org.uk"><img src="{{ url_for('static', filename='images/cresh_logo.png') }}" height="100"></a>
+<a href="https://www.glasgow.ac.uk"><img src="{{ url_for('static', filename='images/UoG.jpg') }}" height="100"></a>
+<a href="https://spectrum.ed.ac.uk/"><img src="{{ url_for('static', filename='images/spectrum_logo.png') }}" height="100"></a>
+<a href="https://www.ukri.org/councils/esrc/"><img src="{{ url_for('static', filename='images/esrc_logo.png') }}" height="100"></a>
+</div>
