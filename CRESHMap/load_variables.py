@@ -3,15 +3,14 @@ from .models import Variables
 from .models import Geography
 from .models import GeographyTypes
 from .aggregate import Aggregator
-from .color import color
-from .legend import make_legend
+from .color import (color, labeled_color_map)
+from .legend import (make_numerical_legend, make_labeled_legend)
 
 import argparse
 from pathlib import Path
 import yaml
 from yaml.loader import SafeLoader
 import pandas
-import colorbrewer
 
 def main():
     parser = argparse.ArgumentParser()
@@ -64,9 +63,26 @@ def main():
             values["variable_id"] = variable["db_var"]
 
             # Calculate color values
-            values["color"], cmap, limits = color(variable, values["value"].to_numpy())
             layer_name = '{db_var}_{year}_S01'.format(**variable)
-            make_legend(layer_name, cmap, limits)
+            if variable["colormethod"] == 'labeled':
+                # TODO check that 'label_var' is provided in variable
+                values_and_labels = data[[variable['file_var'], variable['label_var']]]
+                values_and_labels = values_and_labels.rename(columns={
+                    variable['file_var']: 'value',
+                    variable['label_var']: 'label',
+                })
+                values_and_labels = values_and_labels.drop_duplicates()
+                values_and_labels.sort_values('value', inplace=True)
+                values["color"], cmap, limits = labeled_color_map(
+                    variable['colormap'],
+                    values['value'].to_numpy(),
+                    values_and_labels['value'],
+                    reverse_colors=variable.get('reverse_color', False),
+                )
+                make_labeled_legend(layer_name, cmap, values_and_labels['label'].to_numpy(), width=240)
+            else:
+                values["color"], cmap, limits = color(variable, values["value"].to_numpy())
+                make_numerical_legend(layer_name, cmap, limits)
 
             # Aggregate data for composite geometries
             if 'aggregatemethod' in variable:
@@ -108,7 +124,7 @@ def main():
                         agg_values['value'].to_numpy(),
                     )
                     layer_name = '{db_var}_{year}_{0}'.format(geo_type.gss_code, **variable)
-                    make_legend(layer_name, cmap, limits)
+                    make_numerical_legend(layer_name, cmap, limits)
                     values = pandas.concat((values, agg_values))
 
             if not args.update_legends:

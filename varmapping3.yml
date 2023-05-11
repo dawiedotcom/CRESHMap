@@ -1,0 +1,37 @@
+---
+# Variable mapping for loading urban/rural classification data
+path: data/DataZones_2_AddGeographies.csv
+type: csv
+variables:
+  - geometry: DZ2011_ID/Code
+    db_var: ur2
+    file_var: UR2_ID/Code
+    year: 2020
+    colormethod: labeled
+    label_var: UR2_Name
+    colormap: RdYlBu
+    reverse_color: True
+  - geometry: DZ2011_ID/Code
+    db_var: ur3
+    file_var: UR3_ID/Code
+    year: 2020
+    colormethod: labeled
+    label_var: UR3_Name
+    colormap: RdYlBu
+    reverse_color: True
+  - geometry: DZ2011_ID/Code
+    db_var: ur6
+    file_var: UR6_ID/Code
+    year: 2020
+    colormethod: labeled
+    label_var: UR6_Name
+    colormap: RdYlBu
+    reverse_color: True
+  - geometry: DZ2011_ID/Code
+    db_var: ur8
+    file_var: UR8_ID/Code
+    year: 2020
+    colormethod: labeled
+    label_var: UR8_Name
+    colormap: RdYlBu
+    reverse_color: True
