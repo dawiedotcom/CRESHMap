@@ -158,13 +158,19 @@ def download():
                 navigation=menu_items(),
             )
 
+        if request.form['name'] == '':
+            flash("Please provide a full name.")
+            return render_template(
+                'download.html',
+                navigation=menu_items(),
+            )
+
         download_links = db.session.query(
             DownloadLink
         ).where(
             DownloadLink.email == request.form['email']
         ).all()
 
-        print(download_links)
         if download_links == []:
             # Create a new entry for this email address
             download_link = DownloadLink()
@@ -172,15 +178,23 @@ def download():
             download_link.download_hash = make_random_hash()
             download_link.last_accessed = datetime.datetime(1970, 1, 1)
 
-            db.session.add(download_link)
-            db.session.commit()
         else:
             download_link = download_links[0]
+
+        if (not download_link.name == request.form or
+            not download_link.organization == request.organization):
+
+            download_link.name = request.form['name']
+            download_link.organization = request.form['organization']
+
+            db.session.add(download_link)
+            db.session.commit()
 
         if app.config['EMAIL_FROM_ADDR'] and app.config['EMAIL_SMTP_SERV']:
             send_download_link(
                 app.config['EMAIL_FROM_ADDR'],
                 app.config['EMAIL_SMTP_SERV'],
+                download_link.name,
                 download_link.email,
                 download_link.download_hash,
                 app.config['DOMAIN']

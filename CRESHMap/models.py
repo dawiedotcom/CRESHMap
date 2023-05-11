@@ -97,3 +97,5 @@ class DownloadLink(db.Model):
     download_hash = db.Column(db.String())
     salt = db.Column(db.String())
     last_accessed = db.Column(db.DateTime())
+    organization = db.Column(db.String())
+    name = db.Column(db.String())

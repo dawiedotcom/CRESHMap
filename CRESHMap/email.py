@@ -2,7 +2,7 @@ import smtplib
 from email.message import EmailMessage
 
 email_message = '''
-Dear Cresh Map user,
+Dear {name},
 
 Thank you for your interest in the Cresh Map data set. You can download the data set by clicking on the link below:
 
@@ -12,9 +12,9 @@ Best regards
 www.creshmap.com
 '''
 
-def send_download_link(from_address, smtp_server, to_address, dl_hash, tldn):
+def send_download_link(from_address, smtp_server, name, to_address, dl_hash, tldn):
 
-    msg_text = email_message.format(dl_hash=dl_hash, tldn=tldn)
+    msg_text = email_message.format(dl_hash=dl_hash, tldn=tldn, name=name)
 
     msg = EmailMessage()
     msg.set_content(msg_text)
