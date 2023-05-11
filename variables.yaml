@@ -21,7 +21,7 @@ variables:
       (i) population, as defined by the National Records of Scotland (NRS),
       and (ii) accessibility, based on drive time analysis to differentiate
       between accessible and remote areas in Scotland.
-    source: Scottish Government, 2016 
+    source: Scottish Government, 2016
     values:
       - value: 1
         description: Large Urban Areas (Settlements of 125,000 people and over)
@@ -106,7 +106,7 @@ variables:
     source: Scottish Government, 2020.
   - id: income_rate
     name: Income Rate
-    domain: Sociodemographics
+    domain: Sociodemographics|Employment
     description: >
       Percentage of people who are income deprived (i.e. receiving income support,
       income-based employment, support allowance, Jobseeker's allowance, guaranteed pension
@@ -114,7 +114,7 @@ variables:
     source: Scottish Government, from Department of Work and Pensions and HM Revenue and Customs, 2020.
   - id: employment_rate
     name: Employment Rate
-    domain: Sociodemographics
+    domain: Sociodemographics|Employment
     description: >
       Percentage of working age people who are employment deprived (i.e. recipients
       of jobseeker's allowance, incapacity benefit, employment and support allowance,
@@ -210,9 +210,9 @@ variables:
     source: Scottish Government, Higher Education Statistics Agency, 2020.
   - id: crime_rate
     name: Crime Rate
-    domain: Sociodemographics
+    domain: Sociodemographics|Crime
     description: >
-      Recorded crimes of violence, sexual offences, domestic housebreaking, vandalism, 
+      Recorded crimes of violence, sexual offences, domestic housebreaking, vandalism,
       drugs offences, and common assault per 10,000 population
     source: Scottish Government, from Police Scotland, 2020.
   - id: overcrowded_housing
