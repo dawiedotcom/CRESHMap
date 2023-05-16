@@ -51,7 +51,7 @@ variables:
       Relative value of deprivation estimated by a combination of indicators
       covering 7 domains: income, employment, health, education, geographic access
       to services, crime, and housing. Values ranks datazones from the most deprived
-      (ranked 1) to the least deprived (ranked 6,976). More information on these measure
+      (ranked 1) to the least deprived (ranked 6,976). More information on this measure
       might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
       Colours are classified by quantile.
     source: Scottish Government, 2020.
@@ -60,7 +60,7 @@ variables:
     domain: Sociodemographics|Deprivation Index
     description: >
       Income domain rank in SIMD 2020. Values ranks datazones from the most deprived
-      (ranked 1) to the least deprived (ranked 6,976). More information on these measure
+      (ranked 1) to the least deprived (ranked 6,976). More information on this measure
       might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
       Colours are classified by quantile.
     source: Scottish Government, 2020.
@@ -69,7 +69,7 @@ variables:
     domain: Sociodemographics|Deprivation Index
     description: >-
       Employment domain rank in SIMD 2020. Values ranks datazones from the most deprived
-      (ranked 1) to the least deprived (ranked 6,976). More information on these measure
+      (ranked 1) to the least deprived (ranked 6,976). More information on this measure
       might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
       Colours are classified by quantile.
     source: Scottish Government, 2020.
@@ -78,7 +78,7 @@ variables:
     domain: Sociodemographics|Deprivation Index
     description: >
       Health domain rank in SIMD 2020. Values ranks datazones from the most deprived
-      (ranked 1) to the least deprived (ranked 6,976). More information on these measure
+      (ranked 1) to the least deprived (ranked 6,976). More information on this measure
       might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
       Colours are classified by quantile.
     source: Scottish Government, 2020.
@@ -87,7 +87,7 @@ variables:
     domain: Sociodemographics|Deprivation Index
     description: >
       Education domain rank at SIMD 2020. Values ranks datazones from the most deprived
-      (ranked 1) to the least deprived (ranked 6,976). More information on these measure
+      (ranked 1) to the least deprived (ranked 6,976). More information on this measure
       might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
       Colours are classified by quantile.
   - id: geographic_access_domain_rank
@@ -100,7 +100,7 @@ variables:
       and petrol station) as well as the percentage of premises that do not have
       access to superfast broadband. Values ranks datazones from the most accessible
       (ranked 1) to the least accessible (ranked 6,976).
-      More information on these measure might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
+      More information on this measure might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
       Colours are classified by quantile.
     source: Scottish Government, 2020.
   - id: crime_rank
@@ -108,7 +108,7 @@ variables:
     domain: Sociodemographics|Deprivation Index
     description: >
       Crime domain rank at SIMD 2020. Values ranks datazones from the most deprived
-      (ranked 1) to the least deprived (ranked 6,976). More information on these
+      (ranked 1) to the least deprived (ranked 6,976). More information on this
       measure might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
       Colours are classified by quantile.
     source: Scottish Government, 2020.
@@ -117,7 +117,7 @@ variables:
     domain: Sociodemographics|Deprivation Index
     description: >
       Housing domain rank at 2020. Values ranks datazones from the most deprived
-      (ranked 1) to the least deprived (ranked 6,976). More information on these
+      (ranked 1) to the least deprived (ranked 6,976). More information on this
       measure might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>
       Colours are classified by quantile.
     source: Scottish Government, 2020.
