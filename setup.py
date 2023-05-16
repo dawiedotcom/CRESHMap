@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 name = 'CRESHMap'
-version = '0.0'
-release = '0.0.1'
+version = '1.0'
+release = '1.0.0'
 author = 'Magnus Hagdorn'
 
 setup(
