@@ -261,7 +261,7 @@ variables:
       Colours have manual break values at 1, 2 and 5.
     source: Scottish Government, from National Records of Scotland, 2020.
   - id: alcohol_retailer_density
-    name: Alcohol retailer density
+    name: Alcohol all-premise retailer density
     domain: Retail|Alcohol
     description: >
       Number of outlets per 1000 persons.
