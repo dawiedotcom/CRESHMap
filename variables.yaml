@@ -3,7 +3,7 @@ variables:
   - id: population_density
     name: Population Density
     domain: Sociodemographics|Population
-    description: Population per square kilometer
+    description: Population per square kilometer. Colours are classified by quantile.
     source: CRESH, from National Records of Scotland, 2012; 2016; 2020.
   - id: ur2
     name: UR2
@@ -95,12 +95,12 @@ variables:
     domain: Sociodemographics|Deprivation Index
     description: >
       Geographical access domain rank at SIMD 2020. This indicator consider drive-time
-      and public transport-time accessibility to a range of service slocations
+      and public transport-time accessibility to a range of services locations
       (i.e. GP surgery, post office, retail centre, primary and secondary schools,
       and petrol station) as well as the percentage of premises that do not have
-      access to superfast broadband. Values ranks datazones from the most accessible
-      (ranked 1) to the least accessible (ranked 6,976).
-      More information on this measure might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
+      access to superfast broadband. Values ranks datazones from the least accessible
+      (ranked 1) to the most accessible (ranked 6,976).
+      More information on this measure might be found here: <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">www.gov.scot</a>.
       Colours are classified by quantile.
     source: Scottish Government, 2020.
   - id: crime_rank
@@ -123,7 +123,7 @@ variables:
     source: Scottish Government, 2020.
   - id: income_rate
     name: Income Rate
-    domain: Sociodemographics|Employment
+    domain: Sociodemographics|Income
     description: >
       Percentage of people who are income deprived (i.e. receiving income support,
       income-based employment, support allowance, Jobseeker's allowance, guaranteed pension
@@ -220,8 +220,12 @@ variables:
     name: People without qualifications
     domain: Sociodemographics|Education
     description: >
-      Proportion of working age adults (25-64) that were recorded as having no qualifications.
-      Colours are classified by quantile.
+      Standardised ratio of the proportion of working age adults (25-64) that were recorded
+      as having no qualifications. A value of 100 is the Scotland average for a population
+      with the same age and sex profile. A value higher than 100 indicates that a given datazone
+      is classified above the Scottish mean. Similarly, a value lower than 100 represents that a
+      given datazone has a proportion of workers without qualifications below the Scottish
+      average. Colours are classified by breaks at 25, 50, 100 and 150.
     source: Scottish Government, from National Records of Scotland and 2011 Census.
   - id: teenagers_not_studying_or_working
     name: Teenagers not studying or working
