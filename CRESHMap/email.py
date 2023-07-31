@@ -2,7 +2,7 @@ import smtplib
 from email.message import EmailMessage
 
 email_message = '''
-Dear {name},
+Dear CRESHMap User,
 
 Thank you for your interest in the Cresh Map data set. You can download the data set by clicking on the link below:
 
