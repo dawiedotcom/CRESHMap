@@ -229,8 +229,8 @@ def download_data(download_hash):
     return send_from_directory(
         'data',
         'Creshmap_Dataset_Tobacco_Alcohol.xlsx',
-        as_attachment=True,
-        attachment_filename='Creshmap_Dataset_Tobacco_Alcohol.xlsx',
+        #as_attachment=True,
+        #attachment_filename='Creshmap_Dataset_Tobacco_Alcohol.xlsx',
     )
 
 
