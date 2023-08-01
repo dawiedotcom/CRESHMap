@@ -133,6 +133,10 @@ def index():
 def is_valid_email(email):
     return not re.fullmatch('.*@.*\..*', email) is None
 
+def is_valid_name(name):
+    match = re.findall('((https|http|ftp)*(://)*(\w+\.)+\w+)', name)
+    return len(match) == 0
+
 def make_random_hash():
     salt = str(random.randint(0, 1e24))
     m = hashlib.sha256()
@@ -158,12 +162,20 @@ def download():
                 navigation=menu_items(),
             )
 
-        if request.form['name'] == '':
+        name = request.form['name']
+        if name == '':
             flash("Please provide a full name.")
             return render_template(
                 'download.html',
                 navigation=menu_items(),
             )
+
+        if not is_valid_name(name):
+            return render_template(
+                'download.html',
+                navigation=menu_items(),
+            )
+
 
         download_links = db.session.query(
             DownloadLink
@@ -190,17 +202,21 @@ def download():
             db.session.add(download_link)
             db.session.commit()
 
-        if app.config['EMAIL_FROM_ADDR'] and app.config['EMAIL_SMTP_SERV']:
-            send_download_link(
-                app.config['EMAIL_FROM_ADDR'],
-                app.config['EMAIL_SMTP_SERV'],
-                download_link.name,
-                download_link.email,
-                download_link.download_hash,
-                app.config['DOMAIN']
-            )
+        #if app.config['EMAIL_FROM_ADDR'] and app.config['EMAIL_SMTP_SERV']:
+        #    send_download_link(
+        #        app.config['EMAIL_FROM_ADDR'],
+        #        app.config['EMAIL_SMTP_SERV'],
+        #        download_link.name,
+        #        download_link.email,
+        #        download_link.download_hash,
+        #        app.config['DOMAIN']
+        #    )
 
-        flash("You should receive a download link in your Inbox shortly.")
+        url = 'https://{tldn}/download/{dl_hash}'.format(
+            tldn=app.config['DOMAIN'],
+            dl_hash=download_link.download_hash,
+        )
+        flash(f'You can download the data set <a href="{url}" class="alert-link">here</a>', 'success')
 
     return render_template(
         'download.html',
