@@ -59,7 +59,7 @@ def index():
 
         variables = db.session.query(
             Variables,
-        ).where(
+        ).filter(
             Variables.domain == domain,
         ).group_by(Variables.id).order_by(
             Variables.id,
@@ -71,7 +71,7 @@ def index():
             # Get all populated geography types for this variable/year.
             gss_codes = db.session.query(
                 func.substr(Data.gss_id, 1, 3).label("gss_code"),
-            ).where(
+            ).filter(
                 Data.variable_id == v.id,
                 #Data.year == year
             ).group_by("gss_code").subquery()
@@ -79,7 +79,7 @@ def index():
             data_zones = db.session.query(
                 GeographyTypes.name,
                 GeographyTypes.gss_code
-            ).where(
+            ).filter(
                 GeographyTypes.gss_code == gss_codes.c.gss_code
             ).order_by(
                 GeographyTypes.gss_code,
@@ -102,7 +102,7 @@ def index():
 
             years = db.session.query(
                 Data.year
-            ).group_by(Data.year).where(
+            ).group_by(Data.year).filter(
                 Data.variable_id == v.id
             ).all()
             years = [y[0] for y in years]
@@ -179,7 +179,7 @@ def download():
 
         download_links = db.session.query(
             DownloadLink
-        ).where(
+        ).filter(
             DownloadLink.email == request.form['email']
         ).all()
 
@@ -227,7 +227,7 @@ def download():
 def download_data(download_hash):
     download_links = db.session.query(
         DownloadLink
-    ).where(
+    ).filter(
         DownloadLink.download_hash == download_hash,
     ).all()
 
@@ -239,7 +239,9 @@ def download_data(download_hash):
 
     return send_from_directory(
         'data',
-        'Creshmap_Dataset_Tobacco_Alcohol.xlsx'
+        'Creshmap_Dataset_Tobacco_Alcohol.xlsx',
+        as_attachment=True,
+        attachment_filename='Creshmap_Dataset_Tobacco_Alcohol.xlsx',
     )
 
 
