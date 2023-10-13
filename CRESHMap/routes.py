@@ -22,7 +22,6 @@ from .models import GeographyTypes
 from .models import Variables
 from .models import Data
 from .models import DownloadLink
-from .email import send_download_link
 
 from . import db
 
@@ -202,16 +201,6 @@ def download():
             db.session.add(download_link)
             db.session.commit()
 
-        #if app.config['EMAIL_FROM_ADDR'] and app.config['EMAIL_SMTP_SERV']:
-        #    send_download_link(
-        #        app.config['EMAIL_FROM_ADDR'],
-        #        app.config['EMAIL_SMTP_SERV'],
-        #        download_link.name,
-        #        download_link.email,
-        #        download_link.download_hash,
-        #        app.config['DOMAIN']
-        #    )
-
         url = 'https://{tldn}/download/{dl_hash}'.format(
             tldn=app.config['DOMAIN'],
             dl_hash=download_link.download_hash,
@@ -240,8 +229,8 @@ def download_data(download_hash):
     return send_from_directory(
         'data',
         'Creshmap_Dataset_Tobacco_Alcohol.xlsx',
-        as_attachment=True,
-        attachment_filename='Creshmap_Dataset_Tobacco_Alcohol.xlsx',
+        #as_attachment=True,
+        #attachment_filename='Creshmap_Dataset_Tobacco_Alcohol.xlsx',
     )
 
 
