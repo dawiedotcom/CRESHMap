@@ -18,9 +18,7 @@ const attribDescription = document.getElementById('attrib_description');
 var layers = {};
 
 const baselayer = new ol.layer.Tile({
-    source: new ol.source.Stamen({
-        layer: 'toner-lite'
-    })
+    source: new ol.source.OSM()
 });
 
 function getStatistic(stat_name, layer_name, attribute, year){
