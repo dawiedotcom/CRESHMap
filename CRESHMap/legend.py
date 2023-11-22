@@ -1,5 +1,5 @@
 import os
-import drawSvg as draw
+import drawsvg as draw
 
 def format_limits(limits):
     fmt = 0
@@ -62,7 +62,7 @@ def make_labeled_legend(layer_name, colors, limits, width=150, border=10, box_si
     if not os.path.exists(dirname):
         os.mkdir(dirname)
     filename = f'{dirname}/{layer_name}.svg'
-    d.saveSvg(filename)
+    d.save_svg(filename)
 
 def make_numerical_legend(layer_name, colors, limits, width=150, border=10, box_size=25, font_size=16):
     # TODO refactor to call make_labeled_legend
@@ -93,4 +93,4 @@ def make_numerical_legend(layer_name, colors, limits, width=150, border=10, box_
     if not os.path.exists(dirname):
         os.mkdir(dirname)
     filename = f'{dirname}/{layer_name}.svg'
-    d.saveSvg(filename)
+    d.save_svg(filename)
