@@ -1,0 +1,18 @@
+---
+path: Datazones_TimeSeriesData_2023_update_gambling.csv
+type: csv
+metadata:
+  population:
+    2012: MidYr2012DZPop
+    2016: MidYr2016DZPop
+    2020: MidYr2020DZPop
+    2023: MidYr2021DZPop
+variables:
+  - geometry: DataZone11_ID
+    db_var: gambling_retailer_density
+    file_var: GR23_PopAdjCnt
+    year: 2023
+    colormethod: quantile
+    colormap: YlOrRd
+    nclasses: 5
+    aggregatemethod: per_1000_capita
