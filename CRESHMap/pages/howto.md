@@ -8,7 +8,7 @@ On this page we describe the information that can be displayed and downloaded th
 
 ## Alcohol and tobacco availability
 
-We obtained the locations of all outlets in Scotland licensed to sell alcohol for consumption: on the premises (on-sales)[^1], off the premises (off-sales), and both (on-sales retailers combined with off-sales) from each local licensing board at the start of 2012 and 2016, as well as from the Police Scotland InnKeepers Database at the commencement of 2020. We also attained the locations of all active premises indexed in the Register of Tobacco and Nicotine Vapour Product Retailers at the start of 2012, 2016, and 2020.
+We obtained the locations of all outlets in Scotland licensed to sell alcohol for consumption: on the premises (on-sales)[^1], off the premises (off-sales), and both (on-sales retailers combined with off-sales) from each local licensing board at the start of 2012 and 2016, as well as from the Police Scotland InnKeepers Database at the commencement of 2020 and end of 2023. We also attained the locations of all active premises indexed in the Register of Tobacco and Nicotine Vapour Product Retailers at the start of 2012, 2016, and 2020, and end of 2023. Gambling locations were added at the end of 2023, using the Gambling Commission Public Register.
 
 [^1]: The ‘On-sales only’ category includes any retailers that concurrently retail alcohol for consumption off-site.
 
