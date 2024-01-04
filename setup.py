@@ -1,14 +1,13 @@
 from setuptools import setup, find_packages
 
 name = 'CRESHMap'
-version = '1.0'
-release = '1.0.0'
+version = '1.0.5'
 author = 'Magnus Hagdorn'
 
 setup(
     name=name,
     packages=find_packages(),
-    version=release,
+    version=version,
     include_package_data=True,
     install_requires=[
         "sqlalchemy",

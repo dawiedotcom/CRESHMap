@@ -47,7 +47,6 @@ MAP
           "gml_include_items" "all"
           "gml_featureid"     "ID"
           "gml_types"         "auto"
-          "wfs_enable_request" "*"
       END
       TYPE POINT
       STATUS ON
@@ -87,7 +86,6 @@ MAP
           "gml_include_items" "all"
           "gml_featureid"     "ID"
           "gml_types"         "auto"
-          "wfs_enable_request" "*"
       END
       TYPE POINT
       STATUS ON
@@ -128,7 +126,6 @@ MAP
           "gml_include_items" "all"
           "gml_featureid"     "ID"
           "gml_types"         "auto"
-          "wfs_enable_request" "*"
       END
       TYPE POLYGON
       STATUS ON

@@ -1,0 +1,2 @@
+include CRESHMap/data/Creshmap_Dataset_Tobacco_Alcohol.xlsx
+recursive-include CRESHMap/static *
