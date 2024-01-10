@@ -6,13 +6,13 @@ order: 3
 
 On this page we describe the information that can be displayed and downloaded through the web map site.
 
-## Alcohol and tobacco availability
+## Unhealthy commodities retail environment
 
 We obtained the locations of all outlets in Scotland licensed to sell alcohol for consumption: on the premises (on-sales)[^1], off the premises (off-sales), and both (on-sales retailers combined with off-sales) from each local licensing board at the start of 2012 and 2016, as well as from the Police Scotland InnKeepers Database at the commencement of 2020 and end of 2023. We also attained the locations of all active premises indexed in the Register of Tobacco and Nicotine Vapour Product Retailers at the start of 2012, 2016, and 2020, and end of 2023. Gambling locations were added at the end of 2023, using the Gambling Commission Public Register.
 
 [^1]: The ‘On-sales only’ category includes any retailers that concurrently retail alcohol for consumption off-site.
 
-These datasets were checked for errors (for duplications). Then, to estimate ‘availability’ we counted the number of each outlet type within each Data zone, standardising these counts per 1000 persons based on the resident population within each Data zone at each time point using the official [mid-year population estimates](https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/population/population-estimates/mid-year-population-estimates).
+These datasets were checked for errors (for duplications). Then, to estimate ‘availability’ we counted the number of each outlet type within each Data zone, standardising these counts per 1000 persons based on the resident population within each Data zone at each time point using the official [mid-year population estimates](https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/population/population-estimates/mid-year-population-estimates). Density calculations were also estimated for other higher geographies (e.g., Local Authorities, etc.) displayed in the map following the same strategy.
 
 
 As referenced, data on availability are complemented with data from the [2020 Scottish Index of Multiple Deprivation](https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/). More information on these data can be found by accessing the preceding hyperlink.
@@ -22,11 +22,11 @@ As referenced, data on availability are complemented with data from the [2020 Sc
 
 Several drop down boxes are located to the left of the web map.
 These variously relate to the type of information you wish to look at, for example, Alcohol retailers, or Socio-demographics. 
-Immediately below this level, on the drop-down menu, users then can select the specific attribute to be visualised, for example, On-trade Alcohol retailers.
+Immediately below this level, on the drop-down menu, users then can select the specific attribute to be visualised, for example, On-premise Alcohol retailers.
 The year for which data of interest are to be mapped is then selected.
 And finally, users can select which of 14-levels of geography they wish to visualise the data.
 
-Once the characteristic or attribute of interest, and its geography have been selected users can actively move around the webmap, zooming in and out (there is a radio bottom at the top left hand corner of the web map that provides the + and - zoom options). To enhance understanding of the information, the selected webmap should be considered in tandem with the information provided in the legend (situated to the left of the web-map).
+Once the characteristic or attribute of interest, and its geography have been selected users can actively move around the web map, zooming in and out (there is a radio bottom at the top left hand corner of the web map that provides the + and - zoom options). To enhance understanding of the information, the selected webmap should be considered in tandem with the information provided in the legend (situated to the left of the web map).
 
 The legend provides information on how to interpret the various colour graduations depicted on the map. Specifically, the legend encodes through colour ranking what level of, for example Tobacco availability a specific area has. In the example relating to Tobacco availability, ‘dark red’ depicts areas that have a high number of outlets retailing tobacco per 1000 persons, whereas ‘light yellow’ depicts areas with relatively low numbers of outlets retailing tobacco per 1000 persons. Accompanying the legend, is a description of how each of the area indicators was measured, for example ‘number of outlets per 1000 persons’.
 
