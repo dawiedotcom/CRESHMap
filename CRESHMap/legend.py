@@ -65,7 +65,7 @@ def make_labeled_legend(layer_name, colors, limits, width=150, border=10, box_si
     filename = f'{dirname}/{layer_name}.svg'
     d.save_svg(filename)
 
-def make_numerical_legend(layer_name, colors, limits, width=150, border=10, box_size=25, font_size=16):
+def make_numerical_legend(layer_name, colors, limits, width=150, border=10, box_size=25, font_size=16, no_data_label='No Data'):
     # TODO refactor to call make_labeled_legend
     height = (box_size) * len(colors) + border
     d = draw.Drawing(width, height)
@@ -78,7 +78,7 @@ def make_numerical_legend(layer_name, colors, limits, width=150, border=10, box_
         #r.appendT
         i_limit = i if not has_grey(colors) else i-1
         if is_grey(c):
-            limit_label = 'No data'
+            limit_label = no_data_label
         else:
             limit_label = limit_to_str(i_limit, limits)
 

@@ -14,12 +14,13 @@ def get_cmap(cmap_name, nbins, reverse_colors):
     return cmap
 
 
-def quantile_color_map(cmap_name, values, nbins=5, reverse_colors=False):
+def quantile_color_map(cmap_name, values, nbins=5, reverse_colors=False, no_data_value=None):
     # Result buffer
     result = pandas.DataFrame(['']*values.size, columns=['color'])
     # Find the data range. Note, some values are nonsensical such as negative numbers or NaN.
-    v_min = max(values[values == values].min(), 0)
-    v_max = values[values==values].max()
+    idx = (values == values) & (values != no_data_value)
+    v_min = max(values[idx].min(), 0)
+    v_max = values[idx].max()
     nbins = min(nbins, 9)
     # Create color labels
     cmap = get_cmap(cmap_name, nbins, reverse_colors)
@@ -34,8 +35,8 @@ def quantile_color_map(cmap_name, values, nbins=5, reverse_colors=False):
         labels=cmap,
         retbins=True,
     )
-    if np.any(values != values):
-        result.loc[values != values, 'color'] = '#aaaaaa';
+    if np.any(~idx):
+        result.loc[~idx, 'color'] = '#aaaaaa';
         cmap.insert(0, '#aaaaaa')
     return result, cmap, bins
 
@@ -78,6 +79,7 @@ def color(cfg_variable_entry, values):
     # Assign color values based on data values and specifications in the
     # config file
     colormethod = cfg_variable_entry.get('colormethod', '')
+    no_data_value = cfg_variable_entry.get('no_data_value', None)
     if colormethod == "quantile":
         if not "nclasses" in cfg_variable_entry:
             print("nclasses should be specified for quantile colormothed")
@@ -86,7 +88,8 @@ def color(cfg_variable_entry, values):
             cfg_variable_entry["colormap"],
             values,
             nbins=cfg_variable_entry["nclasses"],
-            reverse_colors=cfg_variable_entry.get("reverse_color", False)
+            reverse_colors=cfg_variable_entry.get("reverse_color", False),
+            no_data_value=no_data_value,
         )
     elif colormethod == "manual":
         if not "break_values" in cfg_variable_entry:

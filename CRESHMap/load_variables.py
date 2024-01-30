@@ -82,7 +82,8 @@ def main():
                 make_labeled_legend(layer_name, cmap, values_and_labels['label'].to_numpy(), width=240)
             else:
                 values["color"], cmap, limits = color(variable, values["value"].to_numpy())
-                make_numerical_legend(layer_name, cmap, limits)
+                no_data_label = variable.get('no_data_label', 'No Data')
+                make_numerical_legend(layer_name, cmap, limits, no_data_label=no_data_label)
 
             # Aggregate data for composite geometries
             if 'aggregatemethod' in variable:
@@ -124,7 +125,8 @@ def main():
                         agg_values['value'].to_numpy(),
                     )
                     layer_name = '{db_var}_{year}_{0}'.format(geo_type.gss_code, **variable)
-                    make_numerical_legend(layer_name, cmap, limits)
+                    no_data_label = variable.get('no_data_label', 'No Data')
+                    make_numerical_legend(layer_name, cmap, limits, no_data_label=no_data_label)
                     values = pandas.concat((values, agg_values))
 
             if not args.update_legends:

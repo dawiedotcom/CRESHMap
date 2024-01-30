@@ -16,3 +16,5 @@ variables:
     colormap: YlOrRd
     nclasses: 5
     aggregatemethod: per_1000_capita
+    no_data_label: "No Outlets"
+    no_data_value: 0
