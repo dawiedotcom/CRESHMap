@@ -14,7 +14,7 @@ def get_cmap(cmap_name, nbins, reverse_colors):
     return cmap
 
 
-def quantile_color_map(cmap_name, values, nbins=5, reverse_colors=False, no_data_value=None):
+def quantile_color_map(cmap_name, values, nbins=5, reverse_colors=False, no_data_value=None, no_data_color='#aaaaaa'):
     # Result buffer
     result = pandas.DataFrame(['']*values.size, columns=['color'])
     # Find the data range. Note, some values are nonsensical such as negative numbers or NaN.
@@ -36,8 +36,8 @@ def quantile_color_map(cmap_name, values, nbins=5, reverse_colors=False, no_data
         retbins=True,
     )
     if np.any(~idx):
-        result.loc[~idx, 'color'] = '#aaaaaa';
-        cmap.insert(0, '#aaaaaa')
+        result.loc[~idx, 'color'] = no_data_color;
+        cmap.insert(0, no_data_color)
     return result, cmap, bins
 
 def manual_color_map(cmap_name, values, bin_values=[], reverse_colors=False):
@@ -80,6 +80,7 @@ def color(cfg_variable_entry, values):
     # config file
     colormethod = cfg_variable_entry.get('colormethod', '')
     no_data_value = cfg_variable_entry.get('no_data_value', None)
+    no_data_color = cfg_variable_entry.get('no_data_color', '#aaaaaa')
     if colormethod == "quantile":
         if not "nclasses" in cfg_variable_entry:
             print("nclasses should be specified for quantile colormothed")
@@ -90,6 +91,7 @@ def color(cfg_variable_entry, values):
             nbins=cfg_variable_entry["nclasses"],
             reverse_colors=cfg_variable_entry.get("reverse_color", False),
             no_data_value=no_data_value,
+            no_data_color=no_data_color,
         )
     elif colormethod == "manual":
         if not "break_values" in cfg_variable_entry:
