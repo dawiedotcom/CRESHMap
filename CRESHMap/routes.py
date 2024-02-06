@@ -228,7 +228,7 @@ def download_data(download_hash):
 
     return send_from_directory(
         'data',
-        'Creshmap_Dataset_Alc_Tob_Gam_2023.xlsx',
+        'Creshmap_Dataset_Alc_Tob_Gam_Foo_Sup_2024.xlsx',
     )
 
 
