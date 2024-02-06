@@ -1,2 +1,2 @@
-include CRESHMap/data/Creshmap_Dataset_Alc_Tob_Gam_2023.xlsx
+include CRESHMap/data/*.xlsx
 recursive-include CRESHMap/static *
