@@ -1,0 +1,75 @@
+---
+path: Datazones_TimeSeriesData_2020_2024_update_smoking.csv
+type: csv
+metadata:
+  population:
+    2012: MidYr2012DZPop
+    2016: MidYr2016DZPop
+    2020: MidYr2020DZPop
+    2023: MidYr2021DZPop
+    2024: MidYr2021DZPop
+variables:
+  - geometry: DataZone11_ID
+    db_var: smoking_all_retailer_density
+    file_var: SmR20_All_PopAdjCnt
+    year: 2020
+    colormethod: quantile
+    colormap: YlOrRd
+    nclasses: 5
+    aggregatemethod: per_1000_capita
+  - geometry: DataZone11_ID
+    db_var: smoking_tobacco_nvp_retailer_density
+    file_var: SmR20_Tob_Nvp_PopAdjCnt
+    year: 2020
+    colormethod: quantile
+    colormap: YlOrRd
+    nclasses: 5
+    aggregatemethod: per_1000_capita
+  - geometry: DataZone11_ID
+    db_var: smoking_tobacco_only_retailer_density
+    file_var: SmR20_Tob_PopAdjCnt
+    year: 2020
+    colormethod: quantile
+    colormap: YlOrRd
+    nclasses: 5
+    aggregatemethod: per_1000_capita
+  - geometry: DataZone11_ID
+    db_var: smoking_nvp_only_retailer_density
+    file_var: SmR20_Nvp_PopAdjCnt
+    year: 2020
+    colormethod: quantile
+    colormap: YlOrRd
+    nclasses: 5
+    aggregatemethod: per_1000_capita
+  - geometry: DataZone11_ID
+    db_var: smoking_all_retailer_density
+    file_var: SmR24_All_PopAdjCnt
+    year: 2024
+    colormethod: quantile
+    colormap: YlOrRd
+    nclasses: 5
+    aggregatemethod: per_1000_capita
+  - geometry: DataZone11_ID
+    db_var: smoking_tobacco_nvp_retailer_density
+    file_var: SmR24_Tob_Nvp_PopAdjCnt
+    year: 2024
+    colormethod: quantile
+    colormap: YlOrRd
+    nclasses: 5
+    aggregatemethod: per_1000_capita
+  - geometry: DataZone11_ID
+    db_var: smoking_tobacco_only_retailer_density
+    file_var: SmR24_Tob_PopAdjCnt
+    year: 2024
+    colormethod: quantile
+    colormap: YlOrRd
+    nclasses: 5
+    aggregatemethod: per_1000_capita
+  - geometry: DataZone11_ID
+    db_var: smoking_nvp_only_retailer_density
+    file_var: SmR24_Nvp_PopAdjCnt
+    year: 2024
+    colormethod: quantile
+    colormap: YlOrRd
+    nclasses: 5
+    aggregatemethod: per_1000_capita
