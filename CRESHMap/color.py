@@ -62,7 +62,10 @@ def labeled_color_map(cmap_name, values, bin_values, reverse_colors=False):
         nbins = 9
         print('  The following bins will be ignored:', bin_values[nbins:])
 
-    if nbins == 2:
+    if nbins == 1:
+        cmap = get_cmap(cmap_name, 3, reverse_colors)
+        cmap = [cmap[0]]
+    elif nbins == 2:
         cmap = get_cmap(cmap_name, 3, reverse_colors)
         cmap = [cmap[0], cmap[2]]
     else:

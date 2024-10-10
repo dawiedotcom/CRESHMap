@@ -63,7 +63,8 @@ def main():
             values["variable_id"] = variable["db_var"]
 
             # Calculate color values
-            layer_name = '{db_var}_{year}_S01'.format(**variable)
+            gss_code = db.session.query(Geography.gss_code).where(Geography.gss_id == values.loc[0, 'gss_id'])[0][0]
+            layer_name = '{db_var}_{year}_{gss_code}'.format(gss_code=gss_code, **variable)
             if variable["colormethod"] == 'labeled':
                 # TODO check that 'label_var' is provided in variable
                 values_and_labels = data[[variable['file_var'], variable['label_var']]]
