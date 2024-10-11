@@ -1,0 +1,13 @@
+---
+path: data/WIAT/wiat_woodlands_data.csv
+type: csv
+variables:
+  - geometry: gss_id
+    db_var: wiat_woodlands
+    file_var: value
+    year: 2024
+    colormethod: labeled
+    label_var: label 
+    colormap: RdPu
+    reverse_color: True
+    

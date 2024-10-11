@@ -1,0 +1,19 @@
+---
+variables:
+  - id: wiat_woodlands
+    name: Woodlands
+    domain: WIAT
+    description: >
+      <p>A layer showing the selected WIAT woodlands indicating their name, year approved and phase.</p>
+
+  - id: wiat_eligible_area
+    name: Eligible Area
+    domain: WIAT
+    description: >
+      <p>Data zones based on the settlements with more than 2,000 people.</p>
+
+  - id: wiat_priority_area
+    name: Priority Area
+    domain: WIAT
+    description: >
+      <p>Data zones based on the 15% most deprived areas.</p>

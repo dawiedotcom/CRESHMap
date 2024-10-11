@@ -1,0 +1,18 @@
+---
+path: data/WIAT/eligibility_priority.csv
+type: csv
+variables:
+  - geometry: DataZone
+    db_var: wiat_eligible_area 
+    file_var: 1km_eligib
+    year: 2024
+    colormethod: labeled
+    label_var: eligib_label
+    colormap: OrRd
+  - geometry: DataZone
+    db_var: wiat_priority_area 
+    file_var: 500m_prior
+    year: 2024
+    colormethod: labeled
+    label_var: prior_label
+    colormap: BuGn
