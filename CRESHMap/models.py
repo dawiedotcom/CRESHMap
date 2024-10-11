@@ -46,7 +46,7 @@ class Geography(db.Model):
     gss_code = db.Column(
         db.String(3), db.ForeignKey('cresh_geography_types.gss_code'))
     name = db.Column(db.String())
-    geometry = db.Column(Geometry('GEOMETRY'))
+    geometry = db.Column(Geometry('GEOMETRY', srid=4326))
 
 
 class Variables(db.Model):
@@ -77,7 +77,7 @@ class TextQuotes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     # NOTE: ST_Centroid is slow on stream/pow so the geometry is cached when reading data
     dz_name = db.Column(db.String())
-    geometry = db.Column(Geometry(geometry_type='POINT'))
+    geometry = db.Column(Geometry(geometry_type='POINT', srid=4326))
     gss_id = db.Column(db.String(10), db.ForeignKey('cresh_geography.gss_id'), index=True)
     value = db.Column(db.String())
 
@@ -86,7 +86,7 @@ class Images(db.Model):
     __tablename__ = 'cresh_images'
     id = db.Column(db.Integer, primary_key=True)
     dz_name = db.Column(db.String())
-    geometry = db.Column(Geometry(geometry_type='POINT'))
+    geometry = db.Column(Geometry(geometry_type='POINT', srid=4326))
     gss_id = db.Column(db.String(10), db.ForeignKey('cresh_geography.gss_id'), index=True)
     filename = db.Column(db.String())
 

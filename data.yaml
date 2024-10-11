@@ -1,5 +1,5 @@
 ---
-tmp_directory: /scratch/chill2/data/CRESHMap
+tmp_directory: data/
 projection: EPSG:4326
 geography_types:
   - code:     S01

@@ -53,7 +53,7 @@ MAP
       CONNECTIONTYPE POSTGIS
       CONNECTION "{% if dburl.host is not none %}host={{ dburl.host }} {% endif %}{% if dburl.username is not none %}user={{ dburl.username }} {% endif %}{% if dburl.password is not none %}password={{ dburl.password }} {% endif %}{% if dburl.port is not none %}port={{ dburl.port }} {% endif %}{% if dburl.database is not none %}dbname={{ dburl.database }}{% endif %}"
 
-      DATA "geometry from (select im.gss_id as gss_id, im.geometry as geometry, im.dz_name as name, im.filename as value from cresh_new_model_test.cresh_images im)
+      DATA "geometry from (select im.gss_id as gss_id, im.geometry as geometry, im.dz_name as name, im.filename as value from cresh_images im)
             as subquery using unique gss_id using srid=0"
 
       PROCESSING "CLOSE_CONNECTION=DEFER" # for maximum performance
@@ -92,7 +92,7 @@ MAP
       CONNECTIONTYPE POSTGIS
       CONNECTION "{% if dburl.host is not none %}host={{ dburl.host }} {% endif %}{% if dburl.username is not none %}user={{ dburl.username }} {% endif %}{% if dburl.password is not none %}password={{ dburl.password }} {% endif %}{% if dburl.port is not none %}port={{ dburl.port }} {% endif %}{% if dburl.database is not none %}dbname={{ dburl.database }}{% endif %}"
 
-      DATA "geometry from (select q.gss_id as gss_id, q.geometry as geometry, q.dz_name as name, STRING_AGG(q.value, '|') as value from cresh_new_model_test.cresh_text_quotes q group by q.gss_id, q.geometry, q.dz_name)
+      DATA "geometry from (select q.gss_id as gss_id, q.geometry as geometry, q.dz_name as name, STRING_AGG(q.value, '|') as value from cresh_text_quotes q group by q.gss_id, q.geometry, q.dz_name)
             as subquery using unique gss_id using srid=0"
 
       PROCESSING "CLOSE_CONNECTION=DEFER" # for maximum performance
@@ -134,10 +134,10 @@ MAP
       # * Add schemas
       CONNECTION "{% if dburl.host is not none %}host={{ dburl.host }} {% endif %}{% if dburl.username is not none %}user={{ dburl.username }} {% endif %}{% if dburl.password is not none %}password={{ dburl.password }} {% endif %}{% if dburl.port is not none %}port={{ dburl.port }} {% endif %}{% if dburl.database is not none %}dbname={{ dburl.database }}{% endif %}"
       DATA "geometry from (select g.gss_id, g.geometry, g.name,
-            {% for a in attributes %} (select value from cresh_new_model_test.data where gss_id = g.gss_id and variable_id = '{{ attributes[a]['id'] }}' and year = {{ attributes[a]['year'] }}) as {{ a }},
-            (select color from cresh_new_model_test.data where gss_id = g.gss_id and variable_id = '{{ attributes[a]['id'] }}' and year = {{ attributes[a]['year'] }}) as {{ a }}_color{% if not loop.last %}, {% endif %} {% endfor %}
-            from cresh_new_model_test.cresh_geography g where g.gss_code = '{{ l }}')
-            as subquery using unique gss_id using srid=0"
+            {% for a in layers[l].variables %} (select value from data where gss_id = g.gss_id and variable_id = '{{ layers[l].variables[a]['id'] }}' and year = {{ layers[l].variables[a]['year'] }}) as {{ a }},
+            (select color from data where gss_id = g.gss_id and variable_id = '{{ layers[l].variables[a]['id'] }}' and year = {{ layers[l].variables[a]['year'] }}) as {{ a }}_color{% if not loop.last %}, {% endif %} {% endfor %}
+            from cresh_geography g where g.gss_code = '{{ l }}')
+            as subquery using unique gss_id using srid=4326"
 
 
       PROCESSING "CLOSE_CONNECTION=DEFER" # for maximum performance
@@ -146,9 +146,9 @@ MAP
         OPACITY 70
       END
 
-      {% for a in attributes %}
+      {% for a in layers[l].variables %}
       CLASS
-          NAME "{{ attributes[a]['name'] }}"
+          NAME "{{ layers[l].variables[a]['name'] }}"
 	        GROUP "{{ a }}"
 	        STYLE
               COLOR [{{ a }}_color]
@@ -156,7 +156,7 @@ MAP
 	        END
       END
       {% endfor %}
-      TEMPLATE "{{ popup }}"
+      TEMPLATE "popup_{{ l }}.js"
       PROJECTION #source
           "init=epsg:4326"
       END
