@@ -286,9 +286,86 @@ variables:
       Colours are classified by quantile.
     source: Data estimated by CRESH from ********.
   - id: tobacco_retailer_density
-    name: Tobacco retailer density
-    domain: Retail|Tobacco
+    name: Tobacco retailer density (2012/2016)
+    domain: Retail|Smoking
+    description: >
+      Number of outlets per 1000 persons.
+      Colours are classified by quantile.
+      All retailers selling tobacco only and both tobacco+NVP products. 
+      NVP only retailers are not displayed in this variable due to lack of data for 2012/2016.
+      NVP = Nicotine Vapour Products (vapes).
+    source: Data estimated by CRESH from ********.
+  - id: gambling_retailer_density
+    name: Gambling retailer density
+    domain: Retail|Gambling
+    description: >
+      Number of outlets per 1000 persons.
+      Colours are classified by quantile.
+      Large numbers of datazones (particularly rural) have no outlets.
+    source: Data estimated by CRESH from ********.
+  - id: food_retailer_density
+    name: Takeaways retailer density
+    domain: Retail|Food
     description: >
       Number of outlets per 1000 persons.
       Colours are classified by quantile.
     source: Data estimated by CRESH from ********.
+  - id: supermarkets_retailer_density
+    name: Supermarkets retailer density
+    domain: Retail|Food
+    description: >
+      Number of outlets per 1000 persons.
+      Colours are classified by quantile.
+    source: Data estimated by CRESH from ********
+  - id: smoking_all_retailer_density
+    name: All retailer density (2020 on)
+    domain: Retail|Smoking
+    description: >
+      Number of outlets per 1000 persons.
+      Colours are classified by quantile.
+      All retailers selling tobacco only, tobacco+NVP and NVP only. 
+      NVP = Nicotine Vapour Products (vapes). 
+    source: Data estimated by CRESH from ********.
+  - id: smoking_tobacco_nvp_retailer_density
+    name: Tobacco and NVP retailer density
+    domain: Retail|Smoking
+    description: >
+      Number of outlets per 1000 persons.
+      Colours are classified by quantile.
+      Retail outlets that sell both tobacco and NVP.
+      NVP = Nicotine Vapour Products (vapes).
+    source: Data estimated by CRESH from ********.
+  - id: smoking_tobacco_only_retailer_density
+    name: Tobacco only retailer density
+    domain: Retail|Smoking
+    description: >
+      Number of outlets per 1000 persons.
+      Colours are classified by quantile.
+      Retail outlets that sell only tobacco.
+    source: Data estimated by CRESH from ********.
+  - id: smoking_nvp_only_retailer_density
+    name: NVP only retailer density
+    domain: Retail|Smoking
+    description: >
+      Number of outlets per 1000 persons.
+      Colours are classified by quantile.
+      Retail outlets that sell only NVP.
+      NVP = Nicotine Vapour Products (vapes).
+    source: Data estimated by CRESH from ********.
+  - id: wiat_woodlands
+    name: Woodlands
+    domain: WIAT
+    description: >
+      <p>A layer showing the selected WIAT woodlands indicating their name, year approved and phase.</p>
+
+  - id: wiat_eligible_area
+    name: Eligible Area
+    domain: WIAT
+    description: >
+      <p>Data zones based on the settlements with more than 2,000 people.</p>
+
+  - id: wiat_priority_area
+    name: Priority Area
+    domain: WIAT
+    description: >
+      <p>Data zones based on the 15% most deprived areas.</p>
