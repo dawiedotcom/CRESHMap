@@ -21,6 +21,14 @@ https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/).
 As not to duplicate data presented elsewhere, for each Data zone we provide a link to further information from [statistics.gov.uk](https://statistics.gov.scot/home). For example, web searching for the "Canongate, Southside and Dumbiedykes-05" Data zone will redirect [here](http://statistics.gov.scot/doc/statistical-geography/S01008684). This webpage gives information on geography, housing, health, deprivation and urban/rural classification.
 
 
+## Woods In and Around Towns (WIAT) 
+
+Access to green and natural environments has demonstrated to have a positive effect on mental wellbeing as multiple studies suggest it may play an important role on mitigating stress levels. In an effort improve quality of life across Scotland’s urban settlements, the Forestry Commission Scotland (FCS) has funded the Woods in and Around Towns (WIAT) programme. The programme has the aim to increase the contact that local residents have with urban woodlands by tackling the barriers they face to visit and benefit from them. They do so by focusing on two main components: i) physical changes to the woods to improve their attractiveness (e.g., drained footpaths, signage, entrance features), and ii) community engagement events to encourage their use (e.g., family fun days, photography, workshops).
+
+With the purpose of prioritising those living in relative poverty – who typically face high levels of stress and poor mental health – the programme determined to fund those woodlands that fell within an eligible and a priority area. The eligible area is composed by a 1km buffer around settlements with a population of at least 2,000 people, while the priority area was designated as a 500m buffer around the 15% most deprived areas in Scotland.
+
+In this map, we present the full set of selected WIAT woodlands as well as the settlements that fall within both the eligible and priority criteria. Please note that to allow a comparison with other data in the site, we decided to show these areas through the Scottish Index of Multiple Deprivation (SIMD) data zones. This means that the resulting eligible and priority zones are a simplified depiction of the actual buffers. For simplicity, we have selected those data zones that have, at least, half their area covered by the original buffers. The data was processed using the Overlap Analysis tool in QGIS.
+
 ## References
 
 Clemens T, Dibben C, Pearce J & Shortt NK (2020). Neighbourhood tobacco supply and individual maternal smoking during pregnancy: A fixed-effects longitudinal analysis using routine data. Tobacco Control, 29(1), 7-14. [https://doi.org/10.1136/tobaccocontrol-2018-054422](https://doi.org/10.1136/tobaccocontrol-2018-054422)
