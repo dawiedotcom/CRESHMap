@@ -24,6 +24,17 @@ ATTRIBUTE_DEFAULTS = {
 
 Layer = namedtuple('Layer', ['gss_code', 'name', 'column_name', 'variables'])
 
+def get_db_schema(url):
+    '''Tries to parse the Postgres schema from the database URL'''
+    options = url.query.get('options', None)
+    if options is None or not 'search_path=' in options:
+        return 'public'
+    parts = options.split(' ')
+    for part in parts:
+        if 'search_path=' in part:
+            idx = part.find('search_path=') + len('search_path=')
+            return part[idx:]
+
 def main():  # noqa C901
     parser = argparse.ArgumentParser()
     parser.add_argument('config', help="the name of the configuration file")
@@ -100,11 +111,15 @@ def main():  # noqa C901
             bbox = bb
 
         print(db.engine.url)
+        db_schema = get_db_schema(db.engine.url)
+        db_schema_clause = db_schema.split(',')[0] + '.' if db_schema else ''
+        print(f'db_schema={db_schema} db_schema_clause={db_schema_clause}')
         cresh_map = render_template(
             'cresh.map',
             bbox=bbox,
             mapserverurl=app.config['MAPSERVER_URL'],
             dburl=db.engine.url,
+            db_schema_clause=db_schema_clause,
             layers=layers,
             quotes_template=quotes_base_name,
             quotes_icon_name=quotes_icon_base_name,
