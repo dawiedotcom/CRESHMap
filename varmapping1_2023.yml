@@ -1,5 +1,5 @@
 ---
-path: Datazones_TimeSeriesData_2023_update.csv
+path: data/Datazones_TimeSeriesData_2023_update.csv
 type: csv
 metadata:
   population:
