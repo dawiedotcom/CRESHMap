@@ -18,3 +18,4 @@ CRESHMap/static/images/qual/
 *.xlsx
 __MACOSX/
 .DS_Store
+*.gpkg
