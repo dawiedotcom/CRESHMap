@@ -28,7 +28,7 @@ def get_db_schema(url):
     '''Tries to parse the Postgres schema from the database URL'''
     options = url.query.get('options', None)
     if options is None or not 'search_path=' in options:
-        return 'public'
+        return None
     parts = options.split(' ')
     for part in parts:
         if 'search_path=' in part:
