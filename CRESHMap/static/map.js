@@ -323,11 +323,14 @@ function showInfo(coordinate) {
                     var value = row.insertCell(1);
                     name.innerHTML = popup_data.attributes[a].name + " (" + popup_data.attributes[a].year + ")";
                     name.scope="row";
-                    value.innerHTML = popup_data.attributes[a].value;
+                    const v = popup_data.attributes[a].value;
+                    const decimal_places = (v > 100) ? 0 : 1;
+                    value.innerHTML = Number(v).toFixed(decimal_places);
                     break;
                 }
                 popupTable.replaceChild(tbody, old_tbody);
                 var popupInfoText = document.getElementById('popupInfoText');
+                console.log(popup_data);
                 popupInfoText.innerHTML = make_count_blurb(popup_data);
                 popupInfoText.innerHTML += make_stat_blurb(popup_data, a);
                 /*Plotly.newPlot(histogramPlot, [{

@@ -72,7 +72,7 @@ def main():
                     variable['file_var']: 'value',
                     variable['label_var']: 'label',
                 })
-                values_and_labels = values_and_labels.drop_duplicates()
+                values_and_labels = values_and_labels.drop_duplicates(subset='label')
                 values_and_labels.sort_values('value', inplace=True)
                 values["color"], cmap, limits = labeled_color_map(
                     variable['colormap'],
